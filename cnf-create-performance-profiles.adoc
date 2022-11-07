@@ -130,6 +130,22 @@ toc::[]
 
 Learn about the Performance Profile Creator (PPC) and how you can use it to create a performance profile.
 
+[NOTE]
+====
+HELP
+
+PLEASE `GOD`.
+====
+
+----
+$ HALP
+----
+
+[source,console]
+----
+$ podman pull registry.redhat.io/openshift4/ztp-site-generate-rhel8:vBranch Build
+----
+
 :leveloffset: +1
 
 // Module included in the following assemblies:

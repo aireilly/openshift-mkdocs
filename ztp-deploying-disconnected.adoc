@@ -131,6 +131,10 @@ toc::[]
 
 Use zero touch provisioning (ZTP) to provision distributed units at new edge sites in a disconnected environment. The workflow starts when the site is connected to the network and ends with the CNF workload deployed and running on the site nodes.
 
+Check dis: xref:../cnf-create-performance-profiles.adoc#cnf-about-the-profile-creator-tool_cnf-create-performance-profiles[About the Performance Profile Creator]
+
+
+
 :leveloffset: +1
 
 // Module included in the following assemblies:
@@ -140,6 +144,22 @@ Use zero touch provisioning (ZTP) to provision distributed units at new edge sit
 :_content-type: CONCEPT
 [id="ztp-provisioning-edge-sites-at-scale_{context}"]
 = Provisioning edge sites at scale
+
+.It's the title!
+[cols=3*, width="60%", options="header"]
+|====
+|Firefox
+|Web Browser
+|Software
+
+|Ruby
+|Programming Language
+|Language
+
+|TorqueBox
+|Application Server
+|Application
+|====
 
 Telco edge computing presents extraordinary challenges with managing hundreds to tens of thousands of clusters in hundreds of thousands of locations. These challenges require fully-automated management solutions with, as closely as possible, zero human interaction.
 
@@ -151,7 +171,7 @@ Service providers are deploying a more distributed mobile network architecture a
 
 The following diagram shows how ZTP works within a far edge framework.
 
-image::217_OpenShift_Zero_Touch_Provisioning_updates_0222_1.png[ZTP in a far edge framework]
+image::fig.png[ZTP in a far edge framework]
 
 :leveloffset!:
 
@@ -656,7 +676,14 @@ The `PolicyGenTemplate` CRs relevant to RAN cluster configuration are described 
 |Description
 
 |`common-ranGen.yaml`
-|Contains a set of common RAN CRs that get applied to all clusters. These CRs subscribe to a set of operators providing cluster features typical for RAN as well as baseline cluster tuning.
+a|Contains a set of common RAN CRs that get applied to all clusters. These CRs subscribe to a set of operators providing cluster features typical for RAN as well as baseline cluster tuning.
+
+[WARNING]
+====
+here be Test warning!
+
+`ARRR`
+====
 
 |`group-du-3node-ranGen.yaml`
 |Contains the RAN policies for three-node clusters only.

@@ -26,17 +26,45 @@ https://docs.openshift.com/container-platform/4.11/scalability_and_performance/c
 
 ## To do 
 
-1. Fix note formatting:
-    ```markdown
-    !!! note
+* `xrefs`:
 
-        In this case, 10 CPUs are reserved on NUMA node 0 and 10 are reserved on NUMA node 1.
-    ```
+currently: 
 
-2. `xrefs`, etc.
+```asciidoc
+xref:../cnf-create-performance-profiles.adoc#cnf-about-the-profile-creator-tool_cnf-create-performance-profiles[About the Performance Profile Creator]
+```
+>>>
+```markdown
+[About the Performance Profile Creator](../cnf-create-performance-profiles.xml#cnf-about-the-profile-creator-tool_cnf-create-performance-profiles)
+```
 
-3. Build all assemblies
+needs to be: 
 
-4. Make a sensible navigation, etc.
+```markdown
+[About the Performance Profile Creator](../cnf-create-performance-profiles.adoc#cnf-about-the-profile-creator-tool)
+```
 
-5. script the asciidoc-reducer + site assembly part...
+
+* Build all assemblies
+
+* Make a sensible navigation, etc.
+
+* script the asciidoc-reducer + site assembly part...
+
+* live reload
+
+### Notes
+
+https://github.com/jgm/pandoc/issues/2610#issuecomment-880624080
+
+https://github.com/rstudio/rmarkdown/blob/main/inst/rmarkdown/lua/latex-div.lua
+
+https://github.com/turtlegraphics/book-test/blob/master/fenced-blocks.lua
+
+https://github.com/jgm/pandocfilters/blob/master/examples/latexdivs.py
+
+https://github.com/sergiocorreia/panflute
+
+https://pypi.org/project/pantable/
+
+https://github.com/jgm/pandoc/wiki/Pandoc-Filters

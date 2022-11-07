@@ -6,7 +6,7 @@ theme:
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: black
-      accent: red
+      accent: blue
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
@@ -14,7 +14,7 @@ theme:
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: black
-      accent: red
+      accent: blue
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
@@ -23,14 +23,21 @@ theme:
   logo: assets/images/redhat.svg
   favicon: assets/redhat-favicon.png
   features:
+    - toc.follow
     - navigation.instant
     - navigation.tracking
     - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
 repo_url: https://github.com/aireilly/openshift-docs
 repo_name: openshift-mkdocs
 markdown_extensions:
+  - codehilite
   - pymdownx.highlight:
       anchor_linenums: true
+      linenums_style: pymdownx-inline
+  - pymdownx.superfences 
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
@@ -39,16 +46,5 @@ markdown_extensions:
   - admonition
   - attr_list
   - md_in_html
-
-
-
-
-
-
-
-
-
-
-
-
-
+  - markdown_grid_tables
+  - pymdownx.betterem

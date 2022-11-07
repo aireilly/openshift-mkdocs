@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en" xml:id="cnf-create-performance-profiles">
+<info>
+<title>Creating a performance profile</title>
+<date>2022-11-02</date>
+</info>
+
+<simpara>Learn about the Performance Profile Creator (PPC) and how you can use it to create a performance profile.</simpara>
+<section xml:id="cnf-about-the-profile-creator-tool_cnf-create-performance-profiles">
+<title>About the Performance Profile Creator</title>
+<simpara>The Performance Profile Creator (PPC) is a command-line tool, delivered with the Node Tuning Operator, used to create the performance profile.
+The tool consumes <literal>must-gather</literal> data from the cluster and several user-supplied profile arguments. The PPC generates a performance profile that is appropriate for your hardware and topology.</simpara>
+<simpara>The tool is run by one of the following methods:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Invoking <literal>podman</literal></simpara>
+</listitem>
+<listitem>
+<simpara>Calling a wrapper script</simpara>
+</listitem>
+</itemizedlist>
+<section xml:id="gathering-data-about-your-cluster-using-must-gather_cnf-create-performance-profiles">
+<title>Gathering data about your cluster using <literal>must-gather</literal></title>
+<simpara>The Performance Profile Creator (PPC) tool requires <literal>must-gather</literal> data. As a cluster administrator, run <literal>must-gather</literal> to capture information about your cluster.</simpara>
+<note>
+<simpara>In earlier versions of {product-title}, the Performance Addon Operator provided automatic, low latency performance tuning for applications. In {product-title} 4.11, these functions are part of the Node Tuning Operator. However, you must still use the <literal>performance-addon-operator-must-gather</literal> image when running the <literal>must-gather</literal> command.</simpara>
+</note>
+<itemizedlist>
+<title>Prerequisites</title>
+<listitem>
+<simpara>Access to the cluster as a user with the <literal>cluster-admin</literal> role.</simpara>
+</listitem>
+<listitem>
+<simpara>Access to the Performance Addon Operator <literal>must gather</literal> image.</simpara>
+</listitem>
+<listitem>
+<simpara>The OpenShift CLI (<literal>oc</literal>) installed.</simpara>
+</listitem>
+</itemizedlist>
+<orderedlist numeration="arabic">
+<title>Procedure</title>
+<listitem>
+<simpara>Navigate to the directory where you want to store the <literal>must-gather</literal> data.</simpara>
+</listitem>
+<listitem>
+<simpara>Run <literal>must-gather</literal> on your cluster:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ oc adm must-gather --image=&lt;PAO_must_gather_image&gt; --dest-dir=&lt;dir&gt;</programlisting>
+<note>
+<simpara><literal>must-gather</literal> must be run with the <literal>performance-addon-operator-must-gather</literal> image. The output can optionally be compressed. Compressed output is required if you are running the Performance Profile Creator wrapper script.</simpara>
+</note>
+<formalpara>
+<title>Example</title>
+<para>
+<programlisting language="terminal" linenumbering="unnumbered">$ oc adm must-gather --image=registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v{product-version} --dest-dir=&lt;path_to_must-gather&gt;/must-gather</programlisting>
+</para>
+</formalpara>
+</listitem>
+<listitem>
+<simpara>Create a compressed file from the <literal>must-gather</literal> directory:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ tar cvaf must-gather.tar.gz must-gather/</programlisting>
+</listitem>
+</orderedlist>
+</section>
+<section xml:id="running-the-performance-profile-profile-cluster-using-podman_cnf-create-performance-profiles">
+<title>Running the Performance Profile Creator using podman</title>
+<simpara>As a cluster administrator, you can run <literal>podman</literal> and the Performance Profile Creator to create a performance profile.</simpara>
+<itemizedlist>
+<title>Prerequisites</title>
+<listitem>
+<simpara>Access to the cluster as a user with the <literal>cluster-admin</literal> role.</simpara>
+</listitem>
+<listitem>
+<simpara>A cluster installed on bare-metal hardware.</simpara>
+</listitem>
+<listitem>
+<simpara>A node with <literal>podman</literal> and OpenShift CLI (<literal>oc</literal>) installed.</simpara>
+</listitem>
+<listitem>
+<simpara>Access to the Node Tuning Operator image.</simpara>
+</listitem>
+</itemizedlist>
+<orderedlist numeration="arabic">
+<title>Procedure</title>
+<listitem>
+<simpara>Check the machine config pool:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ oc get mcp</programlisting>
+<formalpara>
+<title>Example output</title>
+<para>
+<programlisting language="terminal" linenumbering="unnumbered">NAME         CONFIG                                                 UPDATED   UPDATING   DEGRADED   MACHINECOUNT   READYMACHINECOUNT   UPDATEDMACHINECOUNT   DEGRADEDMACHINECOUNT   AGE
+master       rendered-master-acd1358917e9f98cbdb599aea622d78b       True      False      False      3              3                   3                     0                      22h
+worker-cnf   rendered-worker-cnf-1d871ac76e1951d32b2fe92369879826   False     True       False      2              1                   1                     0                      22h</programlisting>
+</para>
+</formalpara>
+</listitem>
+<listitem>
+<simpara>Use Podman to authenticate to <literal>registry.redhat.io</literal>:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ podman login registry.redhat.io</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">Username: myrhusername
+Password: ************</programlisting>
+</listitem>
+<listitem>
+<simpara>Optional: Display help for the PPC tool:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ podman run --rm --entrypoint performance-profile-creator registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version} -h</programlisting>
+<formalpara>
+<title>Example output</title>
+<para>
+<programlisting language="terminal" linenumbering="unnumbered">A tool that automates creation of Performance Profiles
+
+Usage:
+  performance-profile-creator [flags]
+
+Flags:
+      --disable-ht                        Disable Hyperthreading
+  -h, --help                              help for performance-profile-creator
+      --info string                       Show cluster information; requires --must-gather-dir-path, ignore the other arguments. [Valid values: log, json] (default "log")
+      --mcp-name string                   MCP name corresponding to the target machines (required)
+      --must-gather-dir-path string       Must gather directory path (default "must-gather")
+      --offlined-cpu-count int            Number of offlined CPUs
+      --power-consumption-mode string     The power consumption mode.  [Valid values: default, low-latency, ultra-low-latency] (default "default")
+      --profile-name string               Name of the performance profile to be created (default "performance")
+      --reserved-cpu-count int            Number of reserved CPUs (required)
+      --rt-kernel                         Enable Real Time Kernel (required)
+      --split-reserved-cpus-across-numa   Split the Reserved CPUs across NUMA nodes
+      --topology-manager-policy string    Kubelet Topology Manager Policy of the performance profile to be created. [Valid values: single-numa-node, best-effort, restricted] (default "restricted")
+      --user-level-networking             Run with User level Networking(DPDK) enabled</programlisting>
+</para>
+</formalpara>
+</listitem>
+<listitem>
+<simpara>Run the Performance Profile Creator tool in discovery mode:</simpara>
+<note>
+<simpara>Discovery mode inspects your cluster using the output from <literal>must-gather</literal>. The output produced includes information on:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>The NUMA cell partitioning with the allocated CPU ids</simpara>
+</listitem>
+<listitem>
+<simpara>Whether hyperthreading is enabled</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Using this information you can set appropriate values for some of the arguments supplied to the Performance Profile Creator tool.</simpara>
+</note>
+<programlisting language="terminal" linenumbering="unnumbered">$ podman run --entrypoint performance-profile-creator -v &lt;path_to_must-gather&gt;/must-gather:/must-gather:z registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version} --info log --must-gather-dir-path /must-gather</programlisting>
+<note>
+<simpara>This command uses the performance profile creator as a new entry point to <literal>podman</literal>. It maps the <literal>must-gather</literal> data for the host into the container image and invokes the required user-supplied profile arguments to produce the <literal>my-performance-profile.yaml</literal> file.</simpara>
+<simpara>The <literal>-v</literal> option can be the path to either:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>The <literal>must-gather</literal> output directory</simpara>
+</listitem>
+<listitem>
+<simpara>An existing directory containing the <literal>must-gather</literal> decompressed tarball</simpara>
+</listitem>
+</itemizedlist>
+<simpara>The <literal>info</literal> option requires a value which specifies the output format. Possible values are log and JSON. The JSON format is reserved for debugging.</simpara>
+</note>
+</listitem>
+<listitem>
+<simpara>Run <literal>podman</literal>:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ podman run --entrypoint performance-profile-creator -v /must-gather:/must-gather:z registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:vBranch Build --mcp-name=worker-cnf --reserved-cpu-count=4 --rt-kernel=true --split-reserved-cpus-across-numa=false --must-gather-dir-path /must-gather --power-consumption-mode=ultra-low-latency --offlined-cpu-count=6 &gt; my-performance-profile.yaml</programlisting>
+<note>
+<simpara>The Performance Profile Creator arguments are shown in the Performance Profile Creator arguments table. The following arguments are required:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><literal>reserved-cpu-count</literal></simpara>
+</listitem>
+<listitem>
+<simpara><literal>mcp-name</literal></simpara>
+</listitem>
+<listitem>
+<simpara><literal>rt-kernel</literal></simpara>
+</listitem>
+</itemizedlist>
+<simpara>The <literal>mcp-name</literal> argument in this example is set to <literal>worker-cnf</literal> based on the output of the command <literal>oc get mcp</literal>. For single-node OpenShift use <literal>--mcp-name=master</literal>.</simpara>
+</note>
+</listitem>
+<listitem>
+<simpara>Review the created YAML file:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ cat my-performance-profile.yaml</programlisting>
+<formalpara>
+<title>Example output</title>
+<para>
+<programlisting language="yaml" linenumbering="unnumbered">apiVersion: performance.openshift.io/v2
+kind: PerformanceProfile
+metadata:
+  name: performance
+spec:
+  cpu:
+    isolated: 2-39,48-79
+    offlined: 42-47
+    reserved: 0-1,40-41
+  machineConfigPoolSelector:
+    machineconfiguration.openshift.io/role: worker-cnf
+  nodeSelector:
+    node-role.kubernetes.io/worker-cnf: ""
+  numa:
+    topologyPolicy: restricted
+  realTimeKernel:
+    enabled: true
+  workloadHints:
+    highPowerConsumption: true
+    realTime: true</programlisting>
+</para>
+</formalpara>
+</listitem>
+<listitem>
+<simpara>Apply the generated profile:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ oc apply -f my-performance-profile.yaml</programlisting>
+</listitem>
+</orderedlist>
+<section xml:id="how-to-run-podman-to-create-a-profile_cnf-create-performance-profiles">
+<title>How to run <literal>podman</literal> to create a performance profile</title>
+<simpara>The following example illustrates how to run <literal>podman</literal> to create a performance profile with 20 reserved CPUs that are to be split across the NUMA nodes.</simpara>
+<simpara>Node hardware configuration:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>80 CPUs</simpara>
+</listitem>
+<listitem>
+<simpara>Hyperthreading enabled</simpara>
+</listitem>
+<listitem>
+<simpara>Two NUMA nodes</simpara>
+</listitem>
+<listitem>
+<simpara>Even numbered CPUs run on NUMA node 0 and odd numbered CPUs run on NUMA node 1</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Run <literal>podman</literal> to create the performance profile:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ podman run --entrypoint performance-profile-creator -v /must-gather:/must-gather:z registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version} --mcp-name=worker-cnf --reserved-cpu-count=20 --rt-kernel=true --split-reserved-cpus-across-numa=true --must-gather-dir-path /must-gather &gt; my-performance-profile.yaml</programlisting>
+<simpara>The created profile is described in the following YAML:</simpara>
+<programlisting language="yaml" linenumbering="unnumbered">  apiVersion: performance.openshift.io/v2
+  kind: PerformanceProfile
+  metadata:
+    name: performance
+  spec:
+    cpu:
+      isolated: 10-39,50-79
+      reserved: 0-9,40-49
+    nodeSelector:
+      node-role.kubernetes.io/worker-cnf: ""
+    numa:
+      topologyPolicy: restricted
+    realTimeKernel:
+      enabled: true</programlisting>
+<warning>
+<simpara>In this case, 10 CPUs are reserved on NUMA node 0 and 10 are reserved on NUMA node 1.</simpara>
+</warning>
+</section>
+</section>
+<section xml:id="running-the-performance-profile-creator-wrapper-script_cnf-create-performance-profiles">
+<title>Running the Performance Profile Creator wrapper script</title>
+<simpara>The performance profile wrapper script simplifies the running of the Performance Profile Creator (PPC) tool. It hides the complexities associated with running <literal>podman</literal> and specifying the mapping directories and it enables the creation of the performance profile.</simpara>
+<itemizedlist>
+<title>Prerequisites</title>
+<listitem>
+<simpara>Access to the Node Tuning Operator image.</simpara>
+</listitem>
+<listitem>
+<simpara>Access to the <literal>must-gather</literal> tarball.</simpara>
+</listitem>
+</itemizedlist>
+<orderedlist numeration="arabic">
+<title>Procedure</title>
+<listitem>
+<simpara>Create a file on your local machine named, for example, <literal>run-perf-profile-creator.sh</literal>:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ vi run-perf-profile-creator.sh</programlisting>
+</listitem>
+<listitem>
+<simpara>Paste the following code into the file:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">#!/bin/bash
+
+readonly CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-podman}
+readonly CURRENT_SCRIPT=$(basename "$0")
+readonly CMD="${CONTAINER_RUNTIME} run --entrypoint performance-profile-creator"
+readonly IMG_EXISTS_CMD="${CONTAINER_RUNTIME} image exists"
+readonly IMG_PULL_CMD="${CONTAINER_RUNTIME} image pull"
+readonly MUST_GATHER_VOL="/must-gather"
+
+NTO_IMG="registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version}"
+MG_TARBALL=""
+DATA_DIR=""
+
+usage() {
+  print "Wrapper usage:"
+  print "  ${CURRENT_SCRIPT} [-h] [-p image][-t path] -- [performance-profile-creator flags]"
+  print ""
+  print "Options:"
+  print "   -h                 help for ${CURRENT_SCRIPT}"
+  print "   -p                 Node Tuning Operator image"
+  print "   -t                 path to a must-gather tarball"
+
+  ${IMG_EXISTS_CMD} "${NTO_IMG}" &amp;&amp; ${CMD} "${NTO_IMG}" -h
+}
+
+function cleanup {
+  [ -d "${DATA_DIR}" ] &amp;&amp; rm -rf "${DATA_DIR}"
+}
+trap cleanup EXIT
+
+exit_error() {
+  print "error: $*"
+  usage
+  exit 1
+}
+
+print() {
+  echo  "$*" &gt;&amp;2
+}
+
+check_requirements() {
+  ${IMG_EXISTS_CMD} "${NTO_IMG}" || ${IMG_PULL_CMD} "${NTO_IMG}" || \
+      exit_error "Node Tuning Operator image not found"
+
+  [ -n "${MG_TARBALL}" ] || exit_error "Must-gather tarball file path is mandatory"
+  [ -f "${MG_TARBALL}" ] || exit_error "Must-gather tarball file not found"
+
+  DATA_DIR=$(mktemp -d -t "${CURRENT_SCRIPT}XXXX") || exit_error "Cannot create the data directory"
+  tar -zxf "${MG_TARBALL}" --directory "${DATA_DIR}" || exit_error "Cannot decompress the must-gather tarball"
+  chmod a+rx "${DATA_DIR}"
+
+  return 0
+}
+
+main() {
+  while getopts ':hp:t:' OPT; do
+    case "${OPT}" in
+      h)
+        usage
+        exit 0
+        ;;
+      p)
+        NTO_IMG="${OPTARG}"
+        ;;
+      t)
+        MG_TARBALL="${OPTARG}"
+        ;;
+      ?)
+        exit_error "invalid argument: ${OPTARG}"
+        ;;
+    esac
+  done
+  shift $((OPTIND - 1))
+
+  check_requirements || exit 1
+
+  ${CMD} -v "${DATA_DIR}:${MUST_GATHER_VOL}:z" "${NTO_IMG}" "$@" --must-gather-dir-path "${MUST_GATHER_VOL}"
+  echo "" 1&gt;&amp;2
+}
+
+main "$@"</programlisting>
+</listitem>
+<listitem>
+<simpara>Add execute permissions for everyone on this script:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ chmod a+x run-perf-profile-creator.sh</programlisting>
+</listitem>
+<listitem>
+<simpara>Optional: Display the <literal>run-perf-profile-creator.sh</literal> command usage:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ ./run-perf-profile-creator.sh -h</programlisting>
+<formalpara>
+<title>Expected output</title>
+<para>
+<programlisting language="terminal" linenumbering="unnumbered">Wrapper usage:
+  run-perf-profile-creator.sh [-h] [-p image][-t path] -- [performance-profile-creator flags]
+
+Options:
+   -h                 help for run-perf-profile-creator.sh
+   -p                 Node Tuning Operator image <co xml:id="CO1-1"/>
+   -t                 path to a must-gather tarball <co xml:id="CO1-2"/>
+A tool that automates creation of Performance Profiles
+
+Usage:
+  performance-profile-creator [flags]
+
+Flags:
+      --disable-ht                        Disable Hyperthreading
+  -h, --help                              help for performance-profile-creator
+      --info string                       Show cluster information; requires --must-gather-dir-path, ignore the other arguments. [Valid values: log, json] (default "log")
+      --mcp-name string                   MCP name corresponding to the target machines (required)
+      --must-gather-dir-path string       Must gather directory path (default "must-gather")
+      --offlined-cpu-count int            Number of offlined CPUs
+      --power-consumption-mode string     The power consumption mode.  [Valid values: default, low-latency, ultra-low-latency] (default "default")
+      --profile-name string               Name of the performance profile to be created (default "performance")
+      --reserved-cpu-count int            Number of reserved CPUs (required)
+      --rt-kernel                         Enable Real Time Kernel (required)
+      --split-reserved-cpus-across-numa   Split the Reserved CPUs across NUMA nodes
+      --topology-manager-policy string    Kubelet Topology Manager Policy of the performance profile to be created. [Valid values: single-numa-node, best-effort, restricted] (default "restricted")
+      --user-level-networking             Run with User level Networking(DPDK) enabled</programlisting>
+</para>
+</formalpara>
+<note>
+<simpara>There two types of arguments:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Wrapper arguments namely <literal>-h</literal>, <literal>-p</literal> and <literal>-t</literal></simpara>
+</listitem>
+<listitem>
+<simpara>PPC arguments</simpara>
+</listitem>
+</itemizedlist>
+</note>
+<calloutlist>
+<callout arearefs="CO1-1">
+<para>Optional: Specify the Node Tuning Operator image. If not set, the default upstream image is used: <literal>registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version}</literal>.</para>
+</callout>
+<callout arearefs="CO1-2">
+<para><literal>-t</literal> is a required wrapper script argument and specifies the path to a <literal>must-gather</literal> tarball.</para>
+</callout>
+</calloutlist>
+</listitem>
+<listitem>
+<simpara>Run the performance profile creator tool in discovery mode:</simpara>
+<note>
+<simpara>Discovery mode inspects your cluster using the output from <literal>must-gather</literal>. The output produced includes information on:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>The NUMA cell partitioning with the allocated CPU IDs</simpara>
+</listitem>
+<listitem>
+<simpara>Whether hyperthreading is enabled</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Using this information you can set appropriate values for some of the arguments supplied to the Performance Profile Creator tool.</simpara>
+</note>
+<programlisting language="terminal" linenumbering="unnumbered">$ ./run-perf-profile-creator.sh -t /must-gather/must-gather.tar.gz -- --info=log</programlisting>
+<note>
+<simpara>The <literal>info</literal> option requires a value which specifies the output format. Possible values are log and JSON. The JSON format is reserved for debugging.</simpara>
+</note>
+</listitem>
+<listitem>
+<simpara>Check the machine config pool:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ oc get mcp</programlisting>
+<formalpara>
+<title>Example output</title>
+<para>
+<programlisting language="terminal" linenumbering="unnumbered">NAME         CONFIG                                                 UPDATED   UPDATING   DEGRADED   MACHINECOUNT   READYMACHINECOUNT   UPDATEDMACHINECOUNT   DEGRADEDMACHINECOUNT   AGE
+master       rendered-master-acd1358917e9f98cbdb599aea622d78b       True      False      False      3              3                   3                     0                      22h
+worker-cnf   rendered-worker-cnf-1d871ac76e1951d32b2fe92369879826   False     True       False      2              1                   1                     0                      22h</programlisting>
+</para>
+</formalpara>
+</listitem>
+<listitem>
+<simpara>Create a performance profile:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ ./run-perf-profile-creator.sh -t /must-gather/must-gather.tar.gz -- --mcp-name=worker-cnf --reserved-cpu-count=2 --rt-kernel=true &gt; my-performance-profile.yaml</programlisting>
+<note>
+<simpara>The Performance Profile Creator arguments are shown in the Performance Profile Creator arguments table. The following arguments are required:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><literal>reserved-cpu-count</literal></simpara>
+</listitem>
+<listitem>
+<simpara><literal>mcp-name</literal></simpara>
+</listitem>
+<listitem>
+<simpara><literal>rt-kernel</literal></simpara>
+</listitem>
+</itemizedlist>
+<simpara>The <literal>mcp-name</literal> argument in this example is set to <literal>worker-cnf</literal> based on the output of the command <literal>oc get mcp</literal>. For single-node OpenShift use <literal>--mcp-name=master</literal>.</simpara>
+</note>
+</listitem>
+<listitem>
+<simpara>Review the created YAML file:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">$ cat my-performance-profile.yaml</programlisting>
+<formalpara>
+<title>Example output</title>
+<para>
+<programlisting language="terminal" linenumbering="unnumbered">apiVersion: performance.openshift.io/v2
+kind: PerformanceProfile
+metadata:
+  name: performance
+spec:
+  cpu:
+    isolated: 1-39,41-79
+    reserved: 0,40
+  nodeSelector:
+    node-role.kubernetes.io/worker-cnf: ""
+  numa:
+    topologyPolicy: restricted
+  realTimeKernel:
+    enabled: false</programlisting>
+</para>
+</formalpara>
+</listitem>
+<listitem>
+<simpara>Apply the generated profile:</simpara>
+<note>
+<simpara>Install the Node Tuning Operator before applying the profile.</simpara>
+</note>
+<programlisting language="terminal" linenumbering="unnumbered">$ oc apply -f my-performance-profile.yaml</programlisting>
+</listitem>
+</orderedlist>
+</section>
+<section xml:id="performance-profile-creator-arguments_cnf-create-performance-profiles">
+<title>Performance Profile Creator arguments</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>Performance Profile Creator arguments</title>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="30*"/>
+<colspec colname="col_2" colwidth="70*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Argument</entry>
+<entry align="left" valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><literal>disable-ht</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Disable hyperthreading.</simpara>
+<simpara>Possible values: <literal>true</literal> or <literal>false</literal>.</simpara>
+<simpara>Default: <literal>false</literal>.</simpara>
+<warning>
+<simpara>If this argument is set to <literal>true</literal> you should not disable hyperthreading in the BIOS. Disabling hyperthreading is accomplished with a kernel command line argument.</simpara>
+</warning></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>info</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>This captures cluster information and is used in discovery mode only. Discovery mode also requires the <literal>must-gather-dir-path</literal> argument. If any other arguments are set they are ignored.</simpara>
+<simpara>Possible values:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><literal>log</literal></simpara>
+</listitem>
+<listitem>
+<simpara><literal>JSON</literal></simpara>
+<note>
+<simpara>These options define the output format with the JSON format being reserved for debugging.</simpara>
+</note>
+</listitem>
+</itemizedlist>
+<simpara>Default: <literal>log</literal>.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>mcp-name</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>MCP name for example <literal>worker-cnf</literal> corresponding to the target machines. This parameter is required.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>must-gather-dir-path</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Must gather directory path. This parameter is required.</simpara><simpara>When the user runs the tool with the wrapper script <literal>must-gather</literal> is supplied by the script itself and the user must not specify it.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>offlined-cpu-count</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Number of offlined CPUs.</simpara>
+<note>
+<simpara>This must be a natural number greater than 0. If not enough logical processors are offlined then error messages are logged. The messages are:</simpara>
+<programlisting language="terminal" linenumbering="unnumbered">Error: failed to compute the reserved and isolated CPUs: please ensure that reserved-cpu-count plus offlined-cpu-count should be in the range [0,1]</programlisting>
+<programlisting language="terminal" linenumbering="unnumbered">Error: failed to compute the reserved and isolated CPUs: please specify the offlined CPU count in the range [0,1]</programlisting>
+</note></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>power-consumption-mode</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>The power consumption mode.</simpara>
+<simpara>Possible values:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><literal>default</literal>: CPU partitioning with enabled power management and basic low-latency.</simpara>
+</listitem>
+<listitem>
+<simpara><literal>low-latency</literal>: Enhanced measures to improve latency figures.</simpara>
+</listitem>
+<listitem>
+<simpara><literal>ultra-low-latency</literal>: Priority given to optimal latency, at the expense of power management.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Default: <literal>default</literal>.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>profile-name</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Name of the performance profile to create.
+Default: <literal>performance</literal>.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>reserved-cpu-count</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Number of reserved CPUs. This parameter is required.</simpara>
+<note>
+<simpara>This must be a natural number. A value of 0 is not allowed.</simpara>
+</note></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>rt-kernel</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Enable real-time kernel. This parameter is required.</simpara><simpara>Possible values: <literal>true</literal> or <literal>false</literal>.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>split-reserved-cpus-across-numa</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Split the reserved CPUs across NUMA nodes.</simpara><simpara>Possible values: <literal>true</literal> or <literal>false</literal>.</simpara><simpara>Default: <literal>false</literal>.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>topology-manager-policy</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Kubelet Topology Manager policy of the performance profile to be created.</simpara>
+<simpara>Possible values:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><literal>single-numa-node</literal></simpara>
+</listitem>
+<listitem>
+<simpara><literal>best-effort</literal></simpara>
+</listitem>
+<listitem>
+<simpara><literal>restricted</literal></simpara>
+</listitem>
+</itemizedlist>
+<simpara>Default: <literal>restricted</literal>.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>user-level-networking</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Run with user level networking (DPDK) enabled.</simpara><simpara>Possible values: <literal>true</literal> or <literal>false</literal>.</simpara><simpara>Default: <literal>false</literal>.</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</section>
+</section>
+<section xml:id="cnf-create-performance-profiles-reference">
+<title>Reference performance profiles</title>
+<section xml:id="installation-openstack-ovs-dpdk-performance-profile_cnf-create-performance-profiles">
+<title>A performance profile template for clusters that use OVS-DPDK on OpenStack</title>
+<simpara>To maximize machine performance in a cluster that uses Open vSwitch with the Data Plane Development Kit (OVS-DPDK) on Red Hat OpenStack Platform (RHOSP), you can use a performance profile.</simpara>
+<simpara>You can use the following performance profile template to create a profile for your deployment.</simpara>
+<formalpara>
+<title>A performance profile template for clusters that use OVS-DPDK</title>
+<para>
+<programlisting language="yaml" linenumbering="unnumbered">apiVersion: performance.openshift.io/v2
+kind: PerformanceProfile
+metadata:
+  name: cnf-performanceprofile
+spec:
+  additionalKernelArgs:
+    - nmi_watchdog=0
+    - audit=0
+    - mce=off
+    - processor.max_cstate=1
+    - idle=poll
+    - intel_idle.max_cstate=0
+    - default_hugepagesz=1GB
+    - hugepagesz=1G
+    - intel_iommu=on
+  cpu:
+    isolated: &lt;CPU_ISOLATED&gt;
+    reserved: &lt;CPU_RESERVED&gt;
+  hugepages:
+    defaultHugepagesSize: 1G
+    pages:
+      - count: &lt;HUGEPAGES_COUNT&gt;
+        node: 0
+        size: 1G
+  nodeSelector:
+    node-role.kubernetes.io/worker: ''
+  realTimeKernel:
+    enabled: false
+    globallyDisableIrqLoadBalancing: true</programlisting>
+</para>
+</formalpara>
+<simpara>Insert values that are appropriate for your configuration for the <literal>CPU_ISOLATED</literal>, <literal>CPU_RESERVED</literal>, and <literal>HUGEPAGES_COUNT</literal> keys.</simpara>
+<simpara>To learn how to create and use performance profiles, see the "Creating a performance profile" page in the "Scalability and performance" section of the {product-title} documentation.</simpara>
+</section>
+</section>
+<section xml:id="cnf-create-performance-profiles-additional-resources" role="_additional-resources">
+<title>Additional resources</title>
+<itemizedlist>
+<listitem>
+<simpara>For more information about the <literal>must-gather</literal> tool,
+see <link xl:href="../support/gathering-cluster-data.xml#nodes-nodes-managing">Gathering data about your cluster</link>.</simpara>
+</listitem>
+</itemizedlist>
+</section>
+</article>

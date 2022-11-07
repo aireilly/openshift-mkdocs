@@ -1,20 +1,26 @@
-local stringify = (require 'pandoc.utils').stringify
+-- requires pandoc 2.19+
 
 local admonitions = {
-  warning   = {pandoc.Str("!!! warning")},
-  note      = {pandoc.Str("!!! note")},
-  tip       = {pandoc.Str("!!! tip")},
-  important = {pandoc.Str("!!! important")},
-  caution   = {pandoc.Str("!!! caution")}
-  }
+  warning   = '!!! warning',
+  note      = '!!! note',
+  tip       = '!!! tip',
+  important = '!!! important',
+  caution   = '!!! caution'
+}
 
-function Div(el)
-  local admonition_text = admonitions[el.classes[1]]
-  if admonition_text then
-    table.insert(el.content, 1,
-        --pandoc.Para{ pandoc.Str(stringify(admonition_text)) })
-        pandoc.Plain{pandoc.Str(stringify(admonition_text) .. "\n" .. "    " .. stringify(el.content)) })
-  end
-  return el
+local opts = PANDOC_WRITER_OPTIONS -- reuse options to render snippets
+opts.columns = opts.columns - 4    -- admons are indented by four spaces
+opts.template = nil                -- render a snippet
+
+function Div (div)
+  local admonition_text = admonitions[div.classes[1]]
+  if not admonition_text then return nil end  -- not an admonition: exit
+
+  local md = admonition_text .. '\n' ..
+    pandoc.write(pandoc.Pandoc(div.content), 'markdown', opts)
+  return pandoc.RawBlock(
+    'markdown',
+    md:gsub('\n*$', '')     -- remove trailing newlines
+      :gsub('\n', '\n    ') -- indent block
+  )
 end
-

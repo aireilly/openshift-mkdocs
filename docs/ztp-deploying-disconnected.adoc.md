@@ -2,7 +2,19 @@
 
 Use zero touch provisioning (ZTP) to provision distributed units at new edge sites in a disconnected environment. The workflow starts when the site is connected to the network and ends with the CNF workload deployed and running on the site nodes.
 
+Check dis: [About the Performance Profile Creator](../cnf-create-performance-profiles.xml#cnf-about-the-profile-creator-tool_cnf-create-performance-profiles)
+
 ## Provisioning edge sites at scale
+
++-------------+----------------------+-------------+
+| Firefox     | Web Browser          | Software    |
++=============+======================+=============+
+| Ruby        | Programming Language | Language    |
++-------------+----------------------+-------------+
+| TorqueBox   | Application Server   | Application |
++-------------+----------------------+-------------+
+
+**Table 1: It’s the title!**
 
 Telco edge computing presents extraordinary challenges with managing hundreds to tens of thousands of clusters in hundreds of thousands of locations. These challenges require fully-automated management solutions with, as closely as possible, zero human interaction.
 
@@ -131,8 +143,6 @@ Before you install a cluster on infrastructure that you provision, you must crea
 !!! important
     The RHCOS images might not change with every release of {product-title}. You must download images with the highest version that is less than or equal to the {product-title} version that you install. Use the image versions that match your {product-title} version if they are available. You require ISO and RootFS images to install RHCOS on the DU hosts. RHCOS qcow2 images are not supported for this installation type.
 
-The RHCOS images might not change with every release of {product-title}. You must download images with the highest version that is less than or equal to the {product-title} version that you install. Use the image versions that match your {product-title} version if they are available. You require ISO and RootFS images to install RHCOS on the DU hosts. RHCOS qcow2 images are not supported for this installation type.
-
 1.  Log in to the mirror host.
 
 2.  Obtain the RHCOS ISO and RootFS images from [mirror.openshift.com](https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/pre-release/), for example:
@@ -193,8 +203,7 @@ You use Red Hat Advanced Cluster Management (RHACM) on a hub cluster in the disc
 -   Configure a disconnected mirror registry for use in the cluster.
 
     !!! note
-        If you want to deploy Operators to the spoke clusters, you must also add them to this registry. See Mirroring an Operator catalog for more information.
-    If you want to deploy Operators to the spoke clusters, you must also add them to this registry. See [Mirroring an Operator catalog](https://docs.openshift.com/container-platform/4.9/operators/admin/olm-restricted-networks.html#olm-mirror-catalog_olm-restricted-networks) for more information.
+        If you want to deploy Operators to the spoke clusters, you must also add them to this registry. See [Mirroring an Operator catalog](https://docs.openshift.com/container-platform/4.9/operators/admin/olm-restricted-networks.html#olm-mirror-catalog_olm-restricted-networks) for more information.
 
 <!-- -->
 
@@ -216,8 +225,6 @@ For distributed units (DUs), RHACM supports {product-title} deployments that run
 
 !!! important
     Create a persistent volume resource for image storage. Failure to specify persistent volume storage for images can affect cluster performance.
-
-Create a persistent volume resource for image storage. Failure to specify persistent volume storage for images can affect cluster performance.
 
 1.  Modify the `Provisioning` resource to allow the Bare Metal Operator to watch all namespaces:
 
@@ -304,8 +311,35 @@ Use the automated SiteConfig method when you are installing multiple managed clu
 
 Both methods create the CRs shown in the following table. On the cluster site, an automated Discovery image ISO file creates a directory with the site name and a file with the cluster name. Every cluster has its own namespace, and all of the CRs are under that namespace. The namespace and the CR names match the cluster name.
 
-<table><colgroup><col style="width: 33%" /><col style="width: 33%" /><col style="width: 33%" /></colgroup><thead><tr class="header"><th style="text-align: left;">Resource</th><th style="text-align: left;">Description</th><th style="text-align: left;">Usage</th></tr></thead><tbody><tr class="odd"><td style="text-align: left;"><p><code>BareMetalHost</code></p></td><td style="text-align: left;"><p>Contains the connection information for the Baseboard Management Controller (BMC) of the target bare-metal host.</p></td><td style="text-align: left;"><p>Provides access to the BMC to load and boot the discovery image on the target server by using the Redfish protocol. ZTP supports iPXE and virtual media network booting.</p></td></tr><tr class="even"><td style="text-align: left;"><p><code>InfraEnv</code></p></td><td style="text-align: left;"><p>Contains information for pulling {product-title} onto the target bare-metal host.</p></td><td style="text-align: left;"><p>Used with ClusterDeployment to generate the Discovery ISO for the managed cluster.</p></td></tr><tr class="odd"><td style="text-align: left;"><p><code>AgentClusterInstall</code></p></td><td style="text-align: left;"><p>Specifies the managed cluster’s configuration such as networking and the number of supervisor (control plane) nodes. Shows the <code>kubeconfig</code> and credentials when the installation is complete.</p></td><td style="text-align: left;"><p>Specifies the managed cluster configuration information and provides status during the installation of the cluster.</p></td></tr><tr class="even"><td style="text-align: left;"><p><code>ClusterDeployment</code></p></td><td style="text-align: left;"><p>References the <code>AgentClusterInstall</code> to use.</p></td><td style="text-align: left;"><p>Used with <code>InfraEnv</code> to generate the Discovery ISO for the managed cluster.</p></td></tr><tr class="odd"><td style="text-align: left;"><p><code>NMStateConfig</code></p></td><td style="text-align: left;"><p>Provides network configuration information such as <code>MAC</code> to <code>IP</code> mapping, DNS server, default route, and other network settings. This is not needed if DHCP is used.</p></td><td style="text-align: left;"><p>Sets up a static IP address for the managed cluster’s Kube API server.</p></td></tr><tr class="even"><td style="text-align: left;"><p><code>Agent</code></p></td><td style="text-align: left;"><p>Contains hardware information about the target bare-metal host.</p></td><td style="text-align: left;"><p>Created automatically on the hub when the target machine’s discovery image boots.</p></td></tr><tr class="odd"><td style="text-align: left;"><p><code>ManagedCluster</code></p></td><td style="text-align: left;"><p>When a cluster is managed by the hub, it must be imported and known. This Kubernetes object provides that interface.</p></td><td style="text-align: left;"><p>The hub uses this resource to manage and show the status of managed clusters.</p></td></tr><tr class="even"><td style="text-align: left;"><p><code>KlusterletAddonConfig</code></p></td><td style="text-align: left;"><p>Contains the list of services provided by the hub to be deployed to a <code>ManagedCluster</code>.</p></td><td style="text-align: left;"><p>Tells the hub which addon services to deploy to a <code>ManagedCluster</code>.</p></td></tr><tr class="odd"><td style="text-align: left;"><p><code>Namespace</code></p></td><td style="text-align: left;"><p>Logical space for <code>ManagedCluster</code> resources existing on the hub. Unique per site.</p></td><td style="text-align: left;"><p>Propagates resources to the <code>ManagedCluster</code>.</p></td></tr><tr class="even"><td style="text-align: left;"><p><code>Secret</code><br />
-</p></td><td style="text-align: left;"><p>Two custom resources are created: <code>BMC Secret</code> and <code>Image Pull Secret</code>.</p></td><td style="text-align: left;"><ul><li><p><code>BMC Secret</code> authenticates into the target bare-metal host using its username and password.</p></li><li><p><code>Image Pull Secret</code> contains authentication information for the {product-title} image installed on the target bare-metal host.</p></li></ul></td></tr><tr class="odd"><td style="text-align: left;"><p><code>ClusterImageSet</code></p></td><td style="text-align: left;"><p>Contains {product-title} image information such as the repository and image name.</p></td><td style="text-align: left;"><p>Passed into resources to provide {product-title} images.</p></td></tr></tbody></table>
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Resource                | Description                                                                                                                                                                                    | Usage                                                                                                                                                                    |
++=========================+================================================================================================================================================================================================+==========================================================================================================================================================================+
+| `BareMetalHost`         | Contains the connection information for the Baseboard Management Controller (BMC) of the target bare-metal host.                                                                               | Provides access to the BMC to load and boot the discovery image on the target server by using the Redfish protocol. ZTP supports iPXE and virtual media network booting. |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `InfraEnv`              | Contains information for pulling {product-title} onto the target bare-metal host.                                                                                                              | Used with ClusterDeployment to generate the Discovery ISO for the managed cluster.                                                                                       |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `AgentClusterInstall`   | Specifies the managed cluster’s configuration such as networking and the number of supervisor (control plane) nodes. Shows the `kubeconfig` and credentials when the installation is complete. | Specifies the managed cluster configuration information and provides status during the installation of the cluster.                                                      |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `ClusterDeployment`     | References the `AgentClusterInstall` to use.                                                                                                                                                   | Used with `InfraEnv` to generate the Discovery ISO for the managed cluster.                                                                                              |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `NMStateConfig`         | Provides network configuration information such as `MAC` to `IP` mapping, DNS server, default route, and other network settings. This is not needed if DHCP is used.                           | Sets up a static IP address for the managed cluster’s Kube API server.                                                                                                   |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `Agent`                 | Contains hardware information about the target bare-metal host.                                                                                                                                | Created automatically on the hub when the target machine’s discovery image boots.                                                                                        |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `ManagedCluster`        | When a cluster is managed by the hub, it must be imported and known. This Kubernetes object provides that interface.                                                                           | The hub uses this resource to manage and show the status of managed clusters.                                                                                            |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `KlusterletAddonConfig` | Contains the list of services provided by the hub to be deployed to a `ManagedCluster`.                                                                                                        | Tells the hub which addon services to deploy to a `ManagedCluster`.                                                                                                      |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `Namespace`             | Logical space for `ManagedCluster` resources existing on the hub. Unique per site.                                                                                                             | Propagates resources to the `ManagedCluster`.                                                                                                                            |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `Secret`                | Two custom resources are created: `BMC Secret` and `Image Pull Secret`.                                                                                                                        | -   `BMC Secret` authenticates into the target bare-metal host using its username and password.                                                                          |
+|                         |                                                                                                                                                                                                |                                                                                                                                                                          |
+|                         |                                                                                                                                                                                                | -   `Image Pull Secret` contains authentication information for the {product-title} image installed on the target bare-metal host.                                       |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `ClusterImageSet`       | Contains {product-title} image information such as the repository and image name.                                                                                                              | Passed into resources to provide {product-title} images.                                                                                                                 |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Table 2
 
 ZTP support for single node clusters, three-node clusters, and standard clusters requires updates to these CRs, including multiple instantiations of some.
 
@@ -339,9 +373,24 @@ The `PolicyGenTemplate` CRs can be found in the `./out/argocd/example/policygent
 
 The `PolicyGenTemplate` CRs relevant to RAN cluster configuration are described below. Variants are provided for the group `PolicyGenTemplate` CRs to account for differences in single-node, three-node compact, and standard cluster configurations. Similarly, site-specific configuration variants are provided for single-node clusters and multi-node (compact or standard) clusters. Use the group and site-specific configuration variants that are relevant for your deployment.
 
-<table><caption>PolicyGenTemplate CRs for RAN deployments</caption><colgroup><col style="width: 50%" /><col style="width: 50%" /></colgroup><thead><tr class="header"><th style="text-align: left;">PolicyGenTemplate CR</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr class="odd"><td style="text-align: left;"><p><code>common-ranGen.yaml</code></p></td><td style="text-align: left;"><p>Contains a set of common RAN CRs that get applied to all clusters. These CRs subscribe to a set of operators providing cluster features typical for RAN as well as baseline cluster tuning.</p></td></tr><tr class="even"><td style="text-align: left;"><p><code>group-du-3node-ranGen.yaml</code></p></td><td style="text-align: left;"><p>Contains the RAN policies for three-node clusters only.</p></td></tr><tr class="odd"><td style="text-align: left;"><p><code>group-du-sno-ranGen.yaml</code></p></td><td style="text-align: left;"><p>Contains the RAN policies for single-node clusters only.</p></td></tr><tr class="even"><td style="text-align: left;"><p><code>group-du-standard-ranGen.yaml</code></p></td><td style="text-align: left;"><p>Contains the RAN policies for standard three control-plane clusters.</p></td></tr></tbody></table>
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| PolicyGenTemplate CR              | Description                                                                                                                                                                                 |
++===================================+=============================================================================================================================================================================================+
+| `common-ranGen.yaml`              | Contains a set of common RAN CRs that get applied to all clusters. These CRs subscribe to a set of operators providing cluster features typical for RAN as well as baseline cluster tuning. |
+|                                   |                                                                                                                                                                                             |
+|                                   | !!! warning                                                                                                                                                                                 |
+|                                   |     here be Test warning!                                                                                                                                                                   |
+|                                   |                                                                                                                                                                                             |
+|                                   |     `ARRR`                                                                                                                                                                                  |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `group-du-3node-ranGen.yaml`      | Contains the RAN policies for three-node clusters only.                                                                                                                                     |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `group-du-sno-ranGen.yaml`        | Contains the RAN policies for single-node clusters only.                                                                                                                                    |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `group-du-standard-ranGen.yaml`   | Contains the RAN policies for standard three control-plane clusters.                                                                                                                        |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-PolicyGenTemplate CRs for RAN deployments
+**Table 3: PolicyGenTemplate CRs for RAN deployments**
 
 -   For more information about extracting the `/argocd` directory from the `ztp-site-generate` container image, see [Preparing the ZTP Git repository](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-policygentemplates-for-ran_ztp-deploying-disconnected).
 
@@ -509,8 +558,6 @@ Consider the following best practices when customizing site configuration `Polic
 !!! note
     Scaling the hub cluster to managing large numbers of spoke clusters is affected by the number of policies created on the hub cluster. Grouping multiple configuration CRs into a single or limited number of policies is one way to reduce the overall number of policies on the hub cluster. When using the common/group/site hierarchy of policies for managing site configuration, it is especially important to combine site-specific configuration into a single policy.
 
-Scaling the hub cluster to managing large numbers of spoke clusters is affected by the number of policies created on the hub cluster. Grouping multiple configuration CRs into a single or limited number of policies is one way to reduce the overall number of policies on the hub cluster. When using the common/group/site hierarchy of policies for managing site configuration, it is especially important to combine site-specific configuration into a single policy.
-
 ## Creating the PolicyGenTemplate CR
 
 Use this procedure to create the `PolicyGenTemplate` custom resource (CR) for your site in your local clone of the Git repository.
@@ -543,14 +590,12 @@ Ensure that policy namespaces meets the following requirements:
 3.  Ensure that the content of the overlaid spec files matches your desired end state. As a reference, the `out/source-crs` directory contains the full list of `source-crs` available to be included and overlaid by your `PolicyGenTemplate` templates.
 
     !!! note
-        Depending on the specific requirements of your clusters, you might need more than a single group policy per cluster type, especially considering that the example group policies each have a single PerformancePolicy.yaml file that can only be shared across a set of clusters if those clusters consist of identical hardware configurations.
-    Depending on the specific requirements of your clusters, you might need more than a single group policy per cluster type, especially considering that the example group policies each have a single `PerformancePolicy.yaml` file that can only be shared across a set of clusters if those clusters consist of identical hardware configurations.
+        Depending on the specific requirements of your clusters, you might need more than a single group policy per cluster type, especially considering that the example group policies each have a single `PerformancePolicy.yaml` file that can only be shared across a set of clusters if those clusters consist of identical hardware configurations.
 
 4.  Define all the policy namespaces in a YAML file similar to the example `out/argocd/example/policygentemplates/ns.yaml` file.
 
     !!! important
-        Ensure that policy namespaces begin with ztp and are unique.
-    Ensure that policy namespaces begin with `ztp` and are unique.
+        Ensure that policy namespaces begin with `ztp` and are unique.
 
 5.  Add all the `PolicyGenTemplate` files and `ns.yaml` file to the `kustomization.yaml` file, similar to the example `out/argocd/example/policygentemplates/kustomization.yaml` file.
 
@@ -690,8 +735,7 @@ The following example procedure describes how to update fields in the generated 
     ```
 
     !!! note
-        Any fields in the source CR which contain $…​ are removed from the generated CR if they are not provided in the PolicyGenTemplate CR.
-    Any fields in the source CR which contain `$…​` are removed from the generated CR if they are not provided in the `PolicyGenTemplate` CR.
+        Any fields in the source CR which contain `$…​` are removed from the generated CR if they are not provided in the `PolicyGenTemplate` CR.
 
 3.  Update the `PolicyGenTemplate` entry for `PerformanceProfile` in the `group-du-sno-ranGen.yaml` reference file. The following example `PolicyGenTemplate` CR stanza supplies appropriate CPU specifications, sets the `hugepages` configuration, and adds a new field that sets `globallyDisableIrqLoadBalancing` to false.
 
@@ -751,20 +795,18 @@ spec:
 ```
 
 !!! note
-    In the /source-crs folder that you extract from the ztp-site-generate container, the $ syntax is not used for template substitution as implied by the syntax. Rather, if the policyGen tool sees the $ prefix for a string and you do not specify a value for that field in the related PolicyGenTemplate CR, the field is omitted from the output CR entirely.An exception to this is the $mcp variable in /source-crs YAML files that is substituted with the specified value for mcp from the PolicyGenTemplate CR. For example, in example/policygentemplates/group-du-standard-ranGen.yaml, the value for mcp is worker:The policyGen tool replace instances of $mcp with worker in the output CRs.
-
-In the `/source-crs` folder that you extract from the `ztp-site-generate` container, the `$` syntax is not used for template substitution as implied by the syntax. Rather, if the `policyGen` tool sees the `$` prefix for a string and you do not specify a value for that field in the related `PolicyGenTemplate` CR, the field is omitted from the output CR entirely.
-
-An exception to this is the `$mcp` variable in `/source-crs` YAML files that is substituted with the specified value for `mcp` from the `PolicyGenTemplate` CR. For example, in `example/policygentemplates/group-du-standard-ranGen.yaml`, the value for `mcp` is `worker`:
-
-``` yaml
-spec:
-  bindingRules:
-    group-du-standard: ""
-  mcp: "worker"
-```
-
-The `policyGen` tool replace instances of `$mcp` with `worker` in the output CRs.
+    In the `/source-crs` folder that you extract from the `ztp-site-generate` container, the `$` syntax is not used for template substitution as implied by the syntax. Rather, if the `policyGen` tool sees the `$` prefix for a string and you do not specify a value for that field in the related `PolicyGenTemplate` CR, the field is omitted from the output CR entirely.
+    
+    An exception to this is the `$mcp` variable in `/source-crs` YAML files that is substituted with the specified value for `mcp` from the `PolicyGenTemplate` CR. For example, in `example/policygentemplates/group-du-standard-ranGen.yaml`, the value for `mcp` is `worker`:
+    
+    ``` yaml
+    spec:
+      bindingRules:
+        group-du-standard: ""
+      mcp: "worker"
+    ```
+    
+    The `policyGen` tool replace instances of `$mcp` with `worker` in the output CRs.
 
 ### Filtering custom resources using SiteConfig filters
 
@@ -996,9 +1038,7 @@ You can configure bare-metal hardware events for vRAN clusters that are deployed
 -   Create a Git repository where you manage your custom site configuration data.
 
 !!! note
-    Multiple HardwareEvent resources are not permitted.
-
-Multiple `HardwareEvent` resources are not permitted.
+    Multiple `HardwareEvent` resources are not permitted.
 
 1.  To configure the AMQ Interconnect Operator and the Bare Metal Event Relay Operator, add the following YAML to `spec.sourceFiles` in the `common-ranGen.yaml` file:
 
@@ -1184,8 +1224,6 @@ Extra manifests are applied during installation and makes the installation proce
 !!! important
     Providing additional source CRs or modifying existing source CRs can significantly impact the performance or CPU profile of {product-title}.
 
-Providing additional source CRs or modifying existing source CRs can significantly impact the performance or CPU profile of {product-title}.
-
 -   See [Adding new content to the GitOps ZTP pipeline](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-adding-new-content-to-gitops-ztp_ztp-deploying-disconnected) for more information about adding or modifying existing source CRs in the `ztp-site-generate` container.
 
 -   See [Customizing the ZTP GitOps pipeline with extra manifests](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-customizing-the-install-extra-manifests_ztp-deploying-disconnected) for more information on adding extra manifests.
@@ -1333,8 +1371,7 @@ Use the following procedure to prepare the hub cluster for site deployment and i
     ```
 
     !!! note
-        The secrets are referenced from the SiteConfig custom resource (CR) by name. The namespace must match the SiteConfig namespace.
-    The secrets are referenced from the `SiteConfig` custom resource (CR) by name. The namespace must match the `SiteConfig` namespace.
+        The secrets are referenced from the `SiteConfig` custom resource (CR) by name. The namespace must match the `SiteConfig` namespace.
 
 4.  Create a `SiteConfig` CR for your cluster in your local clone of the Git repository:
 
@@ -1507,8 +1544,7 @@ Waves
 Each policy generated from a `PolicyGenTemplate` CR includes a `ztp-deploy-wave` annotation. This annotation is based on the same annotation from each CR which is included in that policy. The wave annotation is used to order the policies in the auto-generated `ClusterGroupUpgrade` CR.
 
 !!! note
-    All CRs in the same policy must have the same setting for the ztp-deploy-wave annotation. The default value of this annotation for each CR can be overridden in the PolicyGenTemplate. The wave annotation in the source CR is used for determining and setting the policy wave annotation. This annotation is removed from each built CR which is included in the generated policy at runtime.
-All CRs in the same policy must have the same setting for the `ztp-deploy-wave` annotation. The default value of this annotation for each CR can be overridden in the `PolicyGenTemplate`. The wave annotation in the source CR is used for determining and setting the policy wave annotation. This annotation is removed from each built CR which is included in the generated policy at runtime.
+    All CRs in the same policy must have the same setting for the `ztp-deploy-wave` annotation. The default value of this annotation for each CR can be overridden in the `PolicyGenTemplate`. The wave annotation in the source CR is used for determining and setting the policy wave annotation. This annotation is removed from each built CR which is included in the generated policy at runtime.
 
 The TALM applies the configuration policies in the order specified by the wave annotations. The TALM waits for each policy to be compliant before moving to the next policy. It is important to ensure that the wave annotation for each CR takes into account any prerequisites for those CRs to be applied to the cluster. For example, an Operator must be installed before or concurrently with the configuration for the Operator. Similarly, the `CatalogSource` for an Operator must be installed in a wave before or concurrently with the Operator Subscription. The default wave value for each CR takes these prerequisites into account.
 
@@ -1743,8 +1779,6 @@ The administrator can specify updating the kernel to `rt-kernel`, reserving CPUs
 !!! note
     In earlier versions of {product-title}, the Performance Addon Operator was used to implement automatic tuning to achieve low latency performance for OpenShift applications. In {product-title} 4.11, these functions are part of the Node Tuning Operator.
 
-In earlier versions of {product-title}, the Performance Addon Operator was used to implement automatic tuning to achieve low latency performance for OpenShift applications. In {product-title} 4.11, these functions are part of the Node Tuning Operator.
-
 ## Troubleshooting GitOps ZTP
 
 The ArgoCD pipeline uses the `SiteConfig` and `PolicyGenTemplate` custom resources (CRs) from Git to generate the cluster configuration CRs and Red Hat Advanced Cluster Management (RHACM) policies. Use the following steps to troubleshoot issues that might occur during this process.
@@ -1936,9 +1970,7 @@ At this point, ZTP has completed its interaction with the cluster and any furthe
 Remove a site and the associated installation and configuration policy CRs by removing the `SiteConfig` and `PolicyGenTemplate` file names from the `kustomization.yaml` file. When you run the ZTP pipeline again, the generated CRs are removed. If you want to permanently remove a site, you should also remove the `SiteConfig` and site-specific `PolicyGenTemplate` files from the Git repository. If you want to remove a site temporarily, for example when redeploying a site, you can leave the `SiteConfig` and site-specific `PolicyGenTemplate` CRs in the Git repository.
 
 !!! note
-    After removing the SiteConfig file, if the corresponding clusters remain in the detach process, check Red Hat Advanced Cluster Management (RHACM) for information about cleaning up the detached managed cluster.
-
-After removing the `SiteConfig` file, if the corresponding clusters remain in the detach process, check Red Hat Advanced Cluster Management (RHACM) for information about cleaning up the detached managed cluster.
+    After removing the `SiteConfig` file, if the corresponding clusters remain in the detach process, check Red Hat Advanced Cluster Management (RHACM) for information about cleaning up the detached managed cluster.
 
 -   For information about removing a cluster, see [Removing a cluster from management](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/clusters/managing-your-clusters#remove-managed-cluster).
 
@@ -2100,8 +2132,7 @@ When upgrading the `ztp-site-generate` container from an earlier release to the 
     ```
 
     !!! note
-        The files listed in the generator sections must contain either SiteConfig or PolicyGenTemplate CRs only. If your existing YAML files contain other CRs, for example, Namespace, these other CRs must be pulled out into separate files and listed in the resources section.
-    The files listed in the `generator` sections must contain either `SiteConfig` or `PolicyGenTemplate` CRs only. If your existing YAML files contain other CRs, for example, `Namespace`, these other CRs must be pulled out into separate files and listed in the `resources` section.
+        The files listed in the `generator` sections must contain either `SiteConfig` or `PolicyGenTemplate` CRs only. If your existing YAML files contain other CRs, for example, `Namespace`, these other CRs must be pulled out into separate files and listed in the `resources` section.
 
     The `PolicyGenTemplate` kustomization file must contain all `PolicyGenTemplate` YAML files in the `generator` section and `Namespace` CRs in the `resources` section. For example:
 
@@ -2315,7 +2346,6 @@ This procedure tells you how to manually create and deploy a single managed clus
 
     !!! note
         If you want to configure a static IP address for the managed cluster at this point, see the procedure in this document for configuring static IP addresses for managed clusters.
-    If you want to configure a static IP address for the managed cluster at this point, see the procedure in this document for configuring static IP addresses for managed clusters.
 
 6.  Create the `ClusterDeployment` custom resource:
 
@@ -2454,25 +2484,46 @@ Distributed unit (DU) hosts require the BIOS to be configured before the host ca
 
     !!! important
         The exact BIOS configuration depends on your specific hardware and network requirements. The following sample configuration is for illustrative purposes only.
-    The exact BIOS configuration depends on your specific hardware and network requirements. The following sample configuration is for illustrative purposes only.
 
-    <table style="width:90%;"><caption>Sample BIOS configuration for an Intel Xeon Skylake or Cascade Lake server</caption><colgroup><col style="width: 45%" /><col style="width: 45%" /></colgroup><thead><tr class="header"><th style="text-align: left;">BIOS Setting</th><th style="text-align: left;">Configuration</th></tr></thead><tbody><tr class="odd"><td style="text-align: left;"><p>CPU Power and Performance Policy</p></td><td style="text-align: left;"><p>Performance</p></td></tr><tr class="even"><td style="text-align: left;"><p>Uncore Frequency Scaling</p></td><td style="text-align: left;"><p>Disabled</p></td></tr><tr class="odd"><td style="text-align: left;"><p>Performance P-limit</p></td><td style="text-align: left;"><p>Disabled</p></td></tr><tr class="even"><td style="text-align: left;"><p>Enhanced Intel SpeedStep ® Tech</p></td><td style="text-align: left;"><p>Enabled</p></td></tr><tr class="odd"><td style="text-align: left;"><p>Intel Configurable TDP</p></td><td style="text-align: left;"><p>Enabled</p></td></tr><tr class="even"><td style="text-align: left;"><p>Configurable TDP Level</p></td><td style="text-align: left;"><p>Level 2</p></td></tr><tr class="odd"><td style="text-align: left;"><p>Intel® Turbo Boost Technology</p></td><td style="text-align: left;"><p>Enabled</p></td></tr><tr class="even"><td style="text-align: left;"><p>Energy Efficient Turbo</p></td><td style="text-align: left;"><p>Disabled</p></td></tr><tr class="odd"><td style="text-align: left;"><p>Hardware P-States</p></td><td style="text-align: left;"><p>Disabled</p></td></tr><tr class="even"><td style="text-align: left;"><p>Package C-State</p></td><td style="text-align: left;"><p>C0/C1 state</p></td></tr><tr class="odd"><td style="text-align: left;"><p>C1E</p></td><td style="text-align: left;"><p>Disabled</p></td></tr><tr class="even"><td style="text-align: left;"><p>Processor C6</p></td><td style="text-align: left;"><p>Disabled</p></td></tr></tbody></table>
+    +----------------------------------+-------------------------------+
+    | BIOS Setting                     | Configuration                 |
+    +==================================+===============================+
+    | CPU Power and Performance Policy | Performance                   |
+    +----------------------------------+-------------------------------+
+    | Uncore Frequency Scaling         | Disabled                      |
+    +----------------------------------+-------------------------------+
+    | Performance P-limit              | Disabled                      |
+    +----------------------------------+-------------------------------+
+    | Enhanced Intel SpeedStep ® Tech  | Enabled                       |
+    +----------------------------------+-------------------------------+
+    | Intel Configurable TDP           | Enabled                       |
+    +----------------------------------+-------------------------------+
+    | Configurable TDP Level           | Level 2                       |
+    +----------------------------------+-------------------------------+
+    | Intel® Turbo Boost Technology    | Enabled                       |
+    +----------------------------------+-------------------------------+
+    | Energy Efficient Turbo           | Disabled                      |
+    +----------------------------------+-------------------------------+
+    | Hardware P-States                | Disabled                      |
+    +----------------------------------+-------------------------------+
+    | Package C-State                  | C0/C1 state                   |
+    +----------------------------------+-------------------------------+
+    | C1E                              | Disabled                      |
+    +----------------------------------+-------------------------------+
+    | Processor C6                     | Disabled                      |
+    +----------------------------------+-------------------------------+
 
-    Sample BIOS configuration for an Intel Xeon Skylake or Cascade Lake server
+    **Table 4: Sample BIOS configuration for an Intel Xeon Skylake or Cascade Lake server**
 
 !!! note
     Enable global SR-IOV and VT-d settings in the BIOS for the host. These settings are relevant to bare-metal environments.
-
-Enable global SR-IOV and VT-d settings in the BIOS for the host. These settings are relevant to bare-metal environments.
 
 ### Configuring static IP addresses for managed clusters
 
 Optionally, after creating the `AgentClusterInstall` custom resource, you can configure static IP addresses for the managed clusters.
 
 !!! note
-    You must create this custom resource before creating the ClusterDeployment custom resource.
-
-You must create this custom resource before creating the `ClusterDeployment` custom resource.
+    You must create this custom resource before creating the `ClusterDeployment` custom resource.
 
 -   Deploy and configure the `AgentClusterInstall` custom resource.
 
@@ -2627,8 +2678,6 @@ After you have completed the preceding procedure, follow these steps to configur
 !!! warning
     If you enable TLS for the HTTPD server, you must confirm the root certificate is signed by an authority trusted by the client and verify the trusted certificate chain between your {product-title} hub and spoke clusters and the HTTPD server. Using a server configured with an untrusted certificate prevents the images from being downloaded to the image creation service. Using untrusted HTTPS servers is not supported.
 
-If you enable TLS for the HTTPD server, you must confirm the root certificate is signed by an authority trusted by the client and verify the trusted certificate chain between your {product-title} hub and spoke clusters and the HTTPD server. Using a server configured with an untrusted certificate prevents the images from being downloaded to the image creation service. Using untrusted HTTPS servers is not supported.
-
 1.  Create a `ConfigMap` containing the mirror registry config:
 
     ``` yaml
@@ -2693,8 +2742,6 @@ If you enable TLS for the HTTPD server, you must confirm the root certificate is
 
 !!! important
     A valid NTP server is required during cluster installation. Ensure that a suitable NTP server is available and can be reached from the installed clusters through the disconnected network.
-
-A valid NTP server is required during cluster installation. Ensure that a suitable NTP server is available and can be reached from the installed clusters through the disconnected network.
 
 ### Configuring IPv6 addresses for a disconnected environment
 
@@ -2886,11 +2933,9 @@ Use this procedure to diagnose any installation issues that might occur with the
 You can use the Topology Aware Lifecycle Manager (TALM) to manage the software lifecycle of multiple OpenShift clusters. TALM uses Red Hat Advanced Cluster Management (RHACM) policies to perform changes on the target clusters.
 
 !!! important
-    The Topology Aware Lifecycle Manager is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.For more information about the support scope of Red Hat Technology Preview features, see https://access.redhat.com/support/offerings/techpreview/.
-
-The Topology Aware Lifecycle Manager is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
-
-For more information about the support scope of Red Hat Technology Preview features, see <https://access.redhat.com/support/offerings/techpreview/>.
+    The Topology Aware Lifecycle Manager is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+    
+    For more information about the support scope of Red Hat Technology Preview features, see <https://access.redhat.com/support/offerings/techpreview/>.
 
 -   For more information about the Topology Aware Lifecycle Manager, see [About the Topology Aware Lifecycle Manager](../scalability_and_performance/cnf-talm-for-cluster-upgrades.xml#cnf-about-topology-aware-lifecycle-manager-config_cnf-topology-aware-lifecycle-manager).
 
@@ -2901,9 +2946,7 @@ TALM has a controller called `ManagedClusterForCGU` that monitors the `Ready` st
 For any managed cluster in the `Ready` state without a "ztp-done" label applied, the `ManagedClusterForCGU` controller automatically creates a `ClusterGroupUpgrade` CR in the `ztp-install` namespace with its associated RHACM policies that are created during the ZTP process. TALM then remediates the set of configuration policies that are listed in the auto-created `ClusterGroupUpgrade` CR to push the configuration CRs to the managed cluster.
 
 !!! note
-    If the managed cluster has no bound policies when the cluster becomes Ready, no ClusterGroupUpgrade CR is created.
-
-If the managed cluster has no bound policies when the cluster becomes `Ready`, no `ClusterGroupUpgrade` CR is created.
+    If the managed cluster has no bound policies when the cluster becomes `Ready`, no `ClusterGroupUpgrade` CR is created.
 
 **Example of an auto-created `ClusterGroupUpgrade` CR for ZTP**
 
@@ -3300,12 +3343,11 @@ You can perform an Operator update with the TALM.
     2.  This update generates one policy, `du-upgrade-operator-catsrc-policy`, to update the `redhat-operators` catalog source with the new index images that contain the desired Operators images.
 
         !!! note
-            If you want to use the image pre-caching for Operators and there are Operators from a different catalog source other than redhat-operators, you must perform the following tasks:Prepare a separate catalog source policy with the new index image or registry poll interval update for the different catalog source.Prepare a separate subscription policy for the desired Operators that are from the different catalog source.
-        If you want to use the image pre-caching for Operators and there are Operators from a different catalog source other than `redhat-operators`, you must perform the following tasks:
-
-        -   Prepare a separate catalog source policy with the new index image or registry poll interval update for the different catalog source.
-
-        -   Prepare a separate subscription policy for the desired Operators that are from the different catalog source.
+            If you want to use the image pre-caching for Operators and there are Operators from a different catalog source other than `redhat-operators`, you must perform the following tasks:
+            
+            -   Prepare a separate catalog source policy with the new index image or registry poll interval update for the different catalog source.
+            
+            -   Prepare a separate subscription policy for the desired Operators that are from the different catalog source.
 
         For example, the desired SRIOV-FEC Operator is available in the `certified-operators` catalog source. To update the catalog source and the Operator subscription, add the following contents to generate two policies, `du-upgrade-fec-catsrc-policy` and `du-upgrade-subscriptions-fec-policy`:
 
@@ -3343,8 +3385,7 @@ You can perform an Operator update with the TALM.
     3.  Remove the specified subscriptions channels in the common `PolicyGenTemplate` CR, if they exist. The default subscriptions channels from the ZTP image are used for the update.
 
         !!! note
-            The default channel for the Operators applied through ZTP {product-version} is stable, except for the performance-addon-operator. As of {product-title} 4.11, the performance-addon-operator functionality was moved to the node-tuning-operator. For the 4.10 release, the default channel for PAO is v4.10. You can also specify the default channels in the common PolicyGenTemplate CR.
-        The default channel for the Operators applied through ZTP {product-version} is `stable`, except for the `performance-addon-operator`. As of {product-title} 4.11, the `performance-addon-operator` functionality was moved to the `node-tuning-operator`. For the 4.10 release, the default channel for PAO is `v4.10`. You can also specify the default channels in the common `PolicyGenTemplate` CR.
+            The default channel for the Operators applied through ZTP {product-version} is `stable`, except for the `performance-addon-operator`. As of {product-title} 4.11, the `performance-addon-operator` functionality was moved to the `node-tuning-operator`. For the 4.10 release, the default channel for PAO is `v4.10`. You can also specify the default channels in the common `PolicyGenTemplate` CR.
 
     4.  Push the `PolicyGenTemplate` CRs updates to the ZTP Git repository.
 
@@ -3415,8 +3456,7 @@ You can perform an Operator update with the TALM.
         -   The policy contains Operator subscriptions. If you have followed the structure and content of the reference `PolicyGenTemplates`, all Operator subscriptions are grouped into the `common-subscriptions-policy` policy.
 
         !!! note
-            One ClusterGroupUpgrade CR can only pre-cache the images of the desired Operators defined in the subscription policy from one catalog source included in the ClusterGroupUpgrade CR. If the desired Operators are from different catalog sources, such as in the example of the SRIOV-FEC Operator, another ClusterGroupUpgrade CR must be created with du-upgrade-fec-catsrc-policy and du-upgrade-subscriptions-fec-policy policies for the SRIOV-FEC Operator images pre-caching and update.
-        One `ClusterGroupUpgrade` CR can only pre-cache the images of the desired Operators defined in the subscription policy from one catalog source included in the `ClusterGroupUpgrade` CR. If the desired Operators are from different catalog sources, such as in the example of the SRIOV-FEC Operator, another `ClusterGroupUpgrade` CR must be created with `du-upgrade-fec-catsrc-policy` and `du-upgrade-subscriptions-fec-policy` policies for the SRIOV-FEC Operator images pre-caching and update.
+            One `ClusterGroupUpgrade` CR can only pre-cache the images of the desired Operators defined in the subscription policy from one catalog source included in the `ClusterGroupUpgrade` CR. If the desired Operators are from different catalog sources, such as in the example of the SRIOV-FEC Operator, another `ClusterGroupUpgrade` CR must be created with `du-upgrade-fec-catsrc-policy` and `du-upgrade-subscriptions-fec-policy` policies for the SRIOV-FEC Operator images pre-caching and update.
 
     2.  Apply the `ClusterGroupUpgrade` CR to the hub cluster by running the following command:
 
@@ -3617,10 +3657,9 @@ You can perform a platform and an Operator update at the same time.
         ```
 
         !!! note
-            The CRs for the platform and Operator updates can be created from the beginning by configuring the setting to spec.enable: true. In this case, the update starts immediately after pre-caching completes and there is no need to manually enable the CR.Both pre-caching and the update create extra resources, such as policies, placement bindings, placement rules, managed cluster actions, and managed cluster view, to help complete the procedures. Setting the afterCompletion.deleteObjects field to true deletes all these resources after the updates complete.
-        The CRs for the platform and Operator updates can be created from the beginning by configuring the setting to `spec.enable: true`. In this case, the update starts immediately after pre-caching completes and there is no need to manually enable the CR.
-
-        Both pre-caching and the update create extra resources, such as policies, placement bindings, placement rules, managed cluster actions, and managed cluster view, to help complete the procedures. Setting the `afterCompletion.deleteObjects` field to `true` deletes all these resources after the updates complete.
+            The CRs for the platform and Operator updates can be created from the beginning by configuring the setting to `spec.enable: true`. In this case, the update starts immediately after pre-caching completes and there is no need to manually enable the CR.
+            
+            Both pre-caching and the update create extra resources, such as policies, placement bindings, placement rules, managed cluster actions, and managed cluster view, to help complete the procedures. Setting the `afterCompletion.deleteObjects` field to `true` deletes all these resources after the updates complete.
 
 ## Removing Performance Addon Operator subscriptions from deployed clusters
 
@@ -3630,8 +3669,6 @@ Do not install the Performance Addon Operator on clusters running {product-title
 
 !!! note
     If you install Performance Addon Operator 4.10.3-5 or later on {product-title} 4.11 or later, the Performance Addon Operator detects the cluster version and automatically hibernates to avoid interfering with the Node Tuning Operator functions. However, to ensure best performance, remove the Performance Addon Operator from your {product-title} 4.11 clusters.
-
-If you install Performance Addon Operator 4.10.3-5 or later on {product-title} 4.11 or later, the Performance Addon Operator detects the cluster version and automatically hibernates to avoid interfering with the Node Tuning Operator functions. However, to ensure best performance, remove the Performance Addon Operator from your {product-title} 4.11 clusters.
 
 -   Create a Git repository where you manage your custom site configuration data. The repository must be accessible from the hub cluster and be defined as a source repository for Argo CD.
 
