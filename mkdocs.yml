@@ -30,7 +30,7 @@ theme:
     - navigation.tabs.sticky
     - navigation.sections
     - navigation.top
-repo_url: https://github.com/aireilly/openshift-docs
+repo_url: https://github.com/aireilly/openshift-mkdocs
 repo_name: openshift-mkdocs
 markdown_extensions:
   - codehilite

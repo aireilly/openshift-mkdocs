@@ -2,71 +2,6 @@
 
 Learn about the Performance Profile Creator (PPC) and how you can use it to create a performance profile.
 
-!!! note
-    HELP
-    
-    PLEASE `GOD`.
-
-    $ HALP
-
-``` terminal
-$ oc adm must-gather --image=farp --dest-dir=<dir>
-```
-
-``` docker
-FROM ubuntu
-
-# Install vnc, xvfb in order to create a 'fake' display and firefox
-RUN apt-get update && apt-get install -y x11vnc xvfb firefox
-RUN mkdir ~/.vnc
-
-# Setup a password
-RUN x11vnc -storepasswd 1234 ~/.vnc/passwd
-
-# Autostart firefox (might not be the best way, but it does the trick)
-RUN bash -c 'echo "firefox" >> /.bashrc'
-
-EXPOSE 5900
-CMD ["x11vnc", "-forever", "-usepw", "-create"]
-```
-
-```bash
-#!/bin/bash
-
-for OPT in "$@"
-do
-  case "$OPT" in
-    '-f' )  canonicalize=1 ;;
-    '-n' )  switchlf="-n" ;;
-  esac
-done
-
-# readlink -f
-function __readlink_f {
-  target="$1"
-  while test -n "$target"; do
-    filepath="$target"
-    cd `dirname "$filepath"`
-    target=`readlink "$filepath"`
-  done
-  /bin/echo $switchlf `pwd -P`/`basename "$filepath"`
-}
-
-if [ ! "$canonicalize" ]; then
-  readlink $switchlf "$@"
-else
-  for file in "$@"
-  do
-    case "$file" in
-      -* )  ;;
-      *  )  __readlink_f "$file" ;;
-    esac
-    done
-fi
-
-exit $?
-```
-
 ## About the Performance Profile Creator
 
 The Performance Profile Creator (PPC) is a command-line tool, delivered with the Node Tuning Operator, used to create the performance profile. The tool consumes `must-gather` data from the cluster and several user-supplied profile arguments. The PPC generates a performance profile that is appropriate for your hardware and topology.
@@ -82,7 +17,7 @@ The tool is run by one of the following methods:
 The Performance Profile Creator (PPC) tool requires `must-gather` data. As a cluster administrator, run `must-gather` to capture information about your cluster.
 
 !!! note
-    In earlier versions of {product-title}, the Performance Addon Operator provided automatic, low latency performance tuning for applications. In {product-title} 4.11, these functions are part of the Node Tuning Operator. However, you must still use the `performance-addon-operator-must-gather` image when running the `must-gather` command.
+    In earlier versions of OpenShift Container Platform, the Performance Addon Operator provided automatic, low latency performance tuning for applications. In OpenShift Container Platform 4.11, these functions are part of the Node Tuning Operator. However, you must still use the `performance-addon-operator-must-gather` image when running the `must-gather` command.
 
 -   Access to the cluster as a user with the `cluster-admin` role.
 
@@ -104,7 +39,7 @@ The Performance Profile Creator (PPC) tool requires `must-gather` data. As a clu
     **Example**
 
     ``` terminal
-    $ oc adm must-gather --image=registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v{product-version} --dest-dir=<path_to_must-gather>/must-gather
+    $ oc adm must-gather --image=registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.11 --dest-dir=<path_to_must-gather>/must-gather
     ```
 
 3.  Create a compressed file from the `must-gather` directory:
@@ -153,7 +88,7 @@ As a cluster administrator, you can run `podman` and the Performance Profile Cre
 3.  Optional: Display help for the PPC tool:
 
     ``` terminal
-    $ podman run --rm --entrypoint performance-profile-creator registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version} -h
+    $ podman run --rm --entrypoint performance-profile-creator registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.11 -h
     ```
 
     **Example output**
@@ -192,7 +127,7 @@ As a cluster administrator, you can run `podman` and the Performance Profile Cre
         Using this information you can set appropriate values for some of the arguments supplied to the Performance Profile Creator tool.
 
     ``` terminal
-    $ podman run --entrypoint performance-profile-creator -v <path_to_must-gather>/must-gather:/must-gather:z registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version} --info log --must-gather-dir-path /must-gather
+    $ podman run --entrypoint performance-profile-creator -v <path_to_must-gather>/must-gather:/must-gather:z registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.11 --info log --must-gather-dir-path /must-gather
     ```
 
     !!! note
@@ -277,7 +212,7 @@ Node hardware configuration:
 Run `podman` to create the performance profile:
 
 ``` terminal
-$ podman run --entrypoint performance-profile-creator -v /must-gather:/must-gather:z registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version} --mcp-name=worker-cnf --reserved-cpu-count=20 --rt-kernel=true --split-reserved-cpus-across-numa=true --must-gather-dir-path /must-gather > my-performance-profile.yaml
+$ podman run --entrypoint performance-profile-creator -v /must-gather:/must-gather:z registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.11 --mcp-name=worker-cnf --reserved-cpu-count=20 --rt-kernel=true --split-reserved-cpus-across-numa=true --must-gather-dir-path /must-gather > my-performance-profile.yaml
 ```
 
 The created profile is described in the following YAML:
@@ -299,7 +234,7 @@ The created profile is described in the following YAML:
       enabled: true
 ```
 
-!!! warning
+!!! note
     In this case, 10 CPUs are reserved on NUMA node 0 and 10 are reserved on NUMA node 1.
 
 ### Running the Performance Profile Creator wrapper script
@@ -328,7 +263,7 @@ The performance profile wrapper script simplifies the running of the Performance
     readonly IMG_PULL_CMD="${CONTAINER_RUNTIME} image pull"
     readonly MUST_GATHER_VOL="/must-gather"
 
-    NTO_IMG="registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version}"
+    NTO_IMG="registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.11"
     MG_TARBALL=""
     DATA_DIR=""
 
@@ -452,7 +387,7 @@ The performance profile wrapper script simplifies the running of the Performance
         
         -   PPC arguments
 
-    -   Optional: Specify the Node Tuning Operator image. If not set, the default upstream image is used: `registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v{product-version}`.
+    -   Optional: Specify the Node Tuning Operator image. If not set, the default upstream image is used: `registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.11`.
 
     -   `-t` is a required wrapper script argument and specifies the path to a `must-gather` tarball.
 
@@ -679,7 +614,7 @@ spec:
 
 Insert values that are appropriate for your configuration for the `CPU_ISOLATED`, `CPU_RESERVED`, and `HUGEPAGES_COUNT` keys.
 
-To learn how to create and use performance profiles, see the "Creating a performance profile" page in the "Scalability and performance" section of the {product-title} documentation.
+To learn how to create and use performance profiles, see the "Creating a performance profile" page in the "Scalability and performance" section of the OpenShift Container Platform documentation.
 
 ## Additional resources
 

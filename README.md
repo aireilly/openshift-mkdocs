@@ -1,28 +1,19 @@
 # Scratch pad
 
 ```cmd
-asciidoctor-reducer ~/openshift-docs/scalability_and_performance/cnf-create-performance-profiles.adoc -o ~/openshift-mkdocs/cnf-create-performance-profiles.adoc
+curl -s https://api.github.com/repos/jgm/pandoc/releases/latest | grep "browser_download_url.*linux-amd64.tar.gz" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+tar -xvzf *linux-amd64.tar.gz
+sudo mv pandoc /usr/local/bin/pandoc
+pip install markdown-grid-tables
+pip install pymdownx
+pip install mkdocs
+pip install mkdocs-material
+gem install asciidoctor-reducer
 ```
-
-Then:
 
 ```cmd
-asciidoctor -b docbook -o - ~/openshift-mkdocs/cnf-create-performance-profiles.adoc | pandoc  --markdown-headings=atx --wrap=preserve -t markdown_strict --shift-heading-level-by=1 -f docbook -s - > ~/openshift-mkdocs/docs/cnf-create-performance-profiles.adoc.md
+adoc-2md.sh && mkdocs serve
 ```
-
-
-https://stackoverflow.com/questions/42706333/set-html-title-from-the-first-header-with-pandoc
-
-and:
-
-```cmd
-mkdocs serve
-```
-
-Compare: 
-
-https://docs.openshift.com/container-platform/4.11/scalability_and_performance/cnf-create-performance-profiles.html
-
 
 ## To do 
 
