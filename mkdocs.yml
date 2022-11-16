@@ -18,6 +18,9 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+  plugins:
+      - search
+      - img2fig
   icon:
     repo: fontawesome/brands/git-alt
   logo: assets/images/redhat.svg
@@ -30,10 +33,21 @@ theme:
     - navigation.tabs.sticky
     - navigation.sections
     - navigation.top
+    - content.code.annotate
 repo_url: https://github.com/aireilly/openshift-mkdocs
 repo_name: openshift-mkdocs
 markdown_extensions:
+  - def_list
+  - fenced_code
+  - footnotes
+  - smarty
   - codehilite
+  - tables
+  - admonition
+  - attr_list
+  - md_in_html
+  - markdown_grid_tables
+  - pymdownx.betterem
   - pymdownx.highlight:
       anchor_linenums: true
       linenums_style: pymdownx-inline
@@ -42,9 +56,3 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.keys
-  - tables
-  - admonition
-  - attr_list
-  - md_in_html
-  - markdown_grid_tables
-  - pymdownx.betterem

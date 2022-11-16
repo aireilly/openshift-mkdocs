@@ -38,7 +38,7 @@ In HTTP keep-alive mode scenarios:
 | re-encrypt           | 21583                   | 25198                 |
 +----------------------+-------------------------+-----------------------+
 
-**Table 1**
+: **Table 1**
 
 In HTTP close (no keep-alive) scenarios:
 
@@ -54,7 +54,7 @@ In HTTP close (no keep-alive) scenarios:
 | re-encrypt           | 2320                    | 2941                  |
 +----------------------+-------------------------+-----------------------+
 
-**Table 2**
+: **Table 2**
 
 Default Ingress Controller configuration with `ROUTER_THREADS=4` was used and two different endpoint publishing strategies (LoadBalancerService/HostNetwork) were tested. TLS session resumption was used for encrypted routes. With HTTP keep-alive, a single HAProxy router is capable of saturating 1 Gbit NIC at page sizes as small as 8 kB.
 
@@ -68,13 +68,13 @@ When running on bare metal with modern processors, you can expect roughly twice 
 | 100-1000                   | applications generating dynamic content       |
 +----------------------------+-----------------------------------------------+
 
-**Table 3**
+: **Table 3**
 
 In general, HAProxy can support routes for 5 to 1000 applications, depending on the technology in use. Ingress Controller performance might be limited by the capabilities and performance of the applications behind it, such as language or static versus dynamic content.
 
 Ingress, or router, sharding should be used to serve more routes towards applications and help horizontally scale the routing tier.
 
-For more information on Ingress sharding, see [Configuring Ingress Controller sharding by using route labels](../networking/ingress-operator.xml#nw-ingress-sharding-route-labels_configuring-ingress) and [Configuring Ingress Controller sharding by using namespace labels](../networking/ingress-operator.xml#nw-ingress-sharding-namespace-labels_configuring-ingress).
+For more information on Ingress sharding, see [Configuring Ingress Controller sharding by using route labels](../networking/ingress-operator/#nw-ingress-sharding-route-labels_configuring-ingress) and [Configuring Ingress Controller sharding by using namespace labels](../networking/ingress-operator.xml#nw-ingress-sharding-namespace-labels_configuring-ingress).
 
 ## Ingress Controller (router) performance optimizations
 
@@ -98,7 +98,7 @@ You can update the `timeoutSeconds` value on the `livenessProbe`, `readinessProb
 | `startupProbe`   | The `startupProbe` gives the router pod up to 2 minutes to initialize before the kubelet begins sending the router liveness and readiness probes. This initialization time can prevent routers with many routes or endpoints from prematurely restarting.                                                                                                                                                                                                       |
 +------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 4**
+: **Table 4**
 
 !!! important
     The timeout configuration option is an advanced tuning technique that can be used to work around issues. However, these issues should eventually be diagnosed and possibly a support case or [Jira issue](https://issues.redhat.com/secure/CreateIssueDetails!init.jspa?pid=12332330&summary=Summary&issuetype=1&priority=10200&versions=12385624) opened for any issues that causes probes to time out.

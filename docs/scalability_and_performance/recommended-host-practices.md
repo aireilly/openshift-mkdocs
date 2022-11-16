@@ -87,6 +87,8 @@ $ oc get mc | grep kubelet
 
 The following procedure is an example to show how to configure the maximum number of pods per node on the worker nodes.
 
+**Prerequisites**
+
 1.  Obtain the label associated with the static `MachineConfigPool` CR for the type of node you want to configure. Perform one of the following steps:
 
     1.  View the machine config pool:
@@ -121,7 +123,7 @@ The following procedure is an example to show how to configure the maximum numbe
         $ oc label machineconfigpool worker custom-kubelet=set-max-pods
         ```
 
-<!-- -->
+**Procedure**
 
 1.  View the available machine configuration objects that you can select:
 
@@ -273,6 +275,8 @@ The following procedure is an example to show how to configure the maximum numbe
 
 By default, only one machine is allowed to be unavailable when applying the kubelet-related configuration to the available worker nodes. For a large cluster, it can take a long time for the configuration change to be reflected. At any time, you can adjust the number of machines that are updating to speed up the process.
 
+**Procedure**
+
 1.  Edit the `worker` machine config pool:
 
     ``` terminal
@@ -319,7 +323,7 @@ The control plane node resource requirements depend on the number and type of no
 | 501                    | 4000                         | 16              | 96              |
 +------------------------+------------------------------+-----------------+-----------------+
 
-**Table 1**
+: **Table 1**
 
 On a large and dense cluster with three masters or control plane nodes, the CPU and memory usage will spike up when one of the nodes is stopped, rebooted or fails. The failures can be due to unexpected issues with power, network or underlying infrastructure in addition to intentional cases where the cluster is restarted after shutting it down to save costs. The remaining two control plane nodes must handle the load in order to be highly available which leads to increase in the resource usage. This is also expected during upgrades because the masters are cordoned, drained, and rebooted serially to apply the operating system updates, as well as the control plane Operators update. To avoid cascading failures, keep the overall CPU and memory resource usage on the control plane nodes to at most 60% of all available capacity to handle the resource usage spikes. Increase the CPU and memory on the control plane nodes accordingly to avoid potential downtime due to lack of resources.
 
@@ -356,7 +360,7 @@ Operator Lifecycle Manager (OLM ) runs on the control plane nodes and it’s mem
 | 10,000               | 9.9                           | 21.6                                            |
 +----------------------+-------------------------------+-------------------------------------------------+
 
-**Table 2**
+: **Table 2**
 
 !!! important
     If you used an installer-provisioned infrastructure installation method, you cannot modify the control plane node size in a running OpenShift Container Platform 4.11 cluster. Instead, you must estimate your total node count and use the suggested control plane node size during installation.
@@ -372,7 +376,11 @@ When you have overloaded AWS master nodes in a cluster and the master nodes requ
 !!! note
     It is recommended to backup etcd before increasing the flavor size of the AWS master instances.
 
+**Prerequisites**
+
 -   You have an IPI (installer-provisioned infrastructure) or UPI (user-provisioned infrastructure) cluster on AWS.
+
+**Procedure**
 
 1.  Open the AWS console, fetch the master instances.
 
@@ -384,7 +392,7 @@ When you have overloaded AWS master nodes in a cluster and the master nodes requ
 
 5.  Backup the instance, and repeat the steps for the next master instance.
 
--   [Backing up etcd](../backup_and_restore/control_plane_backup_and_restore/backing-up-etcd.xml#backing-up-etcd)
+-   [Backing up etcd](../backup_and_restore/control_plane_backup_and_restore/backing-up-etcd/#backing-up-etcd)
 
 ## Recommended etcd practices
 
@@ -424,25 +432,27 @@ Some key metrics to monitor on a deployed OpenShift Container Platform cluster a
 
 To validate the hardware for etcd before or after you create the OpenShift Container Platform cluster, you can use fio.
 
+**Prerequisites**
+
 -   Container runtimes such as Podman or Docker are installed on the machine that you’re testing.
 
 -   Data is written to the `/var/lib/etcd` path.
 
-<!-- -->
+**Procedure** \* Run fio and analyze the results:
 
--   Run fio and analyze the results:
+\+
 
-    -   If you use Podman, run this command:
+-   If you use Podman, run this command:
 
-        ``` terminal
-        $ sudo podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
-        ```
+    ``` terminal
+    $ sudo podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
+    ```
 
-    -   If you use Docker, run this command:
+-   If you use Docker, run this command:
 
-        ``` terminal
-        $ sudo docker run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
-        ```
+    ``` terminal
+    $ sudo docker run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
+    ```
 
 The output reports whether the disk is fast enough to host etcd by comparing the 99th percentile of the fsync metric captured from the run to see if it is less than 20 ms. A few of the most important etcd metrics that might affected by I/O performance are as follow:
 
@@ -521,7 +531,11 @@ You can also determine whether defragmentation is needed by checking the etcd da
 
 Follow this procedure to defragment etcd data on each etcd member.
 
+**Prerequisites**
+
 -   You have access to the cluster as a user with the `cluster-admin` role.
+
+**Procedure**
 
 1.  Determine which etcd member is the leader, because the leader should be defragmented last.
 
@@ -675,6 +689,8 @@ For information on infrastructure nodes and which components can run on infrastr
 
 The monitoring stack includes multiple components, including Prometheus, Thanos Querier, and Alertmanager. The Cluster Monitoring Operator manages this stack. To redeploy the monitoring stack to infrastructure nodes, you can create and apply a custom config map.
 
+**Procedure**
+
 1.  Edit the `cluster-monitoring-config` config map and change the `nodeSelector` to use the `infra` label:
 
     ``` terminal
@@ -791,7 +807,11 @@ The monitoring stack includes multiple components, including Prometheus, Thanos 
 
 You configure the registry Operator to deploy its pods to different nodes.
 
+**Prerequisites**
+
 -   Configure additional compute machine sets in your OpenShift Container Platform cluster.
+
+**Procedure**
 
 1.  View the `config/instance` object:
 
@@ -881,7 +901,11 @@ You configure the registry Operator to deploy its pods to different nodes.
 
 You can deploy the router pod to a different compute machine set. By default, the pod is deployed to a worker node.
 
+**Prerequisites**
+
 -   Configure additional compute machine sets in your OpenShift Container Platform cluster.
+
+**Procedure**
 
 1.  View the `IngressController` custom resource for the router Operator:
 
@@ -991,7 +1015,7 @@ You can deploy the router pod to a different compute machine set. By default, th
 | 500                    | 32                   | 128                   |
 +------------------------+----------------------+-----------------------+
 
-**Table 3**
+: **Table 3**
 
 In general, three infrastructure nodes are recommended per cluster.
 
@@ -1004,6 +1028,6 @@ In general, three infrastructure nodes are recommended per cluster.
 
 ## Additional resources
 
--   [OpenShift Container Platform cluster maximums](../scalability_and_performance/planning-your-environment-according-to-object-maximums.xml#planning-your-environment-according-to-object-maximums)
+-   [OpenShift Container Platform cluster maximums](../scalability_and_performance/planning-your-environment-according-to-object-maximums/#planning-your-environment-according-to-object-maximums)
 
--   [Creating infrastructure machine sets](../machine_management/creating-infrastructure-machinesets.xml#creating-infrastructure-machinesets)
+-   [Creating infrastructure machine sets](../machine_management/creating-infrastructure-machinesets/#creating-infrastructure-machinesets)

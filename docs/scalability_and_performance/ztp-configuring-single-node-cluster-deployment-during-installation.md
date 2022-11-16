@@ -25,6 +25,8 @@ A key feature to enable as part of a single-node OpenShift installation is workl
 !!! note
     You can enable workload partitioning during the cluster installation process only. You cannot disable workload partitioning post-installation. However, you can reconfigure workload partitioning by updating the `cpu` value that you define in the `performanceprofile`, and in the MachineConfig CR in the following procedure.
 
+**Procedure**
+
 -   The base64-encoded content below contains the CPU set that the management workloads are constrained to. This content must be adjusted to match the set specified in the `performanceprofile` and must be accurate for the number of cores on the cluster.
 
     ``` yaml
@@ -169,6 +171,8 @@ spec:
 
 SCTP is a key protocol used in RAN applications. This `MachineConfig` object adds the SCTP kernel module to the node to enable this protocol.
 
+**Procedure**
+
 -   No configuration changes are needed. Use the provided settings:
 
     ``` yaml
@@ -200,6 +204,8 @@ SCTP is a key protocol used in RAN applications. This `MachineConfig` object add
 ### Creating OperatorGroups for Operators
 
 This configuration is provided to enable addition of the Operators needed to configure the platform post-installation. It adds the `Namespace` and `OperatorGroup` objects for the Local Storage Operator, Logging Operator, PTP Operator, and SR-IOV Network Operator.
+
+**Procedure**
 
 -   No configuration changes are needed. Use the provided settings:
 
@@ -289,6 +295,8 @@ This configuration is provided to enable addition of the Operators needed to con
 
 The subscription provides the location to download the Operators needed for platform configuration.
 
+**Procedure**
+
 -   Use the following example to configure the subscription:
 
     ``` yaml
@@ -356,6 +364,8 @@ The subscription provides the location to download the Operators needed for plat
 
 To be able to debug a single node distributed unit (DU), logs need to be stored for further analysis.
 
+**Procedure**
+
 -   Edit the `ClusterLogging` custom resource (CR) in the `openshift-logging` project:
 
     ``` yaml
@@ -410,6 +420,8 @@ To be able to debug a single node distributed unit (DU), logs need to be stored 
 
 This is a key configuration for the single node distributed unit (DU). Many of the real-time capabilities and service assurance are configured here.
 
+**Procedure**
+
 -   Configure the performance profile using the following example:
 
     ``` yaml
@@ -458,6 +470,8 @@ This is a key configuration for the single node distributed unit (DU). Many of t
 ### Configuring Precision Time Protocol (PTP)
 
 In the far edge, the RAN uses PTP to synchronize the systems.
+
+**Procedure**
 
 -   Configure PTP using the following example:
 
@@ -589,6 +603,8 @@ In the far edge, the RAN uses PTP to synchronize the systems.
 
 After the system is configured for Precision Time Protocol (PTP), you need to remove NTP to prevent it from impacting the system clock.
 
+**Procedure**
+
 -   No configuration changes are needed. Use the provided settings:
 
     ``` yaml
@@ -629,6 +645,8 @@ After the system is configured for Precision Time Protocol (PTP), you need to re
 ### Configuring single root I/O virtualization (SR-IOV)
 
 SR-IOV is commonly used to enable the fronthaul and the midhaul networks.
+
+**Procedure**
 
 -   Use the following configuration to configure SRIOV on a single node distributed unit (DU). Note that the first custom resource (CR) is required. The following CRs are examples.
 
@@ -721,6 +739,8 @@ SR-IOV is commonly used to enable the fronthaul and the midhaul networks.
 ### Disabling the console Operator
 
 The console-operator installs and maintains the web console on a cluster. When the node is centrally managed the Operator is not needed and makes space for application workloads.
+
+**Procedure**
 
 -   You can disable the Operator using the following configuration file. No configuration changes are needed. Use the provided settings:
 

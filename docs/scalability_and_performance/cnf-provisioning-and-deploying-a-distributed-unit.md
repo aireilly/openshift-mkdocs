@@ -402,7 +402,7 @@ The following tables identify the namespaces and pods that can be restricted to 
 | openshift-service-ca                             | service-ca                             |
 +--------------------------------------------------+----------------------------------------+
 
-**Table 1**
+: **Table 1**
 
 #### Day 2 Operators
 
@@ -438,7 +438,7 @@ The following tables identify the namespaces and pods that can be restricted to 
 | openshift-logging                    | fluentd                           |
 +--------------------------------------+-----------------------------------+
 
-**Table 2**
+: **Table 2**
 
 #### ACM pods
 
@@ -468,7 +468,7 @@ The following tables identify the namespaces and pods that can be restricted to 
 | open-cluster-management-agent       | klusterlet-work-agent                     |
 +-------------------------------------+-------------------------------------------+
 
-**Table 3**
+: **Table 3**
 
 ## Provisioning and deploying a distributed unit (DU) manually
 
@@ -564,7 +564,7 @@ The `SriovNetworkNodePolicy` object must be configured differently for different
 | Mellanox             | netdevice             | structure             |
 +----------------------+-----------------------+-----------------------+
 
-**Table 4**
+: **Table 4**
 
 In addition, when configuring the `nicSelector`, the `pfNames` value must match the intended interface name on the specific host.
 
@@ -575,6 +575,8 @@ If there is a mixed cluster where some of the nodes are deployed with Intel NICs
 ### Installing the Performance Addon Operator
 
 Install the Performance Addon Operator using the OpenShift Container Platform CLI.
+
+**Procedure**
 
 1.  Create the Performance Addon Operator namespace:
 
@@ -643,6 +645,8 @@ Install the Performance Addon Operator using the OpenShift Container Platform CL
 
 Install the PTP Operator using the OpenShift Container Platform CLI or the web console.
 
+**Procedure**
+
 1.  Apply the Operator namespace:
 
     ``` terminal
@@ -694,6 +698,8 @@ Install the PTP Operator using the OpenShift Container Platform CLI or the web c
 ### Applying the Stream Control Transmission Protocol (SCTP) patch
 
 Load and enable the SCTP kernel module on worker nodes in your cluster.
+
+**Procedure**
 
 1.  Apply the SCTP machine config patch:
 

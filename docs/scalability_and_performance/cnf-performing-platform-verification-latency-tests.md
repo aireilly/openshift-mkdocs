@@ -17,7 +17,7 @@ Your cluster must meet the following requirements before you can run the latency
 
 3.  You have a pre-existing `MachineConfigPool` CR applied in the cluster. The default worker pool is `worker-cnf`.
 
--   For more information about creating the cluster performance profile, see [Provisioning a worker with real-time capabilities](../scalability_and_performance/cnf-low-latency-tuning.xml#node-tuning-operator-provisioning-worker-with-real-time-capabilities_cnf-master).
+-   For more information about creating the cluster performance profile, see [Provisioning a worker with real-time capabilities](../scalability_and_performance/cnf-low-latency-tuning/#node-tuning-operator-provisioning-worker-with-real-time-capabilities_cnf-master).
 
 ## About discovery mode for latency tests
 
@@ -45,14 +45,17 @@ The `cnf-tests` image uses three tools to measure the latency of the system:
 
 Each tool has a specific use. Use the tools in sequence to achieve reliable test results.
 
-hwlatdetect  
-Measures the baseline that the bare-metal hardware can achieve. Before proceeding with the next latency test, ensure that the latency reported by `hwlatdetect` meets the required threshold because you cannot fix hardware latency spikes by operating system tuning.
+hwlatdetect
 
-cyclictest  
-Verifies the real-time kernel scheduler latency after `hwlatdetect` passes validation. The `cyclictest` tool schedules a repeated timer and measures the difference between the desired and the actual trigger times. The difference can uncover basic issues with the tuning caused by interrupts or process priorities. The tool must run on a real-time kernel.
+:   Measures the baseline that the bare-metal hardware can achieve. Before proceeding with the next latency test, ensure that the latency reported by `hwlatdetect` meets the required threshold because you cannot fix hardware latency spikes by operating system tuning.
 
-oslat  
-Behaves similarly to a CPU-intensive DPDK application and measures all the interruptions and disruptions to the busy loop that simulates CPU heavy data processing.
+cyclictest
+
+:   Verifies the real-time kernel scheduler latency after `hwlatdetect` passes validation. The `cyclictest` tool schedules a repeated timer and measures the difference between the desired and the actual trigger times. The difference can uncover basic issues with the tuning caused by interrupts or process priorities. The tool must run on a real-time kernel.
+
+oslat
+
+:   Behaves similarly to a CPU-intensive DPDK application and measures all the interruptions and disruptions to the busy loop that simulates CPU heavy data processing.
 
 The tests introduce the following environment variables:
 
@@ -74,7 +77,7 @@ The tests introduce the following environment variables:
 | `MAXIMUM_LATENCY`             | Unified variable that specifies the maximum acceptable latency in microseconds. Applicable for all available latency tools.                                                                                                                                                                                                                          |
 +-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 1: Latency test environment variables**
+: **Table 1: Latency test environment variables**
 
 !!! note
     Variables that are specific to a latency tool take precedence over unified variables. For example, if `OSLAT_MAXIMUM_LATENCY` is set to 30 microseconds and `MAXIMUM_LATENCY` is set to 10 microseconds, the `oslat` test will run with maximum acceptable latency of 30 microseconds.
@@ -87,6 +90,8 @@ Run the cluster latency tests to validate node tuning for your Cloud-native Netw
     **Always** run the latency tests with `DISCOVERY_MODE=true` set. If you don't, the test suite will make changes to the running cluster configuration.
 !!! note
     When executing `podman` commands as a non-root or non-privileged user, mounting paths can fail with `permission denied` errors. To make the `podman` command work, append `:Z` to the volumes creation; for example, `-v $(pwd)/:/kubeconfig:Z`. This allows `podman` to do the proper SELinux relabeling.
+
+**Procedure**
 
 1.  Open a shell prompt in the directory containing the `kubeconfig` file.
 
@@ -115,8 +120,9 @@ Run the cluster latency tests to validate node tuning for your Cloud-native Netw
 
     where:
 
-    &lt;performance\_profile&gt;  
-    Is the name of the performance profile you want to run the latency tests against.
+    &lt;performance\_profile&gt;
+
+    :   Is the name of the performance profile you want to run the latency tests against.
 
     !!! important
         For valid latency tests results, run the tests for at least 12 hours.
@@ -130,11 +136,13 @@ The `hwlatdetect` tool is available in the `rt-kernel` package with a regular su
 !!! note
     When executing `podman` commands as a non-root or non-privileged user, mounting paths can fail with `permission denied` errors. To make the `podman` command work, append `:Z` to the volumes creation; for example, `-v $(pwd)/:/kubeconfig:Z`. This allows `podman` to do the proper SELinux relabeling.
 
+**Prerequisites**
+
 -   You have installed the real-time kernel in the cluster.
 
 -   You have logged in to `registry.redhat.io` with your Customer Portal credentials.
 
-<!-- -->
+**Procedure**
 
 -   To run the `hwlatdetect` tests, run the following command, substituting variable values as appropriate:
 
@@ -293,13 +301,15 @@ The `cyclictest` tool measures the real-time kernel scheduler latency on the spe
 !!! note
     When executing `podman` commands as a non-root or non-privileged user, mounting paths can fail with `permission denied` errors. To make the `podman` command work, append `:Z` to the volumes creation; for example, `-v $(pwd)/:/kubeconfig:Z`. This allows `podman` to do the proper SELinux relabeling.
 
+**Prerequisites**
+
 -   You have logged in to `registry.redhat.io` with your Customer Portal credentials.
 
 -   You have installed the real-time kernel in the cluster.
 
 -   You have applied a cluster performance profile by using Node Tuning Operator.
 
-<!-- -->
+**Procedure**
 
 -   To perform the `cyclictest`, run the following command, substituting variable values as appropriate:
 
@@ -420,11 +430,13 @@ The `oslat` test simulates a CPU-intensive DPDK application and measures all the
 !!! note
     When executing `podman` commands as a non-root or non-privileged user, mounting paths can fail with `permission denied` errors. To make the `podman` command work, append `:Z` to the volumes creation; for example, `-v $(pwd)/:/kubeconfig:Z`. This allows `podman` to do the proper SELinux relabeling.
 
+**Prerequisites**
+
 -   You have logged in to `registry.redhat.io` with your Customer Portal credentials.
 
 -   You have applied a cluster performance profile by using the Node Tuning Operator.
 
-<!-- -->
+**Procedure**
 
 -   To perform the `oslat` test, run the following command, substituting variable values as appropriate:
 
@@ -486,11 +498,13 @@ The `oslat` test simulates a CPU-intensive DPDK application and measures all the
 
 Use the following procedures to generate a JUnit latency test output and test failure report.
 
+**Prerequisites**
+
 -   You have installed the OpenShift CLI (`oc`).
 
 -   You have logged in as a user with `cluster-admin` privileges.
 
-<!-- -->
+**Procedure**
 
 -   Create a test failure report with information about the cluster state and resources for troubleshooting by passing the `--report` parameter with the path to where the report is dumped:
 
@@ -504,18 +518,21 @@ Use the following procedures to generate a JUnit latency test output and test fa
 
     where:
 
-    &lt;report\_folder\_path&gt;  
-    Is the path to the folder where the report is generated.
+    &lt;report\_folder\_path&gt;
+
+    :   Is the path to the folder where the report is generated.
 
 ## Generating a JUnit latency test report
 
 Use the following procedures to generate a JUnit latency test output and test failure report.
 
+**Prerequisites**
+
 -   You have installed the OpenShift CLI (`oc`).
 
 -   You have logged in as a user with `cluster-admin` privileges.
 
-<!-- -->
+**Procedure**
 
 -   Create a JUnit-compliant XML report by passing the `--junit` parameter together with the path to where the report is dumped:
 
@@ -529,8 +546,9 @@ Use the following procedures to generate a JUnit latency test output and test fa
 
     where:
 
-    &lt;junit\_folder\_path&gt;  
-    Is the path to the folder where the junit report is generated
+    &lt;junit\_folder\_path&gt;
+
+    :   Is the path to the folder where the junit report is generated
 
 ## Running latency tests on a single-node OpenShift cluster
 
@@ -541,11 +559,13 @@ You can run latency tests on single-node OpenShift clusters.
 !!! note
     When executing `podman` commands as a non-root or non-privileged user, mounting paths can fail with `permission denied` errors. To make the `podman` command work, append `:Z` to the volumes creation; for example, `-v $(pwd)/:/kubeconfig:Z`. This allows `podman` to do the proper SELinux relabeling.
 
+**Prerequisites**
+
 -   You have installed the OpenShift CLI (`oc`).
 
 -   You have logged in as a user with `cluster-admin` privileges.
 
-<!-- -->
+**Procedure**
 
 -   To run the latency tests on a single-node OpenShift cluster, run the following command:
 
@@ -583,8 +603,9 @@ A `mirror` executable is shipped in the image to provide the input required by `
 
     where:
 
-    &lt;disconnected\_registry&gt;  
-    Is the disconnected mirror registry you have configured, for example, `my.local.registry:5000/`.
+    &lt;disconnected\_registry&gt;
+
+    :   Is the disconnected mirror registry you have configured, for example, `my.local.registry:5000/`.
 
 2.  When you have mirrored the `cnf-tests` image into the disconnected registry, you must override the original registry used to fetch the images when running the tests, for example:
 
@@ -610,15 +631,19 @@ You can run the latency tests using a custom test image and image registry using
 
     where:
 
-    &lt;custom\_image\_registry&gt;  
-    is the custom image registry, for example, `custom.registry:5000/`.
+    &lt;custom\_image\_registry&gt;
 
-    &lt;custom\_cnf-tests\_image&gt;  
-    is the custom cnf-tests image, for example, `custom-cnf-tests-image:latest`.
+    :   is the custom image registry, for example, `custom.registry:5000/`.
+
+    &lt;custom\_cnf-tests\_image&gt;
+
+    :   is the custom cnf-tests image, for example, `custom-cnf-tests-image:latest`.
 
 **Mirroring images to the cluster internal registry**
 
 OpenShift Container Platform provides a built-in container image registry, which runs as a standard workload on the cluster.
+
+**Procedure**
 
 1.  Gain external access to the registry by exposing it with a route:
 
@@ -685,6 +710,8 @@ OpenShift Container Platform provides a built-in container image registry, which
 
 You can optionally change the default upstream images that are mirrored for the latency tests.
 
+**Procedure**
+
 1.  The `mirror` command tries to mirror the upstream images by default. This can be overridden by passing a file with the following format to the image:
 
     ``` yaml
@@ -709,11 +736,13 @@ You can optionally change the default upstream images that are mirrored for the 
 
 To run latency tests, the cluster must be accessible from within the `cnf-tests` container.
 
+**Prerequisites**
+
 -   You have installed the OpenShift CLI (`oc`).
 
 -   You have logged in as a user with `cluster-admin` privileges.
 
-<!-- -->
+**Procedure**
 
 -   Verify that the cluster is accessible from inside the `cnf-tests` container by running the following command:
 

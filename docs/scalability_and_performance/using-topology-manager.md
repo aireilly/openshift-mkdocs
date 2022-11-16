@@ -7,7 +7,7 @@ Topology Manager uses topology information from collected hints to decide if a p
 Topology Manager is useful for workloads that use hardware accelerators to support latency-critical execution and high throughput parallel computation.
 
 !!! note
-    To use Topology Manager you must use the CPU Manager with the `static` policy. For more information on CPU Manager, see [Using CPU Manager](../scalability_and_performance/using-cpu-manager.xml#using-cpu-manager).
+    To use Topology Manager you must use the CPU Manager with the `static` policy. For more information on CPU Manager, see [Using CPU Manager](../scalability_and_performance/using-cpu-manager/#using-cpu-manager).
 
 ## Topology Manager policies
 
@@ -18,17 +18,21 @@ Topology Manager aligns `Pod` resources of all Quality of Service (QoS) classes 
 
 Topology Manager supports four allocation policies, which you assign in the `cpumanager-enabled` custom resource (CR):
 
-`none` policy  
-This is the default policy and does not perform any topology alignment.
+`none` policy
 
-`best-effort` policy  
-For each container in a pod with the `best-effort` topology management policy, kubelet calls each Hint Provider to discover their resource availability. Using this information, the Topology Manager stores the preferred NUMA Node affinity for that container. If the affinity is not preferred, Topology Manager stores this and admits the pod to the node.
+:   This is the default policy and does not perform any topology alignment.
 
-`restricted` policy  
-For each container in a pod with the `restricted` topology management policy, kubelet calls each Hint Provider to discover their resource availability. Using this information, the Topology Manager stores the preferred NUMA Node affinity for that container. If the affinity is not preferred, Topology Manager rejects this pod from the node, resulting in a pod in a `Terminated` state with a pod admission failure.
+`best-effort` policy
 
-`single-numa-node` policy  
-For each container in a pod with the `single-numa-node` topology management policy, kubelet calls each Hint Provider to discover their resource availability. Using this information, the Topology Manager determines if a single NUMA Node affinity is possible. If it is, the pod is admitted to the node. If a single NUMA Node affinity is not possible, the Topology Manager rejects the pod from the node. This results in a pod in a Terminated state with a pod admission failure.
+:   For each container in a pod with the `best-effort` topology management policy, kubelet calls each Hint Provider to discover their resource availability. Using this information, the Topology Manager stores the preferred NUMA Node affinity for that container. If the affinity is not preferred, Topology Manager stores this and admits the pod to the node.
+
+`restricted` policy
+
+:   For each container in a pod with the `restricted` topology management policy, kubelet calls each Hint Provider to discover their resource availability. Using this information, the Topology Manager stores the preferred NUMA Node affinity for that container. If the affinity is not preferred, Topology Manager rejects this pod from the node, resulting in a pod in a `Terminated` state with a pod admission failure.
+
+`single-numa-node` policy
+
+:   For each container in a pod with the `single-numa-node` topology management policy, kubelet calls each Hint Provider to discover their resource availability. Using this information, the Topology Manager determines if a single NUMA Node affinity is possible. If it is, the pod is admitted to the node. If a single NUMA Node affinity is not possible, the Topology Manager rejects the pod from the node. This results in a pod in a Terminated state with a pod admission failure.
 
 ## Setting up Topology Manager
 
@@ -65,7 +69,7 @@ To activate Topololgy Manager:
 
     -   Specify your selected Topology Manager allocation policy. Here, the policy is `single-numa-node`. Acceptable values are: `default`, `best-effort`, `restricted`, `single-numa-node`.
 
--   For more information on CPU Manager, see [Using CPU Manager](../scalability_and_performance/using-cpu-manager.xml#using-cpu-manager).
+-   For more information on CPU Manager, see [Using CPU Manager](../scalability_and_performance/using-cpu-manager/#using-cpu-manager).
 
 ## Pod interactions with Topology Manager policies
 

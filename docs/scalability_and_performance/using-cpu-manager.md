@@ -14,6 +14,8 @@ CPU Manager is useful for workloads that have some of these attributes:
 
 ## Setting up CPU Manager
 
+**Procedure**
+
 1.  Optional: Label a node:
 
     ``` terminal

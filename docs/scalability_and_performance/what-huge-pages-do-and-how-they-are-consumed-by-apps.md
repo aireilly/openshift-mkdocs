@@ -64,6 +64,8 @@ You can use the Downward API to inject information about the huge pages resource
 
 You can inject the resource allocation as environment variables, a volume plug-in, or both. Applications that you develop and run in the container can determine the resources that are available by reading the environment variables or files in the specified volumes.
 
+**Procedure**
+
 1.  Create a `hugepages-volume-pod.yaml` file that is similar to the following example:
 
     ``` yaml
@@ -153,7 +155,7 @@ You can inject the resource allocation as environment variables, a volume plug-i
     2
     ```
 
--   [Allowing containers to consume Downward API objects](../nodes/containers/nodes-containers-downward-api.xml#nodes-containers-downward-api)
+-   [Allowing containers to consume Downward API objects](../nodes/containers/nodes-containers-downward-api/#nodes-containers-downward-api)
 
 ## Configuring huge pages
 
@@ -247,6 +249,8 @@ $ oc get node <node_using_hugepages> -o jsonpath="{.status.allocatable.hugepages
 ## Disabling Transparent Huge Pages
 
 Transparent Huge Pages (THP) attempt to automate most aspects of creating, managing, and using huge pages. Since THP automatically manages the huge pages, this is not always handled optimally for all types of workloads. THP can lead to performance regressions, since many applications handle huge pages on their own. Therefore, consider disabling THP. The following steps describe how to disable THP using the Node Tuning Operator (NTO).
+
+**Procedure**
 
 1.  Create a file with the following content and name it `thp-disable-tuned.yaml`:
 

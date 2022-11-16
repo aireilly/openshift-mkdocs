@@ -23,15 +23,19 @@ You can deprovision a bare metal host in the web console. Deprovisioning a host 
 !!! note
     Powering off the host without first moving the daemon set and unmanaged static pods to another node can cause service disruption and loss of data.
 
--   [Adding compute machines to bare metal](../machine_management/user_infra/adding-bare-metal-compute-user-infra.xml#adding-bare-metal-compute-user-infra)
+-   [Adding compute machines to bare metal](../machine_management/user_infra/adding-bare-metal-compute-user-infra/#adding-bare-metal-compute-user-infra)
 
 ### Adding a bare metal host to the cluster using the web console
 
 You can add bare metal hosts to the cluster in the web console.
 
+**Prerequisites**
+
 -   Install an RHCOS cluster on bare metal.
 
 -   Log in as a user with `cluster-admin` privileges.
+
+**Procedure**
 
 1.  In the web console, navigate to **Compute** → **Bare Metal Hosts**.
 
@@ -58,11 +62,15 @@ You can add bare metal hosts to the cluster in the web console.
 
 You can add bare metal hosts to the cluster in the web console using a YAML file that describes the bare metal host.
 
+**Prerequisites**
+
 -   Install a RHCOS compute machine on bare metal infrastructure for use in the cluster.
 
 -   Log in as a user with `cluster-admin` privileges.
 
 -   Create a `Secret` CR for the bare metal host.
+
+**Procedure**
 
 1.  In the web console, navigate to **Compute** → **Bare Metal Hosts**.
 
@@ -85,7 +93,7 @@ You can add bare metal hosts to the cluster in the web console using a YAML file
       hardwareProfile: unknown
     ```
 
-    -   `credentialsName` must reference a valid `Secret` CR. The `baremetal-operator` cannot manage the bare metal host without a valid `Secret` referenced in the `credentialsName`. For more information about secrets and how to create them, see [Understanding secrets](../nodes/pods/nodes-pods-secrets.xml#nodes-pods-secrets-about_nodes-pods-secrets).
+    -   `credentialsName` must reference a valid `Secret` CR. The `baremetal-operator` cannot manage the bare metal host without a valid `Secret` referenced in the `credentialsName`. For more information about secrets and how to create them, see [Understanding secrets](../nodes/pods/nodes-pods-secrets/#nodes-pods-secrets-about_nodes-pods-secrets).
 
 4.  Select **Create** to save the YAML and create the new bare metal host.
 
@@ -98,11 +106,15 @@ You can add bare metal hosts to the cluster in the web console using a YAML file
 
 To automatically create the number of `Machine` objects that matches the number of available `BareMetalHost` objects, add a `metal3.io/autoscale-to-hosts` annotation to the `MachineSet` object.
 
+**Prerequisites**
+
 -   Install RHCOS bare metal compute machines for use in the cluster, and create corresponding `BareMetalHost` objects.
 
 -   Install the OpenShift Container Platform CLI (`oc`).
 
 -   Log in as a user with `cluster-admin` privileges.
+
+**Procedure**
 
 1.  Annotate the compute machine set that you want to configure for automatic scaling by adding the `metal3.io/autoscale-to-hosts` annotation. Replace `<machineset>` with the name of the compute machine set.
 
@@ -115,6 +127,6 @@ To automatically create the number of `Machine` objects that matches the number 
 !!! note
     When you use a `BareMetalHost` object to create a machine in the cluster and labels or selectors are subsequently changed on the `BareMetalHost`, the `BareMetalHost` object continues be counted against the `MachineSet` that the `Machine` object was created from.
 
--   [Expanding the cluster](../installing/installing_bare_metal_ipi/ipi-install-expanding-the-cluster.xml#ipi-install-expanding-the-cluster)
+-   [Expanding the cluster](../installing/installing_bare_metal_ipi/ipi-install-expanding-the-cluster/#ipi-install-expanding-the-cluster)
 
--   [MachineHealthChecks on bare metal](../machine_management/deploying-machine-health-checks.xml#machine-health-checks-bare-metal_deploying-machine-health-checks)
+-   [MachineHealthChecks on bare metal](../machine_management/deploying-machine-health-checks/#machine-health-checks-bare-metal_deploying-machine-health-checks)

@@ -25,9 +25,13 @@ The Node Observability Operator is not installed in OpenShift Container Platform
 
 You can install the Node Observability Operator by using the OpenShift CLI (oc).
 
+**Prerequisites**
+
 -   You have installed the OpenShift CLI (oc).
 
 -   You have access to the cluster with `cluster-admin` privileges.
+
+**Procedure**
 
 1.  Confirm that the Node Observability Operator is available by running the following command:
 
@@ -125,9 +129,13 @@ You can install the Node Observability Operator by using the OpenShift CLI (oc).
 
 You can install the Node Observability Operator from the OpenShift Container Platform web console.
 
+**Prerequisites**
+
 -   You have access to the cluster with `cluster-admin` privileges.
 
 -   You have access to the OpenShift Container Platform web console.
+
+**Procedure**
 
 1.  Log in to the OpenShift Container Platform web console.
 
@@ -166,11 +174,9 @@ You must create and run the `NodeObservability` custom resource (CR) before you 
 
 The CRI-O unix socket of the node is mounted on the agent pod, which allows the agent to communicate with CRI-O to run the pprof request. Similarly, the `kubelet-serving-ca` certificate chain is mounted on the agent pod, which allows secure communication between the agent and node’s kubelet endpoint.
 
--   You have installed the Node Observability Operator.
+**Prerequisites** \* You have installed the Node Observability Operator. \* You have installed the OpenShift CLI (oc). \* You have access to the cluster with `cluster-admin` privileges.
 
--   You have installed the OpenShift CLI (oc).
-
--   You have access to the cluster with `cluster-admin` privileges.
+**Procedure**
 
 1.  Log in to the OpenShift Container Platform CLI by running the following command:
 
@@ -241,11 +247,9 @@ To run the profiling query, you must create a `NodeObservabilityRun` resource. T
 !!! important
     You can request only one profiling query at any point of time.
 
--   You have installed the Node Observability Operator.
+**Prerequisites** \* You have installed the Node Observability Operator. \* You have created the `NodeObservability` custom resource (CR). \* You have access to the cluster with `cluster-admin` privileges.
 
--   You have created the `NodeObservability` custom resource (CR).
-
--   You have access to the cluster with `cluster-admin` privileges.
+**Procedure**
 
 1.  Create a `NodeObservabilityRun` resource file named `nodeobservabilityrun.yaml` that contains the following text:
 

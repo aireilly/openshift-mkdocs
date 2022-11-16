@@ -41,7 +41,7 @@ For telecommunications applications, it is important to design your application 
 !!! note
     Hyperthreading implementation and configuration differs depending on the hardware you are running OpenShift Container Platform on. Consult the relevant host hardware tuning information for more details of the hyperthreading implementation specific to that hardware. Disabling hyperthreading can increase the cost per core of the cluster.
 
--   [Configuring hyperthreading for a cluster](../scalability_and_performance/cnf-low-latency-tuning.xml#configuring_hyperthreading_for_a_cluster_cnf-master)
+-   [Configuring hyperthreading for a cluster](../scalability_and_performance/cnf-low-latency-tuning/#configuring_hyperthreading_for_a_cluster_cnf-master)
 
 Unresolved directive in cnf-performance-addon-operator-for-low-latency-nodes.adoc - include::modules/cnf-upgrading-performance-addon-operator.adoc\[leveloffset=+1\]
 
@@ -166,6 +166,8 @@ rt-worker-0.example.com           Ready  worker,worker-rt   5d17h   v1.25.0
 ### Creating a workload that works in real-time
 
 Use the following procedures for preparing a workload that will use real-time capabilities.
+
+**Procedure**
 
 1.  Create a pod with a QoS class of `Guaranteed`.
 
@@ -352,9 +354,13 @@ By disabling P-states and C-states at the pod level, you can configure high prio
 | ```                                       |                                                                                                                                                                                        |
 +-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 1: Power saving configurations**
+: **Table 1: Power saving configurations**
+
+**Prerequisites**
 
 -   You enabled C-states and OS-controlled P-states in the BIOS
+
+**Procedure**
 
 1.  Generate a `PerformanceProfile` with `per-pod-power-management` set to `true`:
 
@@ -564,7 +570,7 @@ spec:
 
 <!-- -->
 
--   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles.xml#cnf-create-performance-profiles).
+-   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles/#cnf-create-performance-profiles).
 
 ### Configuring huge pages
 
@@ -821,9 +827,13 @@ To configure hyperthreading for an OpenShift Container Platform cluster, set the
 !!! warning
     Disabling a previously enabled host hyperthreading configuration can cause the CPU core IDs listed in the `PerformanceProfile` YAML to be incorrect. This incorrect configuration can cause the node to become unavailable because the listed CPUs can no longer be found.
 
+**Prerequisites**
+
 -   Access to the cluster as a user with the `cluster-admin` role.
 
 -   Install the OpenShift CLI (oc).
+
+**Procedure**
 
 1.  Ascertain which threads are running on what CPUs for the host you want to configure.
 
@@ -953,9 +963,11 @@ The following table describes how combinations of power consumption and real-tim
 |                                     | ```                         |                                                      |                                                                                                                 |
 +-------------------------------------+-----------------------------+------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------+
 
-**Table 2**
+: **Table 2**
 
 ### Configuring workload hints manually
+
+**Procedure**
 
 1.  Create a `PerformanceProfile` appropriate for the environment’s hardware and topology as described in the table in "Understanding workload hints". Adjust the profile to match the expected workload. In this example, we tune for the lowest possible latency.
 
@@ -977,7 +989,7 @@ The following table describes how combinations of power consumption and real-tim
 
     -   Disables some debugging and monitoring features that can affect system latency.
 
--   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles.xml#cnf-create-performance-profiles).
+-   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles/#cnf-create-performance-profiles).
 
 ### Restricting CPUs for infra and application containers
 
@@ -999,7 +1011,7 @@ Generic housekeeping and workload tasks use CPUs in a way that may impact latenc
 | OS processes/systemd services     | Pins to reserved CPUs                                                               |
 +-----------------------------------+-------------------------------------------------------------------------------------+
 
-**Table 3: Process' CPU assignments**
+: **Table 3: Process' CPU assignments**
 
 The allocatable capacity of cores on a node for pods of all QoS process types, `Burstable`, `BestEffort`, or `Guaranteed`, is equal to the capacity of the isolated pool. The capacity of the reserved pool is removed from the node’s total core capacity for use by the cluster and operating system housekeeping duties.
 
@@ -1028,6 +1040,8 @@ To ensure that housekeeping tasks and workloads do not interfere with each other
 
 -   `reserved` - Specifies the CPUs for the cluster and operating system housekeeping duties. Threads in the `reserved` group are often busy. Do not run latency-sensitive applications in the `reserved` group. Latency-sensitive applications run in the `isolated` group.
 
+**Procedure**
+
 1.  Create a performance profile appropriate for the environment’s hardware and topology.
 
 2.  Add the `reserved` and `isolated` parameters with the CPUs you want reserved and isolated for the infra and application containers:
@@ -1051,7 +1065,7 @@ To ensure that housekeeping tasks and workloads do not interfere with each other
 
     -   Optional: Specify a node selector to apply the performance profile to specific nodes.
 
--   [Managing device interrupt processing for guaranteed pod isolated CPUs](../scalability_and_performance/cnf-low-latency-tuning.xml#managing-device-interrupt-processing-for-guaranteed-pod-isolated-cpus_cnf-master)
+-   [Managing device interrupt processing for guaranteed pod isolated CPUs](../scalability_and_performance/cnf-low-latency-tuning/#managing-device-interrupt-processing-for-guaranteed-pod-isolated-cpus_cnf-master)
 
 -   [Create a pod that gets assigned a QoS class of Guaranteed](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/#create-a-pod-that-gets-assigned-a-qos-class-of-guaranteed)
 
@@ -1075,11 +1089,13 @@ Unsupported network devices:
 
 -   Intel DPDK virtual functions
 
-<!-- -->
+**Prerequisites**
 
 -   Access to the cluster as a user with the `cluster-admin` role.
 
 -   Install the OpenShift CLI (`oc`).
+
+**Procedure**
 
 1.  Log in to the OpenShift Container Platform cluster running the Node Tuning Operator as a user with `cluster-admin` privileges.
 
@@ -1216,7 +1232,7 @@ Unsupported network devices:
     $ oc apply -f <your_profile_name>.yaml
     ```
 
--   [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles.xml#cnf-create-performance-profiles).
+-   [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles/#cnf-create-performance-profiles).
 
 ### Verifying the queue status
 
@@ -1475,35 +1491,43 @@ Status:
 
 The `Status` field contains `Conditions` that specify `Type` values that indicate the status of the performance profile:
 
-`Available`  
-All machine configs and Tuned profiles have been created successfully and are available for cluster components are responsible to process them (NTO, MCO, Kubelet).
+`Available`
 
-`Upgradeable`  
-Indicates whether the resources maintained by the Operator are in a state that is safe to upgrade.
+:   All machine configs and Tuned profiles have been created successfully and are available for cluster components are responsible to process them (NTO, MCO, Kubelet).
 
-`Progressing`  
-Indicates that the deployment process from the performance profile has started.
+`Upgradeable`
 
-`Degraded`  
-Indicates an error if:
+:   Indicates whether the resources maintained by the Operator are in a state that is safe to upgrade.
 
--   Validation of the performance profile has failed.
+`Progressing`
 
--   Creation of all relevant components did not complete successfully.
+:   Indicates that the deployment process from the performance profile has started.
+
+`Degraded`
+
+:   Indicates an error if:
+
+    -   Validation of the performance profile has failed.
+
+    -   Creation of all relevant components did not complete successfully.
 
 Each of these types contain the following fields:
 
-`Status`  
-The state for the specific type (`true` or `false`).
+`Status`
 
-`Timestamp`  
-The transaction timestamp.
+:   The state for the specific type (`true` or `false`).
 
-`Reason string`  
-The machine readable reason.
+`Timestamp`
 
-`Message string`  
-The human readable reason describing the state and error details, if any.
+:   The transaction timestamp.
+
+`Reason string`
+
+:   The machine readable reason.
+
+`Message string`
+
+:   The human readable reason describing the state and error details, if any.
 
 ### Machine config pools
 
@@ -1616,9 +1640,13 @@ You can gather debugging information about specific features by using the `oc ad
 !!! note
     In earlier versions of OpenShift Container Platform, the Performance Addon Operator provided automatic, low latency performance tuning for applications. In OpenShift Container Platform 4.11, these functions are part of the Node Tuning Operator. However, you must still use the `performance-addon-operator-must-gather` image when running the `must-gather` command.
 
+**Prerequisites**
+
 -   Access to the cluster as a user with the `cluster-admin` role.
 
 -   The OpenShift Container Platform CLI (oc) installed.
+
+**Procedure**
 
 1.  Navigate to the directory where you want to store the `must-gather` data.
 
@@ -1645,10 +1673,10 @@ You can gather debugging information about specific features by using the `oc ad
 
 4.  Attach the compressed file to your support case on the [Red Hat Customer Portal](https://access.redhat.com/).
 
--   For more information about MachineConfig and KubeletConfig, see [Managing nodes](../nodes/nodes/nodes-nodes-managing.xml#nodes-nodes-managing).
+-   For more information about MachineConfig and KubeletConfig, see [Managing nodes](../nodes/nodes/nodes-nodes-managing/#nodes-nodes-managing).
 
--   For more information about the Node Tuning Operator, see [Using the Node Tuning Operator](../scalability_and_performance/using-node-tuning-operator.xml#using-node-tuning-operator).
+-   For more information about the Node Tuning Operator, see [Using the Node Tuning Operator](../scalability_and_performance/using-node-tuning-operator/#using-node-tuning-operator).
 
--   For more information about the PerformanceProfile, see [Configuring huge pages](../scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps.xml#configuring-huge-pages_huge-pages).
+-   For more information about the PerformanceProfile, see [Configuring huge pages](../scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps/#configuring-huge-pages_huge-pages).
 
--   For more information about consuming huge pages from your containers, see [How huge pages are consumed by apps](../scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps.xml#how-huge-pages-are-consumed-by-apps_huge-pages).
+-   For more information about consuming huge pages from your containers, see [How huge pages are consumed by apps](../scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps/#how-huge-pages-are-consumed-by-apps_huge-pages).

@@ -21,7 +21,7 @@ Red Hat performed various tests for different scale sizes.
 | 200             | 7200           | 25 GB                             | 375 GB                                | 14 GB                      | 46 MB                    |
 +-----------------+----------------+-----------------------------------+---------------------------------------+----------------------------+--------------------------+
 
-**Table 1: Prometheus Database storage requirements based on number of nodes/pods in the cluster**
+: **Table 1: Prometheus Database storage requirements based on number of nodes/pods in the cluster**
 
 Approximately 20 percent of the expected size was added as overhead to ensure that the storage requirements do not exceed the calculated value.
 

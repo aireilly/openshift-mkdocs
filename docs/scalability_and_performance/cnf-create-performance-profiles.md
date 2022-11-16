@@ -19,11 +19,15 @@ The Performance Profile Creator (PPC) tool requires `must-gather` data. As a clu
 !!! note
     In earlier versions of OpenShift Container Platform, the Performance Addon Operator provided automatic, low latency performance tuning for applications. In OpenShift Container Platform 4.11, these functions are part of the Node Tuning Operator. However, you must still use the `performance-addon-operator-must-gather` image when running the `must-gather` command.
 
+**Prerequisites**
+
 -   Access to the cluster as a user with the `cluster-admin` role.
 
 -   Access to the Performance Addon Operator `must gather` image.
 
 -   The OpenShift CLI (`oc`) installed.
+
+**Procedure**
 
 1.  Navigate to the directory where you want to store the `must-gather` data.
 
@@ -52,6 +56,8 @@ The Performance Profile Creator (PPC) tool requires `must-gather` data. As a clu
 
 As a cluster administrator, you can run `podman` and the Performance Profile Creator to create a performance profile.
 
+**Prerequisites**
+
 -   Access to the cluster as a user with the `cluster-admin` role.
 
 -   A cluster installed on bare-metal hardware.
@@ -59,6 +65,8 @@ As a cluster administrator, you can run `podman` and the Performance Profile Cre
 -   A node with `podman` and OpenShift CLI (`oc`) installed.
 
 -   Access to the Node Tuning Operator image.
+
+**Procedure**
 
 1.  Check the machine config pool:
 
@@ -241,9 +249,13 @@ The created profile is described in the following YAML:
 
 The performance profile wrapper script simplifies the running of the Performance Profile Creator (PPC) tool. It hides the complexities associated with running `podman` and specifying the mapping directories and it enables the creation of the performance profile.
 
+**Prerequisites**
+
 -   Access to the Node Tuning Operator image.
 
 -   Access to the `must-gather` tarball.
+
+**Procedure**
 
 1.  Create a file on your local machine named, for example, `run-perf-profile-creator.sh`:
 
@@ -568,7 +580,7 @@ The performance profile wrapper script simplifies the running of the Performance
 |                                   | Default: `false`.                                                                                                                                                                        |
 +-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 1: Performance Profile Creator arguments**
+: **Table 1: Performance Profile Creator arguments**
 
 ## Reference performance profiles
 
@@ -618,4 +630,4 @@ To learn how to create and use performance profiles, see the "Creating a perform
 
 ## Additional resources
 
--   For more information about the `must-gather` tool, see [Gathering data about your cluster](../support/gathering-cluster-data.xml#nodes-nodes-managing).
+-   For more information about the `must-gather` tool, see [Gathering data about your cluster](../support/gathering-cluster-data/#nodes-nodes-managing).

@@ -27,6 +27,8 @@ The Node Tuning Operator is part of a standard OpenShift Container Platform inst
 
 Use this process to access an example Node Tuning Operator specification.
 
+**Procedure**
+
 -   Run the following command to access an example Node Tuning Operator specification:
 
     ``` terminal
@@ -416,6 +418,8 @@ See [Available TuneD Plug-ins](https://access.redhat.com/documentation/en-us/red
 
 To set node-level tuning on the nodes in your hosted cluster, you can use the Node Tuning Operator. In hosted control planes, you can configure node tuning by creating config maps that contain `Tuned` objects and referencing those config maps in your node pools.
 
+**Procedure**
+
 1.  Create a config map that contains a valid tuned manifest, and reference the manifest in a node pool. In the following example, a `Tuned` manifest defines a profile that sets `vm.dirty_ratio` to 55 on nodes that contain the `tuned-1-node-label` node label with any value. Save the following `ConfigMap` manifest in a file named `tuned-1.yaml`:
 
     ``` yaml
@@ -531,6 +535,8 @@ Now that you have created the `ConfigMap` object that contains a `Tuned` manifes
     For more information about the support scope of Red Hat Technology Preview features, see <https://access.redhat.com/support/offerings/techpreview/>.
 
 For more advanced tuning in hosted control planes, which requires setting kernel boot parameters, you can also use the Node Tuning Operator. The following example shows how you can create a node pool with huge pages reserved.
+
+**Procedure**
 
 1.  Create a `ConfigMap` object that contains a `Tuned` object manifest for creating 10 huge pages that are 2 MB in size. Save this `ConfigMap` manifest in a file named `tuned-hugepages.yaml`:
 

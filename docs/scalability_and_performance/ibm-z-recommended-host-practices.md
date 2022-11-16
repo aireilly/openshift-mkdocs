@@ -43,6 +43,8 @@ Receive Flow Steering (RFS) extends Receive Packet Steering (RPS) by further red
 
 ### Use the Machine Config Operator (MCO) to activate RFS
 
+**Procedure**
+
 1.  Copy the following MCO sample profile into a YAML file. For example, `enable-rfs.yaml`:
 
     ``` yaml
@@ -129,6 +131,8 @@ Using HyperPAV for the local storage devices leads to a significant performance 
 ### Use the Machine Config Operator (MCO) to activate HyperPAV aliases in nodes using z/VM full-pack minidisks
 
 For z/VM-based OpenShift Container Platform setups that use full-pack minidisks, you can leverage the advantage of MCO profiles by activating HyperPAV aliases in all of the nodes. You must add YAML configurations for both control plane and compute nodes.
+
+**Procedure**
 
 1.  Copy the following MCO sample profile into a YAML file for the control plane node. For example, `05-master-kernelarg-hpav.yaml`:
 
@@ -307,6 +311,8 @@ kernel.sched_migration_cost_ns=60000
 
 !!! note
     This setting applies only to KVM hosts with cgroups version 1. To enable CPU hotplug on the host, disable the cgroup controller.
+
+**Procedure**
 
 1.  Open `/etc/libvirt/qemu.conf` with an editor of your choice.
 

@@ -35,6 +35,29 @@ needs to be:
 [About the Performance Profile Creator](../cnf-create-performance-profiles.adoc#cnf-about-the-profile-creator-tool)
 ```
 
+* codeblock callouts
+
+``` markdown
+    \`\`\`
+     yaml
+      apiVersion: performance.openshift.io/v2
+      kind: PerformanceProfile
+      metadata:
+       name: example-performanceprofile # (1)
+      spec:
+      ...
+        realTimeKernel:
+          enabled: true
+        nodeSelector:
+           node-role.kubernetes.io/worker-rt: ""
+        machineConfigPoolSelector:
+           machineconfiguration.openshift.io/role: worker-rt
+    \`\`\`
+
+    1. Here is the callout thing.
+```
+
+Fig titles, "Procedure", 
 
 * Build all assemblies
 

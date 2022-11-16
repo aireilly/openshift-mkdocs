@@ -37,66 +37,69 @@ All worker latency profiles configure the following parameters:
 
 While the default configuration works in most cases, OpenShift Container Platform offers two other worker latency profiles for situations where the network is experiencing higher latency than usual. The three worker latency profiles are described in the following sections:
 
-Default worker latency profile  
-With the `Default` profile, each kubelet reports its node status to the Kubelet Controller Manager Operator (kube controller) every 10 seconds. The Kubelet Controller Manager Operator checks the kubelet for a status every 5 seconds.
+Default worker latency profile
 
-The Kubernetes Controller Manager Operator waits 40 seconds for a status update before considering that node unhealthy. It marks the node with the `node.kubernetes.io/not-ready` or `node.kubernetes.io/unreachable` taint and evicts the pods on that node. If a pod on that node has the `NoExecute` toleration, the pod gets evicted in 300 seconds. If the pod has the `tolerationSeconds` parameter, the eviction waits for the period specified by that parameter.
+:   With the `Default` profile, each kubelet reports its node status to the Kubelet Controller Manager Operator (kube controller) every 10 seconds. The Kubelet Controller Manager Operator checks the kubelet for a status every 5 seconds.
 
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Profile                    | Component                                | Parameter                      | Value     |
-+============================+==========================================+================================+===========+
-| Default                    | kubelet                                  | `node-status-update-frequency` | 10s       |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubelet Controller Manager | `node-monitor-grace-period`              | 40s                            |           |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubernetes API Server      | `default-not-ready-toleration-seconds`   | 300s                           |           |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubernetes API Server      | `default-unreachable-toleration-seconds` | 300s                           |           |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
+    The Kubernetes Controller Manager Operator waits 40 seconds for a status update before considering that node unhealthy. It marks the node with the `node.kubernetes.io/not-ready` or `node.kubernetes.io/unreachable` taint and evicts the pods on that node. If a pod on that node has the `NoExecute` toleration, the pod gets evicted in 300 seconds. If the pod has the `tolerationSeconds` parameter, the eviction waits for the period specified by that parameter.
 
-**Table 1**
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Profile                    | Component                                | Parameter                      | Value     |
+    +============================+==========================================+================================+===========+
+    | Default                    | kubelet                                  | `node-status-update-frequency` | 10s       |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubelet Controller Manager | `node-monitor-grace-period`              | 40s                            |           |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubernetes API Server      | `default-not-ready-toleration-seconds`   | 300s                           |           |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubernetes API Server      | `default-unreachable-toleration-seconds` | 300s                           |           |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
 
-Medium worker latency profile  
-Use the `MediumUpdateAverageReaction` profile if the network latency is slightly higher than usual.
+    : **Table 1**
 
-The `MediumUpdateAverageReaction` profile reduces the frequency of kubelet updates to 20 seconds and changes the period that the Kubernetes Controller Manager Operator waits for those updates to 2 minutes. The pod eviction period for a pod on that node is reduced to 60 seconds. If the pod has the `tolerationSeconds` parameter, the eviction waits for the period specified by that parameter.
+Medium worker latency profile
 
-The Kubernetes Controller Manager Operator waits for 2 minutes to consider a node unhealthy. In another minute, the eviction process starts.
+:   Use the `MediumUpdateAverageReaction` profile if the network latency is slightly higher than usual.
 
-+-----------------------------+------------------------------------------+--------------------------------+-----------+
-| Profile                     | Component                                | Parameter                      | Value     |
-+=============================+==========================================+================================+===========+
-| MediumUpdateAverageReaction | kubelet                                  | `node-status-update-frequency` | 20s       |
-+-----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubelet Controller Manager  | `node-monitor-grace-period`              | 2m                             |           |
-+-----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubernetes API Server       | `default-not-ready-toleration-seconds`   | 60s                            |           |
-+-----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubernetes API Server       | `default-unreachable-toleration-seconds` | 60s                            |           |
-+-----------------------------+------------------------------------------+--------------------------------+-----------+
+    The `MediumUpdateAverageReaction` profile reduces the frequency of kubelet updates to 20 seconds and changes the period that the Kubernetes Controller Manager Operator waits for those updates to 2 minutes. The pod eviction period for a pod on that node is reduced to 60 seconds. If the pod has the `tolerationSeconds` parameter, the eviction waits for the period specified by that parameter.
 
-**Table 2**
+    The Kubernetes Controller Manager Operator waits for 2 minutes to consider a node unhealthy. In another minute, the eviction process starts.
 
-Low worker latency profile  
-Use the `LowUpdateSlowReaction` profile if the network latency is extremely high.
+    +-----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Profile                     | Component                                | Parameter                      | Value     |
+    +=============================+==========================================+================================+===========+
+    | MediumUpdateAverageReaction | kubelet                                  | `node-status-update-frequency` | 20s       |
+    +-----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubelet Controller Manager  | `node-monitor-grace-period`              | 2m                             |           |
+    +-----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubernetes API Server       | `default-not-ready-toleration-seconds`   | 60s                            |           |
+    +-----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubernetes API Server       | `default-unreachable-toleration-seconds` | 60s                            |           |
+    +-----------------------------+------------------------------------------+--------------------------------+-----------+
 
-The `LowUpdateSlowReaction` profile reduces the frequency of kubelet updates to 1 minute and changes the period that the Kubernetes Controller Manager Operator waits for those updates to 5 minutes. The pod eviction period for a pod on that node is reduced to 60 seconds. If the pod has the `tolerationSeconds` parameter, the eviction waits for the period specified by that parameter.
+    : **Table 2**
 
-The Kubernetes Controller Manager Operator waits for 5 minutes to consider a node unhealthy. In another minute, the eviction process starts.
+Low worker latency profile
 
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Profile                    | Component                                | Parameter                      | Value     |
-+============================+==========================================+================================+===========+
-| LowUpdateSlowReaction      | kubelet                                  | `node-status-update-frequency` | 1m        |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubelet Controller Manager | `node-monitor-grace-period`              | 5m                             |           |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubernetes API Server      | `default-not-ready-toleration-seconds`   | 60s                            |           |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
-| Kubernetes API Server      | `default-unreachable-toleration-seconds` | 60s                            |           |
-+----------------------------+------------------------------------------+--------------------------------+-----------+
+:   Use the `LowUpdateSlowReaction` profile if the network latency is extremely high.
 
-**Table 3**
+    The `LowUpdateSlowReaction` profile reduces the frequency of kubelet updates to 1 minute and changes the period that the Kubernetes Controller Manager Operator waits for those updates to 5 minutes. The pod eviction period for a pod on that node is reduced to 60 seconds. If the pod has the `tolerationSeconds` parameter, the eviction waits for the period specified by that parameter.
+
+    The Kubernetes Controller Manager Operator waits for 5 minutes to consider a node unhealthy. In another minute, the eviction process starts.
+
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Profile                    | Component                                | Parameter                      | Value     |
+    +============================+==========================================+================================+===========+
+    | LowUpdateSlowReaction      | kubelet                                  | `node-status-update-frequency` | 1m        |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubelet Controller Manager | `node-monitor-grace-period`              | 5m                             |           |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubernetes API Server      | `default-not-ready-toleration-seconds`   | 60s                            |           |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+    | Kubernetes API Server      | `default-unreachable-toleration-seconds` | 60s                            |           |
+    +----------------------------+------------------------------------------+--------------------------------+-----------+
+
+    : **Table 3**
 
 ## Using worker latency profiles
 

@@ -76,14 +76,17 @@ The following diagram shows how the RAN policy generator interacts with GitOps a
 
 RAN policies are categorized into three main groups:
 
-Common  
-A policy that exists in the `Common` category is applied to all clusters to be represented by the site plan. Cluster types include single node, three-node, and standard clusters.
+Common
 
-Groups  
-A policy that exists in the `Groups` category is applied to a group of clusters. Every group of clusters could have their own policies that exist under the `Groups` category. For example, `Groups/group1` can have its own policies that are applied to the clusters belonging to `group1`. You can also define a group for each cluster type: single node, three-node, and standard clusters.
+:   A policy that exists in the `Common` category is applied to all clusters to be represented by the site plan. Cluster types include single node, three-node, and standard clusters.
 
-Sites  
-A policy that exists in the `Sites` category is applied to a specific cluster. Any cluster could have its own policies that exist in the `Sites` category. For example, `Sites/cluster1` has its own policies applied to `cluster1`. You can also define an example site-specific configuration for each cluster type: single node, three-node, and standard clusters.
+Groups
+
+:   A policy that exists in the `Groups` category is applied to a group of clusters. Every group of clusters could have their own policies that exist under the `Groups` category. For example, `Groups/group1` can have its own policies that are applied to the clusters belonging to `group1`. You can also define a group for each cluster type: single node, three-node, and standard clusters.
+
+Sites
+
+:   A policy that exists in the `Sites` category is applied to a specific cluster. Any cluster could have its own policies that exist in the `Sites` category. For example, `Sites/cluster1` has its own policies applied to `cluster1`. You can also define an example site-specific configuration for each cluster type: single node, three-node, and standard clusters.
 
 ## Low latency for distributed units (DUs)
 
@@ -95,20 +98,25 @@ Low latency systems are about guarantees with regards to response and processing
 
 OpenShift Container Platform enables low latency processing for DUs running on COTS hardware by using a number of technologies and specialized hardware devices:
 
-Real-time kernel for RHCOS  
-Ensures workloads are handled with a high degree of process determinism.
+Real-time kernel for RHCOS
 
-CPU isolation  
-Avoids CPU scheduling delays and ensures CPU capacity is available consistently.
+:   Ensures workloads are handled with a high degree of process determinism.
 
-NUMA awareness  
-Aligns memory and huge pages with CPU and PCI devices to pin guaranteed container memory and huge pages to the NUMA node. This decreases latency and improves performance of the node.
+CPU isolation
 
-Huge pages memory management  
-Using huge page sizes improves system performance by reducing the amount of system resources required to access page tables.
+:   Avoids CPU scheduling delays and ensures CPU capacity is available consistently.
 
-Precision timing synchronization using PTP  
-Allows synchronization between nodes in the network with sub-microsecond accuracy.
+NUMA awareness
+
+:   Aligns memory and huge pages with CPU and PCI devices to pin guaranteed container memory and huge pages to the NUMA node. This decreases latency and improves performance of the node.
+
+Huge pages memory management
+
+:   Using huge page sizes improves system performance by reducing the amount of system resources required to access page tables.
+
+Precision timing synchronization using PTP
+
+:   Allows synchronization between nodes in the network with sub-microsecond accuracy.
 
 ## Preparing the disconnected environment
 
@@ -118,7 +126,7 @@ RHACM is deployed as an Operator on the OpenShift Container Platform hub cluster
 
 You also use a disconnected mirror host to serve the RHCOS ISO and RootFS disk images that provision the DU bare-metal host operating system.
 
--   For more information about creating the disconnected mirror registry, see [Creating a mirror registry](../installing/disconnected_install/installing-mirroring-creating-registry.xml#installing-mirroring-creating-registry).
+-   For more information about creating the disconnected mirror registry, see [Creating a mirror registry](../installing/disconnected_install/installing-mirroring-creating-registry/#installing-mirroring-creating-registry).
 
 -   For more information about mirroring OpenShift Platform image to the disconnected registry, see [Mirroring images for a disconnected installation](../installing/disconnected_install/installing-mirroring-installation-images.html#installing-mirroring-installation-images).
 
@@ -126,10 +134,14 @@ You also use a disconnected mirror host to serve the RHCOS ISO and RootFS disk i
 
 Before you install a cluster on infrastructure that you provision, you must create Red Hat Enterprise Linux CoreOS (RHCOS) machines for it to use. Use a disconnected mirror to host the RHCOS images you require to provision your distributed unit (DU) bare-metal hosts.
 
+**Prerequisites**
+
 -   Deploy and configure an HTTP server to host the RHCOS image resources on the network. You must be able to access the HTTP server from your computer, and from the machines that you create.
 
 !!! important
     The RHCOS images might not change with every release of OpenShift Container Platform. You must download images with the highest version that is less than or equal to the OpenShift Container Platform version that you install. Use the image versions that match your OpenShift Container Platform version if they are available. You require ISO and RootFS images to install RHCOS on the DU hosts. RHCOS qcow2 images are not supported for this installation type.
+
+**Procedure**
 
 1.  Log in to the mirror host.
 
@@ -184,6 +196,8 @@ Before you install a cluster on infrastructure that you provision, you must crea
 
 You use Red Hat Advanced Cluster Management (RHACM) on a hub cluster in the disconnected environment to manage the deployment of distributed unit (DU) profiles on multiple managed spoke clusters.
 
+**Prerequisites**
+
 -   Install the OpenShift Container Platform CLI (`oc`).
 
 -   Log in as a user with `cluster-admin` privileges.
@@ -193,7 +207,7 @@ You use Red Hat Advanced Cluster Management (RHACM) on a hub cluster in the disc
     !!! note
         If you want to deploy Operators to the spoke clusters, you must also add them to this registry. See [Mirroring an Operator catalog](https://docs.openshift.com/container-platform/4.9/operators/admin/olm-restricted-networks.html#olm-mirror-catalog_olm-restricted-networks) for more information.
 
-<!-- -->
+**Procedure**
 
 -   Install RHACM on the hub cluster in the disconnected environment. See [Installing RHACM in a disconnected environment](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/install/installing#install-on-disconnected-networks).
 
@@ -202,6 +216,8 @@ You use Red Hat Advanced Cluster Management (RHACM) on a hub cluster in the disc
 The Assisted Installer Service (AIS) deploys OpenShift Container Platform clusters. Red Hat Advanced Cluster Management (RHACM) ships with AIS. AIS is deployed when you enable the MultiClusterHub Operator on the RHACM hub cluster.
 
 For distributed units (DUs), RHACM supports OpenShift Container Platform deployments that run on a single bare-metal host, three-node clusters, or standard clusters. In the case of single node clusters or three-node clusters, all nodes act as both control plane and worker nodes.
+
+**Prerequisites**
 
 -   Install OpenShift Container Platform 4.11 on a hub cluster.
 
@@ -213,6 +229,8 @@ For distributed units (DUs), RHACM supports OpenShift Container Platform deploym
 
 !!! important
     Create a persistent volume resource for image storage. Failure to specify persistent volume storage for images can affect cluster performance.
+
+**Procedure**
 
 1.  Modify the `Provisioning` resource to allow the Bare Metal Operator to watch all namespaces:
 
@@ -291,11 +309,13 @@ For each CR in the `<site>.yaml` file on the managed cluster, ZTP uses the data 
 
 ZTP provides two ways for defining and installing CRs on managed clusters: a manual approach when you are provisioning a single cluster and an automated approach when provisioning multiple clusters.
 
-Manual CR creation for single clusters  
-Use this method when you are creating CRs for a single cluster. This is a good way to test your CRs before deploying on a larger scale.
+Manual CR creation for single clusters
 
-Automated CR creation for multiple managed clusters  
-Use the automated SiteConfig method when you are installing multiple managed clusters, for example, in batches of up to 100 clusters. SiteConfig uses ArgoCD as the engine for the GitOps method of site deployment. After completing a site plan that contains all of the required parameters for deployment, a policy generator creates the manifests and applies them to the hub cluster.
+:   Use this method when you are creating CRs for a single cluster. This is a good way to test your CRs before deploying on a larger scale.
+
+Automated CR creation for multiple managed clusters
+
+:   Use the automated SiteConfig method when you are installing multiple managed clusters, for example, in batches of up to 100 clusters. SiteConfig uses ArgoCD as the engine for the GitOps method of site deployment. After completing a site plan that contains all of the required parameters for deployment, a policy generator creates the manifests and applies them to the hub cluster.
 
 Both methods create the CRs shown in the following table. On the cluster site, an automated Discovery image ISO file creates a directory with the site name and a file with the cluster name. Every cluster has its own namespace, and all of the CRs are under that namespace. The namespace and the CR names match the cluster name.
 
@@ -327,7 +347,7 @@ Both methods create the CRs shown in the following table. On the cluster site, a
 | `ClusterImageSet`       | Contains OpenShift Container Platform image information such as the repository and image name.                                                                                                 | Passed into resources to provide OpenShift Container Platform images.                                                                                                    |
 +-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 1**
+: **Table 1**
 
 ZTP support for single node clusters, three-node clusters, and standard clusters requires updates to these CRs, including multiple instantiations of some.
 
@@ -373,9 +393,9 @@ The `PolicyGenTemplate` CRs relevant to RAN cluster configuration are described 
 | `group-du-standard-ranGen.yaml`   | Contains the RAN policies for standard three control-plane clusters.                                                                                                                        |
 +-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 2: PolicyGenTemplate CRs for RAN deployments**
+: **Table 2: PolicyGenTemplate CRs for RAN deployments**
 
--   For more information about extracting the `/argocd` directory from the `ztp-site-generate` container image, see [Preparing the ZTP Git repository](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-policygentemplates-for-ran_ztp-deploying-disconnected).
+-   For more information about extracting the `/argocd` directory from the `ztp-site-generate` container image, see [Preparing the ZTP Git repository](../scalability_and_performance/ztp-deploying-disconnected/#ztp-policygentemplates-for-ran_ztp-deploying-disconnected).
 
 ## About the PolicyGenTemplate
 
@@ -560,6 +580,8 @@ Ensure that policy namespaces meets the following requirements:
 
 -   Namespaces must not match the namespace of a pre-existing cluster.
 
+**Procedure**
+
 1.  Choose an appropriate example from `out/argocd/example/policygentemplates`. This directory demonstrates a three-level policy framework that represents a well-supported low-latency profile tuned for the needs of 5G Telco DU deployments:
 
     -   A single `common-ranGen.yaml` file that applies to all types of sites.
@@ -592,11 +614,15 @@ You can override the default policy evaluation intervals with `PolicyGenTemplate
 
 The zero touch provisioning (ZTP) policy generator generates `ConfigurationPolicy` CR policies with pre-defined policy evaluation intervals. The default value for the `noncompliant` state is 10 seconds. The default value for the `compliant` state is 10 minutes. To disable the evaluation interval, set the value to `never`.
 
+**Prerequisites**
+
 -   You have installed the OpenShift CLI (`oc`).
 
 -   You have logged in to the hub cluster as a user with `cluster-admin` privileges.
 
 -   You have created a Git repository where you manage your custom site configuration data.
+
+**Procedure**
 
 1.  To configure the evaluation interval for all policies in a `PolicyGenTemplate` CR, add `evaluationInterval` to the `spec` field, and then set the appropriate `compliant` and `noncompliant` values. For example:
 
@@ -667,7 +693,11 @@ Installing and deploying the clusters is a two stage process, as shown here:
 
 The following example procedure describes how to update fields in the generated `PerformanceProfile` CR for the reference configuration based on the `PolicyGenTemplate` CR in the `group-du-sno-ranGen.yaml` file. Use the procedure as a basis for modifying other parts of the `PolicyGenTemplate` based on your requirements.
 
+**Prerequisites**
+
 -   Create a Git repository where you manage your custom site configuration data. The repository must be accessible from the hub cluster and be defined as a source repository for Argo CD.
+
+**Procedure**
 
 1.  Review the baseline source CR for existing content. You can review the source CRs listed in the reference `PolicyGenTemplate` CRs by extracting them from the zero touch provisioning (ZTP) container.
 
@@ -801,9 +831,13 @@ You can exclude individual CRs from the `/source-crs/extra-manifest` folder that
 
 Some additional optional filtering scenarios are also described.
 
+**Prerequisites**
+
 -   You configured the hub cluster for generating the required installation and policy CRs.
 
 -   You created a Git repository where you manage your custom site configuration data. The repository must be accessible from the hub cluster and be defined as a source repository for the Argo CD application.
+
+**Procedure**
 
 1.  To prevent the ZTP pipeline from applying the `03-sctp-machine-config-worker.yaml` CR file, apply the following YAML in the `SiteConfig` CR:
 
@@ -872,7 +906,11 @@ Some additional optional filtering scenarios are also described.
 
 You can configure PTP fast events for vRAN clusters that are deployed using the GitOps Zero Touch Provisioning (ZTP) pipeline. Use `PolicyGenTemplate` custom resources (CRs) as the basis to create a hierarchy of configuration files tailored to your specific site requirements.
 
+**Prerequisites**
+
 -   Create a Git repository where you manage your custom site configuration data.
+
+**Procedure**
 
 1.  Add the following YAML into `.spec.sourceFiles` in the `common-ranGen.yaml` file to configure the AMQP Operator:
 
@@ -941,7 +979,11 @@ You can configure PTP fast events for vRAN clusters that are deployed using the 
 
 You can configure UEFI secure boot for vRAN clusters that are deployed using the GitOps zero touch provisioning (ZTP) pipeline.
 
+**Prerequisites**
+
 -   Create a Git repository where you manage your custom site configuration data.
+
+**Procedure**
 
 1.  Create the following `MachineConfig` resource and save it in the `uefi-secure-boot.yaml` file:
 
@@ -1014,6 +1056,8 @@ You can configure UEFI secure boot for vRAN clusters that are deployed using the
 
 You can configure bare-metal hardware events for vRAN clusters that are deployed using the GitOps Zero Touch Provisioning (ZTP) pipeline.
 
+**Prerequisites**
+
 -   Install the OpenShift CLI (`oc`).
 
 -   Log in as a user with `cluster-admin` privileges.
@@ -1022,6 +1066,8 @@ You can configure bare-metal hardware events for vRAN clusters that are deployed
 
 !!! note
     Multiple `HardwareEvent` resources are not permitted.
+
+**Procedure**
 
 1.  To configure the AMQ Interconnect Operator and the Bare Metal Event Relay Operator, add the following YAML to `spec.sourceFiles` in the `common-ranGen.yaml` file:
 
@@ -1072,7 +1118,7 @@ You can configure bare-metal hardware events for vRAN clusters that are deployed
     --from-literal=hostaddr="<bmc_host_ip_addr>"
     ```
 
--   For more information about how to install the Bare Metal Event Relay, see [Installing the Bare Metal Event Relay using the CLI](../monitoring/using-rfhe.xml#nw-rfhe-installing-operator-cli_using-rfhe).
+-   For more information about how to install the Bare Metal Event Relay, see [Installing the Bare Metal Event Relay using the CLI](../monitoring/using-rfhe/#nw-rfhe-installing-operator-cli_using-rfhe).
 
 -   For more information about how to install the AMQ Interconnect Operator, see [Installing the AMQ messaging bus](../monitoring/using-rfhe.html#hw-installing-amq-interconnect-messaging-bus_using-rfhe).
 
@@ -1091,6 +1137,8 @@ The procedures in this section tell you how to complete the following tasks:
 ### Preparing the ZTP Git repository
 
 Create a Git repository for hosting site configuration data. The zero touch provisioning (ZTP) pipeline requires read access to this repository.
+
+**Procedure**
 
 1.  Create a directory structure with separate paths for the `SiteConfig` and `PolicyGenTemplate` custom resources (CR).
 
@@ -1145,11 +1193,15 @@ The `KlusterletAddonConfigOverride.yaml` file is only required if one or more `S
 
 You can configure your hub cluster with a set of ArgoCD applications that generate the required installation and policy custom resources (CR) for each site based on a zero touch provisioning (ZTP) GitOps flow.
 
+**Prerequisites**
+
 -   Openshift Cluster 4.11 as the hub cluster
 
 -   Red Hat Advanced Cluster Management (RHACM) Operator 2.5 installed on the hub cluster
 
 -   Red Hat OpenShift GitOps Operator 1.5 on the hub cluster
+
+**Procedure**
 
 1.  Install the Topology Aware Lifecycle Manager (TALM), which coordinates with any new sites added by ZTP and manages application of the `PolicyGenTemplate`-generated policies.
 
@@ -1195,27 +1247,32 @@ Custom resources (CRs) that are deployed through the GitOps zero touch provision
 
 If you require cluster configuration changes outside of the base GitOps ZTP pipeline configuration, there are three options:
 
-Apply the additional configuration after the ZTP pipeline is complete  
-When the GitOps ZTP pipeline deployment is complete, the deployed cluster is ready for application workloads. At this point, you can install additional Operators and apply configurations specific to your requirements. Ensure that additional configurations do not negatively affect the performance of the platform or allocated CPU budget.
+Apply the additional configuration after the ZTP pipeline is complete
 
-Add content to the ZTP library  
-The base source CRs that you deploy with the GitOps ZTP pipeline can be augmented with custom content as required.
+:   When the GitOps ZTP pipeline deployment is complete, the deployed cluster is ready for application workloads. At this point, you can install additional Operators and apply configurations specific to your requirements. Ensure that additional configurations do not negatively affect the performance of the platform or allocated CPU budget.
 
-Create extra manifests for the cluster installation  
-Extra manifests are applied during installation and makes the installation process more efficient.
+Add content to the ZTP library
+
+:   The base source CRs that you deploy with the GitOps ZTP pipeline can be augmented with custom content as required.
+
+Create extra manifests for the cluster installation
+
+:   Extra manifests are applied during installation and makes the installation process more efficient.
 
 !!! important
     Providing additional source CRs or modifying existing source CRs can significantly impact the performance or CPU profile of OpenShift Container Platform.
 
--   See [Adding new content to the GitOps ZTP pipeline](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-adding-new-content-to-gitops-ztp_ztp-deploying-disconnected) for more information about adding or modifying existing source CRs in the `ztp-site-generate` container.
+-   See [Adding new content to the GitOps ZTP pipeline](../scalability_and_performance/ztp-deploying-disconnected/#ztp-adding-new-content-to-gitops-ztp_ztp-deploying-disconnected) for more information about adding or modifying existing source CRs in the `ztp-site-generate` container.
 
--   See [Customizing the ZTP GitOps pipeline with extra manifests](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-customizing-the-install-extra-manifests_ztp-deploying-disconnected) for more information on adding extra manifests.
+-   See [Customizing the ZTP GitOps pipeline with extra manifests](../scalability_and_performance/ztp-deploying-disconnected/#ztp-customizing-the-install-extra-manifests_ztp-deploying-disconnected) for more information on adding extra manifests.
 
 ## Adding new content to the GitOps ZTP pipeline
 
 The source CRs in the GitOps ZTP site generator container provide a set of critical features and node tuning settings for RAN Distributed Unit (DU) applications. These are applied to the clusters that you deploy with ZTP. To add or modify existing source CRs in the `ztp-site-generate` container, rebuild the `ztp-site-generate` container and make it available to the hub cluster, typically from the disconnected registry associated with the hub cluster. Any valid OpenShift Container Platform CR can be added.
 
 Perform the following procedure to add new content to the ZTP pipeline.
+
+**Procedure**
 
 1.  Create a directory containing a Containerfile and the source CR YAML files that you want to include in the updated `ztp-site-generate` container, for example:
 
@@ -1271,13 +1328,17 @@ Perform the following procedure to add new content to the ZTP pipeline.
 
     You must wait until the new `openshift-gitops-repo-server` pod has completed initialization and the previous pod is terminated before the newly added container image content is available.
 
--   Alternatively, you can patch the Argo CD instance as described in [Preparing the hub cluster for ZTP](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-preparing-the-hub-cluster-for-ztp_ztp-deploying-disconnected) by modifying `argocd-openshift-gitops-patch.json` with an updated `initContainer` image before applying the patch file.
+-   Alternatively, you can patch the Argo CD instance as described in [Preparing the hub cluster for ZTP](../scalability_and_performance/ztp-deploying-disconnected/#ztp-preparing-the-hub-cluster-for-ztp_ztp-deploying-disconnected) by modifying `argocd-openshift-gitops-patch.json` with an updated `initContainer` image before applying the patch file.
 
 ## Customizing extra installation manifests in the ZTP GitOps pipeline
 
 You can define a set of extra manifests for inclusion in the installation phase of the zero touch provisioning (ZTP) GitOps pipeline. These manifests are linked to the `SiteConfig` custom resources (CRs) and are applied to the cluster during installation. Including `MachineConfig` CRs at install time makes the installation process more efficient.
 
+**Prerequisites**
+
 -   Create a Git repository where you manage your custom site configuration data. The repository must be accessible from the hub cluster and be defined as a source repository for the Argo CD application.
+
+**Procedure**
 
 1.  Create a set of extra manifest CRs that the ZTP pipeline uses to customize the cluster installs.
 
@@ -1309,6 +1370,8 @@ The ZTP pipeline appends the CRs in the `/extra-manifest` directory to the defau
 ## Deploying a site
 
 Use the following procedure to prepare the hub cluster for site deployment and initiate zero touch provisioning (ZTP) by pushing custom resources (CRs) to your Git repository.
+
+**Procedure**
 
 1.  Create the required secrets for the site. These resources must be in a namespace with a name matching the cluster name. In `out/argocd/example/siteconfig/example-sno.yaml`, the cluster name and namespace is `example-sno`.
 
@@ -1497,41 +1560,43 @@ Use the following procedure to prepare the hub cluster for site deployment and i
 
     -   `KlusterletAddonConfig`
 
--   [BMC addressing](../installing/installing_bare_metal_ipi/ipi-install-installation-workflow.xml#bmc-addressing_ipi-install-installation-workflow)
+-   [BMC addressing](../installing/installing_bare_metal_ipi/ipi-install-installation-workflow/#bmc-addressing_ipi-install-installation-workflow)
 
 ## GitOps ZTP and Topology Aware Lifecycle Manager
 
 GitOps zero touch provisioning (ZTP) generates installation and configuration CRs from manifests stored in Git. These artifacts are applied to a centralized hub cluster where Red Hat Advanced Cluster Management (RHACM), assisted installer service, and the Topology Aware Lifecycle Manager (TALM) use the CRs to install and configure the spoke cluster. The configuration phase of the ZTP pipeline uses the TALM to orchestrate the application of the configuration CRs to the cluster. There are several key integration points between GitOps ZTP and the TALM.
 
-Inform policies  
-By default, GitOps ZTP creates all policies with a remediation action of `inform`. These policies cause RHACM to report on compliance status of clusters relevant to the policies but does not apply the desired configuration. During the ZTP installation, the TALM steps through the created `inform` policies, creates a copy for the target spoke cluster(s) and changes the remediation action of the copy to `enforce`. This pushes the configuration to the spoke cluster. Outside of the ZTP phase of the cluster lifecycle, this setup allows changes to be made to policies without the risk of immediately rolling those changes out to all affected spoke clusters in the network. You can control the timing and the set of clusters that are remediated using TALM.
+Inform policies
 
-Automatic creation of ClusterGroupUpgrade CRs  
-The TALM monitors the state of all `ManagedCluster` CRs on the hub cluster. Any `ManagedCluster` CR which does not have a `ztp-done` label applied, including newly created `ManagedCluster` CRs, causes the TALM to automatically create a `ClusterGroupUpgrade` CR with the following characteristics:
+:   By default, GitOps ZTP creates all policies with a remediation action of `inform`. These policies cause RHACM to report on compliance status of clusters relevant to the policies but does not apply the desired configuration. During the ZTP installation, the TALM steps through the created `inform` policies, creates a copy for the target spoke cluster(s) and changes the remediation action of the copy to `enforce`. This pushes the configuration to the spoke cluster. Outside of the ZTP phase of the cluster lifecycle, this setup allows changes to be made to policies without the risk of immediately rolling those changes out to all affected spoke clusters in the network. You can control the timing and the set of clusters that are remediated using TALM.
 
--   The `ClusterGroupUpgrade` CR is created and enabled in the `ztp-install` namespace.
+Automatic creation of ClusterGroupUpgrade CRs
 
--   `ClusterGroupUpgrade` CR has the same name as the `ManagedCluster` CR.
+:   The TALM monitors the state of all `ManagedCluster` CRs on the hub cluster. Any `ManagedCluster` CR which does not have a `ztp-done` label applied, including newly created `ManagedCluster` CRs, causes the TALM to automatically create a `ClusterGroupUpgrade` CR with the following characteristics:
 
--   The cluster selector includes only the cluster associated with that `ManagedCluster` CR.
+    -   The `ClusterGroupUpgrade` CR is created and enabled in the `ztp-install` namespace.
 
--   The set of managed policies includes all policies that RHACM has bound to the cluster at the time the `ClusterGroupUpgrade` is created.
+    -   `ClusterGroupUpgrade` CR has the same name as the `ManagedCluster` CR.
 
--   Pre-caching is disabled.
+    -   The cluster selector includes only the cluster associated with that `ManagedCluster` CR.
 
--   Timeout set to 4 hours (240 minutes).
+    -   The set of managed policies includes all policies that RHACM has bound to the cluster at the time the `ClusterGroupUpgrade` is created.
 
-    The automatic creation of an enabled `ClusterGroupUpgrade` ensures that initial zero-touch deployment of clusters proceeds without the need for user intervention. Additionally, the automatic creation of a `ClusterGroupUpgrade` CR for any `ManagedCluster` without the `ztp-done` label allows a failed ZTP installation to be restarted by simply deleting the `ClusterGroupUpgrade` CR for the cluster.
+    -   Pre-caching is disabled.
 
-Waves  
-Each policy generated from a `PolicyGenTemplate` CR includes a `ztp-deploy-wave` annotation. This annotation is based on the same annotation from each CR which is included in that policy. The wave annotation is used to order the policies in the auto-generated `ClusterGroupUpgrade` CR.
+    -   Timeout set to 4 hours (240 minutes).
 
-!!! note
-    All CRs in the same policy must have the same setting for the `ztp-deploy-wave` annotation. The default value of this annotation for each CR can be overridden in the `PolicyGenTemplate`. The wave annotation in the source CR is used for determining and setting the policy wave annotation. This annotation is removed from each built CR which is included in the generated policy at runtime.
+        The automatic creation of an enabled `ClusterGroupUpgrade` ensures that initial zero-touch deployment of clusters proceeds without the need for user intervention. Additionally, the automatic creation of a `ClusterGroupUpgrade` CR for any `ManagedCluster` without the `ztp-done` label allows a failed ZTP installation to be restarted by simply deleting the `ClusterGroupUpgrade` CR for the cluster.
 
-The TALM applies the configuration policies in the order specified by the wave annotations. The TALM waits for each policy to be compliant before moving to the next policy. It is important to ensure that the wave annotation for each CR takes into account any prerequisites for those CRs to be applied to the cluster. For example, an Operator must be installed before or concurrently with the configuration for the Operator. Similarly, the `CatalogSource` for an Operator must be installed in a wave before or concurrently with the Operator Subscription. The default wave value for each CR takes these prerequisites into account.
+Waves
 
-Multiple CRs and policies can share the same wave number. Having fewer policies can result in faster deployments and lower CPU usage. It is a best practice to group many CRs into relatively few waves.
+:   Each policy generated from a `PolicyGenTemplate` CR includes a `ztp-deploy-wave` annotation. This annotation is based on the same annotation from each CR which is included in that policy. The wave annotation is used to order the policies in the auto-generated `ClusterGroupUpgrade` CR.
+
+    !!! note
+        All CRs in the same policy must have the same setting for the `ztp-deploy-wave` annotation. The default value of this annotation for each CR can be overridden in the `PolicyGenTemplate`. The wave annotation in the source CR is used for determining and setting the policy wave annotation. This annotation is removed from each built CR which is included in the generated policy at runtime.
+    The TALM applies the configuration policies in the order specified by the wave annotations. The TALM waits for each policy to be compliant before moving to the next policy. It is important to ensure that the wave annotation for each CR takes into account any prerequisites for those CRs to be applied to the cluster. For example, an Operator must be installed before or concurrently with the configuration for the Operator. Similarly, the `CatalogSource` for an Operator must be installed in a wave before or concurrently with the Operator Subscription. The default wave value for each CR takes these prerequisites into account.
+
+    Multiple CRs and policies can share the same wave number. Having fewer policies can result in faster deployments and lower CPU usage. It is a best practice to group many CRs into relatively few waves.
 
 To check the default wave value in each source CR, run the following command against the `out/source-crs` directory that is extracted from the `ztp-site-generate` container image:
 
@@ -1539,15 +1604,17 @@ To check the default wave value in each source CR, run the following command aga
 $ grep -r "ztp-deploy-wave" out/source-crs
 ```
 
-Phase labels  
-The `ClusterGroupUpgrade` CR is automatically created and includes directives to annotate the `ManagedCluster` CR with labels at the start and end of the ZTP process.
+Phase labels
 
-When ZTP configuration post-installation commences, the `ManagedCluster` has the `ztp-running` label applied. When all policies are remediated to the cluster and are fully compliant, these directives cause the TALM to remove the `ztp-running` label and apply the `ztp-done` label.
+:   The `ClusterGroupUpgrade` CR is automatically created and includes directives to annotate the `ManagedCluster` CR with labels at the start and end of the ZTP process.
 
-For deployments which make use of the `informDuValidator` policy, the `ztp-done` label is applied when the cluster is fully ready for deployment of applications. This includes all reconciliation and resulting effects of the ZTP applied configuration CRs.
+    When ZTP configuration post-installation commences, the `ManagedCluster` has the `ztp-running` label applied. When all policies are remediated to the cluster and are fully compliant, these directives cause the TALM to remove the `ztp-running` label and apply the `ztp-done` label.
 
-Linked CRs  
-The automatically created `ClusterGroupUpgrade` CR has the owner reference set as the `ManagedCluster` from which it was derived. This reference ensures that deleting the `ManagedCluster` CR causes the instance of the `ClusterGroupUpgrade` to be deleted along with any supporting resources.
+    For deployments which make use of the `informDuValidator` policy, the `ztp-done` label is applied when the cluster is fully ready for deployment of applications. This includes all reconciliation and resulting effects of the ZTP applied configuration CRs.
+
+Linked CRs
+
+:   The automatically created `ClusterGroupUpgrade` CR has the owner reference set as the `ManagedCluster` from which it was derived. This reference ensures that deleting the `ManagedCluster` CR causes the instance of the `ClusterGroupUpgrade` to be deleted along with any supporting resources.
 
 ## Monitoring deployment progress
 
@@ -1597,32 +1664,37 @@ After all policies become complaint, the `ztp-done` label is added to the cluste
 
 Zero touch provisioning (ZTP) simplifies the process of checking the ZTP installation status for a cluster. The ZTP status moves through three phases: cluster installation, cluster configuration, and ZTP done.
 
-Cluster installation phase  
-The cluster installation phase is shown by the `ManagedCluster` CR `ManagedClusterJoined` condition. If the `ManagedCluster` CR does not have this condition, or the condition is set to `False`, the cluster is still in the installation phase. Additional details about installation are available from the `AgentClusterInstall` and `ClusterDeployment` CRs. For more information, see "Troubleshooting GitOps ZTP".
+Cluster installation phase
 
-Cluster configuration phase  
-The cluster configuration phase is shown by a `ztp-running` label applied the `ManagedCluster` CR for the cluster.
+:   The cluster installation phase is shown by the `ManagedCluster` CR `ManagedClusterJoined` condition. If the `ManagedCluster` CR does not have this condition, or the condition is set to `False`, the cluster is still in the installation phase. Additional details about installation are available from the `AgentClusterInstall` and `ClusterDeployment` CRs. For more information, see "Troubleshooting GitOps ZTP".
 
-ZTP done  
-Cluster installation and configuration is complete in the ZTP done phase. This is shown by the removal of the `ztp-running` label and addition of the `ztp-done` label to the `ManagedCluster` CR. The `ztp-done` label shows that the configuration has been applied and the baseline DU configuration has completed cluster tuning.
+Cluster configuration phase
 
-The transition to the ZTP done state is conditional on the compliant state of a Red Hat Advanced Cluster Management (RHACM) static validator inform policy. This policy captures the existing criteria for a completed installation and validates that it moves to a compliant state only when ZTP provisioning of the spoke cluster is complete.
+:   The cluster configuration phase is shown by a `ztp-running` label applied the `ManagedCluster` CR for the cluster.
 
-The validator inform policy ensures the configuration of the distributed unit (DU) cluster is fully applied and Operators have completed their initialization. The policy validates the following:
+ZTP done
 
--   The target `MachineConfigPool` contains the expected entries and has finished updating. All nodes are available and not degraded.
+:   Cluster installation and configuration is complete in the ZTP done phase. This is shown by the removal of the `ztp-running` label and addition of the `ztp-done` label to the `ManagedCluster` CR. The `ztp-done` label shows that the configuration has been applied and the baseline DU configuration has completed cluster tuning.
 
--   The SR-IOV Operator has completed initialization as indicated by at least one `SriovNetworkNodeState` with `syncStatus: Succeeded`.
+    The transition to the ZTP done state is conditional on the compliant state of a Red Hat Advanced Cluster Management (RHACM) static validator inform policy. This policy captures the existing criteria for a completed installation and validates that it moves to a compliant state only when ZTP provisioning of the spoke cluster is complete.
 
--   The PTP Operator daemon set exists.
+    The validator inform policy ensures the configuration of the distributed unit (DU) cluster is fully applied and Operators have completed their initialization. The policy validates the following:
 
-    The policy captures the existing criteria for a completed installation and validates that it moves to a compliant state only when ZTP provisioning of the spoke cluster is complete.
+    -   The target `MachineConfigPool` contains the expected entries and has finished updating. All nodes are available and not degraded.
 
-    The validator inform policy is included in the reference group `PolicyGenTemplate` CRs. For reliable indication of the ZTP done state, this validator inform policy must be included in the ZTP pipeline.
+    -   The SR-IOV Operator has completed initialization as indicated by at least one `SriovNetworkNodeState` with `syncStatus: Succeeded`.
+
+    -   The PTP Operator daemon set exists.
+
+        The policy captures the existing criteria for a completed installation and validates that it moves to a compliant state only when ZTP provisioning of the spoke cluster is complete.
+
+        The validator inform policy is included in the reference group `PolicyGenTemplate` CRs. For reliable indication of the ZTP done state, this validator inform policy must be included in the ZTP pipeline.
 
 ### Creating a validator inform policy
 
 Use the following procedure to create a validator inform policy that provides an indication of when the zero touch provisioning (ZTP) installation and configuration of the deployed cluster is complete. This policy can be used for deployments of single node clusters, three-node clusters, and standard clusters.
+
+**Procedure**
 
 1.  Create a stand-alone `PolicyGenTemplate` custom resource (CR) that contains the source file `validatorCRs/informDuValidator.yaml`. You only need one stand-alone `PolicyGenTemplate` CR for each cluster type.
 
@@ -1709,6 +1781,8 @@ Use the following procedure to create a validator inform policy that provides an
 
 After you have created the validator inform policies for your clusters and pushed them to the zero touch provisioning (ZTP) Git repository, you can check the status of each cluster for policy compliance.
 
+**Procedure**
+
 1.  To query the status of the spoke clusters, use either the Red Hat Advanced Cluster Management (RHACM) web console or the CLI:
 
     -   To query status from the RHACM web console, perform the following actions:
@@ -1778,6 +1852,8 @@ $ oc get AgentClusterInstall -n <cluster_name>
 
 If no object is returned, use the following procedure to troubleshoot the ArgoCD pipeline flow from `SiteConfig` files to the installation CRs.
 
+**Procedure**
+
 1.  Verify that the `SiteConfig→ManagedCluster` was generated to the hub cluster:
 
     ``` terminal
@@ -1833,6 +1909,8 @@ $ oc get policy -n $NS
 The expected set of policy-wrapped CRs should be displayed.
 
 If the policies failed synchronization, use the following troubleshooting steps.
+
+**Procedure**
 
 1.  To display detailed information about the policies, run the following command:
 
@@ -1920,6 +1998,8 @@ If the policies failed synchronization, use the following troubleshooting steps.
 
 Use the following procedure to restart policies reconciliation in the event of unexpected compliance issues. This procedure is required when the `ClusterGroupUpgrade` CR has timed out.
 
+**Procedure**
+
 1.  A `ClusterGroupUpgrade` CR is generated in the namespace `ztp-install` by the Topology Aware Lifecycle Manager after the managed spoke cluster becomes `Ready`:
 
     ``` terminal
@@ -1946,7 +2026,7 @@ Note that when the `ClusterGroupUpgrade` CR completes with status `UpgradeComple
 
 At this point, ZTP has completed its interaction with the cluster and any further interactions should be treated as an upgrade.
 
--   For information about using TALM to construct your own `ClusterGroupUpgrade` CR, see [About the ClusterGroupUpgrade CR](../scalability_and_performance/cnf-talm-for-cluster-upgrades.xml#talo-about-cgu-crs_cnf-topology-aware-lifecycle-manager).
+-   For information about using TALM to construct your own `ClusterGroupUpgrade` CR, see [About the ClusterGroupUpgrade CR](../scalability_and_performance/cnf-talm-for-cluster-upgrades/#talo-about-cgu-crs_cnf-topology-aware-lifecycle-manager).
 
 ## Site cleanup
 
@@ -1960,6 +2040,8 @@ Remove a site and the associated installation and configuration policy CRs by re
 ### Removing obsolete content
 
 If a change to the `PolicyGenTemplate` file configuration results in obsolete policies, for example, policies are renamed, use the following procedure to remove those policies in an automated way.
+
+**Procedure**
 
 1.  Remove the affected `PolicyGenTemplate` files from the Git repository, commit and push to the remote repository.
 
@@ -1979,6 +2061,8 @@ $ oc delete policy -n <namespace> <policyName>
 
 If you need to remove the ArgoCD pipeline and all generated artifacts follow this procedure:
 
+**Procedure**
+
 1.  Detach all clusters from RHACM.
 
 2.  Delete the `kustomization.yaml` file in the `deployment` directory using the following command:
@@ -1990,6 +2074,8 @@ If you need to remove the ArgoCD pipeline and all generated artifacts follow thi
 ## Upgrading GitOps ZTP
 
 You can upgrade the Gitops zero touch provisioning (ZTP) infrastructure independently from the underlying cluster, Red Hat Advanced Cluster Management (RHACM), and OpenShift Container Platform version running on the spoke clusters. This procedure guides you through the upgrade process to avoid impact on the spoke clusters. However, any changes to the content or settings of policies, including adding recommended content, results in changes that must be rolled out and reconciled to the spoke clusters.
+
+**Prerequisites**
 
 -   This procedure assumes that you have a fully operational hub cluster running the earlier version of the GitOps ZTP infrastructure.
 
@@ -2010,6 +2096,8 @@ At a high level, the strategy for upgrading the GitOps ZTP infrastructure is:
 ### Preparing for the upgrade
 
 Use the following procedure to prepare your site for the GitOps zero touch provisioning (ZTP) upgrade.
+
+**Procedure**
 
 1.  Obtain the latest version of the GitOps ZTP container from which you can extract a set of custom resources (CRs) used to configure the GitOps operator on the hub cluster for use in the GitOps ZTP solution.
 
@@ -2041,6 +2129,8 @@ If the upgrade includes changes to policies that may result in obsolete policies
 
 To ensure that existing clusters remain untouched by the tooling updates, all existing managed clusters must be labeled with the `ztp-done` label.
 
+**Procedure**
+
 1.  Find a label selector that lists the managed clusters that were deployed with zero touch provisioning (ZTP), such as `local-cluster!=true`:
 
     ``` terminal
@@ -2058,6 +2148,8 @@ To ensure that existing clusters remain untouched by the tooling updates, all ex
 Removing the existing applications ensures that any changes to existing content in the Git repository are not rolled out until the new version of the tooling is available.
 
 Use the application files from the `deployment` directory. If you used custom names for the applications, update the names in these files first.
+
+**Procedure**
 
 1.  Perform a non-cascaded delete on the `clusters` application to leave all generated resources in place:
 
@@ -2079,7 +2171,7 @@ Use the application files from the `deployment` directory. If you used custom na
 
 Install the Topology Aware Lifecycle Manager (TALM) on the hub cluster.
 
--   For information about the Topology Aware Lifecycle Manager (TALM), see [About the Topology Aware Lifecycle Manager configuration](../scalability_and_performance/cnf-talm-for-cluster-upgrades.xml#cnf-about-topology-aware-lifecycle-manager-config_cnf-topology-aware-lifecycle-manager).
+-   For information about the Topology Aware Lifecycle Manager (TALM), see [About the Topology Aware Lifecycle Manager configuration](../scalability_and_performance/cnf-talm-for-cluster-upgrades/#cnf-about-topology-aware-lifecycle-manager-config_cnf-topology-aware-lifecycle-manager).
 
 ### Required changes to the Git repository
 
@@ -2157,6 +2249,8 @@ When upgrading the `ztp-site-generate` container from an earlier release to the 
 
 Using the extracted `argocd/deployment` directory, and after ensuring that the applications point to your Git repository, apply the full contents of the deployment directory. Applying the full contents of the directory ensures that all necessary resources for the applications are correctly configured.
 
+**Procedure**
+
 1.  To patch the ArgoCD instance in the hub cluster by using the patch file previously extracted into the `out/argocd/deployment/` directory, enter the following command:
 
     ``` terminal
@@ -2177,11 +2271,13 @@ If any configuration changes were included in the upgrade due to implementing re
 
 To roll out the changes, create one or more `ClusterGroupUpgrade` CRs as detailed in the TALM documentation. The CR must contain the list of `Non-Compliant` policies that you want to push out to the spoke clusters as well as a list or selector of which clusters should be included in the update.
 
--   For information about creating `ClusterGroupUpgrade` CRs, see [About the auto-created ClusterGroupUpgrade CR for ZTP](../scalability_and_performance/ztp-deploying-disconnected.xml#talo-precache-autocreated-cgu-for-ztp_ztp-deploying-disconnected).
+-   For information about creating `ClusterGroupUpgrade` CRs, see [About the auto-created ClusterGroupUpgrade CR for ZTP](../scalability_and_performance/ztp-deploying-disconnected/#talo-precache-autocreated-cgu-for-ztp_ztp-deploying-disconnected).
 
 ## Manually install a single managed cluster
 
 This procedure tells you how to manually create and deploy a single managed cluster. If you are creating multiple clusters, perhaps hundreds, use the `SiteConfig` method described in “Creating ZTP custom resources for multiple managed clusters”.
+
+**Prerequisites**
 
 -   Enable the Assisted Installer service.
 
@@ -2225,6 +2321,8 @@ This procedure tells you how to manually create and deploy a single managed clus
 -   You mirrored the ISO and `rootfs` used to generate the spoke cluster ISO to an HTTP server and configured the settings to pull images from there.
 
     The images must match the version of the `ClusterImageSet`. For example, to deploy a 4.11.0 version, the `rootfs` and ISO must be set to `4.11.0`.
+
+**Procedure**
 
 1.  Create a `ClusterImageSet` for each specific cluster version that needs to be deployed. A `ClusterImageSet` has the following format:
 
@@ -2453,11 +2551,13 @@ This procedure tells you how to manually create and deploy a single managed clus
 
 To provision additional clusters, repeat this procedure for each cluster.
 
--   [BMC addressing](../installing/installing_bare_metal_ipi/ipi-install-installation-workflow.xml#bmc-addressing_ipi-install-installation-workflow)
+-   [BMC addressing](../installing/installing_bare_metal_ipi/ipi-install-installation-workflow/#bmc-addressing_ipi-install-installation-workflow)
 
 ### Configuring BIOS for distributed unit bare-metal hosts
 
 Distributed unit (DU) hosts require the BIOS to be configured before the host can be provisioned. The BIOS configuration is dependent on the specific hardware that runs your DUs and the particular requirements of your installation.
+
+**Procedure**
 
 1.  Set the **UEFI/BIOS Boot Mode** to `UEFI`.
 
@@ -2496,7 +2596,7 @@ Distributed unit (DU) hosts require the BIOS to be configured before the host ca
     | Processor C6                     | Disabled                      |
     +----------------------------------+-------------------------------+
 
-    **Table 3: Sample BIOS configuration for an Intel Xeon Skylake or Cascade Lake server**
+    : **Table 3: Sample BIOS configuration for an Intel Xeon Skylake or Cascade Lake server**
 
 !!! note
     Enable global SR-IOV and VT-d settings in the BIOS for the host. These settings are relevant to bare-metal environments.
@@ -2508,7 +2608,11 @@ Optionally, after creating the `AgentClusterInstall` custom resource, you can co
 !!! note
     You must create this custom resource before creating the `ClusterDeployment` custom resource.
 
+**Prerequisites**
+
 -   Deploy and configure the `AgentClusterInstall` custom resource.
+
+**Procedure**
 
 1.  Create a `NMStateConfig` custom resource:
 
@@ -2604,7 +2708,11 @@ The Discovery image ISO process finishes when the `Agent` custom resource is cre
 
 Ensure that cluster provisioning was successful by checking the cluster status.
 
+**Prerequisites**
+
 -   All of the custom resources have been configured and provisioned, and the `Agent` custom resource is created on the hub for the managed cluster.
+
+**Procedure**
 
 1.  Check the status of the managed cluster:
 
@@ -2654,12 +2762,16 @@ Ensure that cluster provisioning was successful by checking the cluster status.
 
 After you have completed the preceding procedure, follow these steps to configure the managed cluster for a disconnected environment.
 
+**Prerequisites**
+
 -   A disconnected installation of Red Hat Advanced Cluster Management (RHACM) 2.3.
 
 -   Host the `rootfs` and `iso` images on an HTTPD server.
 
 !!! warning
     If you enable TLS for the HTTPD server, you must confirm the root certificate is signed by an authority trusted by the client and verify the trusted certificate chain between your OpenShift Container Platform hub and spoke clusters and the HTTPD server. Using a server configured with an untrusted certificate prevents the images from being downloaded to the image creation service. Using untrusted HTTPS servers is not supported.
+
+**Procedure**
 
 1.  Create a `ConfigMap` containing the mirror registry config:
 
@@ -2730,6 +2842,8 @@ After you have completed the preceding procedure, follow these steps to configur
 
 Optionally, when you are creating the `AgentClusterInstall` custom resource, you can configure IPv6 addresses for the managed clusters.
 
+**Procedure**
+
 1.  In the `AgentClusterInstall` custom resource, modify the IP addresses in `clusterNetwork` and `serviceNetwork` for IPv6 addresses:
 
     ``` yaml
@@ -2764,9 +2878,13 @@ Optionally, when you are creating the `AgentClusterInstall` custom resource, you
 
 ## Generating RAN policies
 
+**Prerequisites**
+
 -   Install Kustomize
 
 -   Install the [Kustomize Policy Generator plug-in](https://github.com/stolostron/policy-generator-plugin)
+
+**Procedure**
 
 1.  Configure the `kustomization.yaml` file to reference the `policyGenerator.yaml` file. The following example shows the PolicyGenerator definition:
 
@@ -2854,6 +2972,8 @@ Optionally, when you are creating the `AgentClusterInstall` custom resource, you
 
 Use this procedure to diagnose any installation issues that might occur with the managed clusters.
 
+**Procedure**
+
 1.  Check the status of the managed cluster:
 
     ``` terminal
@@ -2920,7 +3040,7 @@ You can use the Topology Aware Lifecycle Manager (TALM) to manage the software l
     
     For more information about the support scope of Red Hat Technology Preview features, see <https://access.redhat.com/support/offerings/techpreview/>.
 
--   For more information about the Topology Aware Lifecycle Manager, see [About the Topology Aware Lifecycle Manager](../scalability_and_performance/cnf-talm-for-cluster-upgrades.xml#cnf-about-topology-aware-lifecycle-manager-config_cnf-topology-aware-lifecycle-manager).
+-   For more information about the Topology Aware Lifecycle Manager, see [About the Topology Aware Lifecycle Manager](../scalability_and_performance/cnf-talm-for-cluster-upgrades/#cnf-about-topology-aware-lifecycle-manager-config_cnf-topology-aware-lifecycle-manager).
 
 ### About the auto-created ClusterGroupUpgrade CR for ZTP
 
@@ -3073,19 +3193,21 @@ You must mirror both the platform image and Operator images that you want to upd
 
 <!-- -->
 
--   For more information about how to update ZTP, see [Upgrading GitOps ZTP](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-upgrading-gitops-ztp_ztp-deploying-disconnected).
+-   For more information about how to update ZTP, see [Upgrading GitOps ZTP](../scalability_and_performance/ztp-deploying-disconnected/#ztp-upgrading-gitops-ztp_ztp-deploying-disconnected).
 
--   For more information about how to mirror an OpenShift Container Platform image repository, see [Mirroring the OpenShift Container Platform image repository](../installing/disconnected_install/installing-mirroring-installation-images.xml#installation-mirror-repository_installing-mirroring-installation-images).
+-   For more information about how to mirror an OpenShift Container Platform image repository, see [Mirroring the OpenShift Container Platform image repository](../installing/disconnected_install/installing-mirroring-installation-images/#installation-mirror-repository_installing-mirroring-installation-images).
 
--   For more information about how to mirror Operator catalogs for disconnected clusters, see [Mirroring Operator catalogs for use with disconnected clusters](../installing/disconnected_install/installing-mirroring-installation-images.xml#olm-mirror-catalog_installing-mirroring-installation-images).
+-   For more information about how to mirror Operator catalogs for disconnected clusters, see [Mirroring Operator catalogs for use with disconnected clusters](../installing/disconnected_install/installing-mirroring-installation-images/#olm-mirror-catalog_installing-mirroring-installation-images).
 
--   For more information about how to prepare the disconnected environment and mirroring the desired image repository, see [Preparing the disconnected environment](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-acm-preparing-to-install-disconnected-acm_ztp-deploying-disconnected).
+-   For more information about how to prepare the disconnected environment and mirroring the desired image repository, see [Preparing the disconnected environment](../scalability_and_performance/ztp-deploying-disconnected/#ztp-acm-preparing-to-install-disconnected-acm_ztp-deploying-disconnected).
 
 -   For more information about update channels and releases, see [Understanding upgrade channels and releases](../updating/understanding-upgrade-channels-release.xml).
 
 ### Performing a platform update
 
 You can perform a platform update with the TALM.
+
+**Prerequisites**
 
 -   Install the Topology Aware Lifecycle Manager (TALM).
 
@@ -3098,6 +3220,8 @@ You can perform a platform update with the TALM.
 -   Log in as a user with `cluster-admin` privileges.
 
 -   Create RHACM policies in the hub cluster.
+
+**Procedure**
 
 1.  Create a `PolicyGenTemplate` CR for the platform update:
 
@@ -3272,11 +3396,13 @@ You can perform a platform update with the TALM.
         $ oc get policies --all-namespaces
         ```
 
--   For more information about mirroring the images in a disconnected environment, [Preparing the disconnected environment](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-acm-preparing-to-install-disconnected-acm_ztp-deploying-disconnected)
+-   For more information about mirroring the images in a disconnected environment, [Preparing the disconnected environment](../scalability_and_performance/ztp-deploying-disconnected/#ztp-acm-preparing-to-install-disconnected-acm_ztp-deploying-disconnected)
 
 ### Performing an Operator update
 
 You can perform an Operator update with the TALM.
+
+**Prerequisites**
 
 -   Install the Topology Aware Lifecycle Manager (TALM).
 
@@ -3289,6 +3415,8 @@ You can perform an Operator update with the TALM.
 -   Log in as a user with `cluster-admin` privileges.
 
 -   Create RHACM policies in the hub cluster.
+
+**Procedure**
 
 1.  Update the `PolicyGenTemplate` CR for the Operator update.
 
@@ -3517,11 +3645,13 @@ You can perform an Operator update with the TALM.
         $ oc get policies --all-namespaces
         ```
 
--   For more information about updating GitOps ZTP, see [Upgrading GitOps ZTP](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-upgrading-gitops-ztp_ztp-deploying-disconnected).
+-   For more information about updating GitOps ZTP, see [Upgrading GitOps ZTP](../scalability_and_performance/ztp-deploying-disconnected/#ztp-upgrading-gitops-ztp_ztp-deploying-disconnected).
 
 ### Performing a platform and an Operator update together
 
 You can perform a platform and an Operator update at the same time.
+
+**Prerequisites**
 
 -   Install the Topology Aware Lifecycle Manager (TALM).
 
@@ -3532,6 +3662,8 @@ You can perform a platform and an Operator update at the same time.
 -   Log in as a user with `cluster-admin` privileges.
 
 -   Create RHACM policies in the hub cluster.
+
+**Procedure**
 
 1.  Create the `PolicyGenTemplate` CR for the updates by following the steps described in the "Performing a platform update" and "Performing an Operator update" sections.
 
@@ -3653,11 +3785,15 @@ Do not install the Performance Addon Operator on clusters running OpenShift Cont
 !!! note
     If you install Performance Addon Operator 4.10.3-5 or later on OpenShift Container Platform 4.11 or later, the Performance Addon Operator detects the cluster version and automatically hibernates to avoid interfering with the Node Tuning Operator functions. However, to ensure best performance, remove the Performance Addon Operator from your OpenShift Container Platform 4.11 clusters.
 
+**Prerequisites**
+
 -   Create a Git repository where you manage your custom site configuration data. The repository must be accessible from the hub cluster and be defined as a source repository for Argo CD.
 
 -   Update to OpenShift Container Platform 4.11 or later.
 
 -   Log in as a user with `cluster-admin` privileges.
+
+**Procedure**
 
 1.  Change the `complianceType` to `mustnothave` for the Performance Addon Operator namespace, Operator group, and subscription in the `common-ranGen.yaml` file.
 
@@ -3687,4 +3823,4 @@ Do not install the Performance Addon Operator on clusters running OpenShift Cont
 
 6.  Merge the changes with your custom site repository and wait for the ArgoCD application to synchronize the change to the hub cluster. The policy remains compliant.
 
--   [Upgrading GitOps ZTP](../scalability_and_performance/ztp-deploying-disconnected.xml#ztp-roll-out-the-configuration-changes_ztp-deploying-disconnected)
+-   [Upgrading GitOps ZTP](../scalability_and_performance/ztp-deploying-disconnected/#ztp-roll-out-the-configuration-changes_ztp-deploying-disconnected)

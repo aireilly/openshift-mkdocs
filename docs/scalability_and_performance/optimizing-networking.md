@@ -1,8 +1,8 @@
 # Optimizing networking
 
-The [OpenShift SDN](../networking/openshift_sdn/about-openshift-sdn.xml#about-openshift-sdn) uses OpenvSwitch, virtual extensible LAN (VXLAN) tunnels, OpenFlow rules, and iptables. This network can be tuned by using jumbo frames, network interface controllers (NIC) offloads, multi-queue, and ethtool settings.
+The [OpenShift SDN](../networking/openshift_sdn/about-openshift-sdn/#about-openshift-sdn) uses OpenvSwitch, virtual extensible LAN (VXLAN) tunnels, OpenFlow rules, and iptables. This network can be tuned by using jumbo frames, network interface controllers (NIC) offloads, multi-queue, and ethtool settings.
 
-[OVN-Kubernetes](../networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.xml#about-ovn-kubernetes) uses Geneve (Generic Network Virtualization Encapsulation) instead of VXLAN as the tunnel protocol.
+[OVN-Kubernetes](../networking/ovn_kubernetes_network_provider/about-ovn-kubernetes/#about-ovn-kubernetes) uses Geneve (Generic Network Virtualization Encapsulation) instead of VXLAN as the tunnel protocol.
 
 VXLAN provides benefits over VLANs, such as an increase in networks from 4096 to over 16 million, and layer 2 connectivity across physical networks. This allows for all pods behind a service to communicate with each other, even if they are running on different systems.
 
@@ -57,10 +57,10 @@ IPSec encrypts traffic at the IP payload level, before it hits the NIC, protecti
 
 ## Additional resources
 
--   [Modifying advanced network configuration parameters](../installing/installing_aws/installing-aws-network-customizations.xml#modifying-nwoperator-config-startup_installing-aws-network-customizations)
+-   [Modifying advanced network configuration parameters](../installing/installing_aws/installing-aws-network-customizations/#modifying-nwoperator-config-startup_installing-aws-network-customizations)
 
--   [Configuration parameters for the OVN-Kubernetes default CNI network provider](../networking/cluster-network-operator.xml#nw-operator-configuration-parameters-for-ovn-sdn_cluster-network-operator)
+-   [Configuration parameters for the OVN-Kubernetes default CNI network provider](../networking/cluster-network-operator/#nw-operator-configuration-parameters-for-ovn-sdn_cluster-network-operator)
 
--   [Configuration parameters for the OpenShift SDN default CNI network provider](../networking/cluster-network-operator.xml#nw-operator-configuration-parameters-for-openshift-sdn_cluster-network-operator)
+-   [Configuration parameters for the OpenShift SDN default CNI network provider](../networking/cluster-network-operator/#nw-operator-configuration-parameters-for-openshift-sdn_cluster-network-operator)
 
--   [Improving cluster stability in high latency environments using worker latency profiles](../scalability_and_performance/scaling-worker-latency-profiles.xml#scaling-worker-latency-profiles)
+-   [Improving cluster stability in high latency environments using worker latency profiles](../scalability_and_performance/scaling-worker-latency-profiles/#scaling-worker-latency-profiles)

@@ -36,9 +36,13 @@ If you need to scale a compute machine set without making other changes, you do 
 !!! note
     By default, the OpenShift Container Platform router pods are deployed on workers. Because the router is required to access some cluster resources, including the web console, do not scale the compute machine set to `0` unless you first relocate the router pods.
 
+**Prerequisites**
+
 -   Install an OpenShift Container Platform cluster and the `oc` command line.
 
 -   Log in to `oc` as a user with `cluster-admin` permission.
+
+**Procedure**
 
 1.  Edit the compute machine set by running the following command:
 
@@ -222,7 +226,11 @@ If `maxUnhealthy` is set to `40%` and there are 6 machines being checked:
 
 You can create a `MachineHealthCheck` resource for all `MachineSets` in your cluster. You should not create a `MachineHealthCheck` resource that targets control plane machines.
 
+**Prerequisites**
+
 -   Install the `oc` command line interface.
+
+**Procedure**
 
 1.  Create a `healthcheck.yml` file that contains the definition of your machine health check.
 

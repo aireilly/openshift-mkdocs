@@ -49,7 +49,7 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 | Number of custom resource definitions (CRD)           | There is no default value.                          | 512 <sup>\[7\]</sup>                                                   |
 +-------------------------------------------------------+-----------------------------------------------------+------------------------------------------------------------------------+
 
-**Table 1**
+: **Table 1**
 
 1.  Pause pods were deployed to stress the control plane components of OpenShift Container Platform at 2000 node scale.
 
@@ -84,7 +84,7 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 | Compute                             | m5.2xlarge  | 8      | 32       | gp3       | 100                  | 3/25/250/500 <sup>\[5\]</sup> | us-west-2 |
 +-------------------------------------+-------------+--------+----------+-----------+----------------------+-------------------------------+-----------+
 
-**Table 2**
+: **Table 2**
 
 1.  gp3 disks with a baseline performance of 3000 IOPS and 125 MiB per second are used for control plane/etcd nodes because etcd is latency sensitive. gp3 volumes do not use burst performance.
 
@@ -110,7 +110,7 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 | Compute                             | 16       | 64       | gp2       | 120                   | 2 to 100 <sup>\[5\]</sup> |
 +-------------------------------------+----------+----------+-----------+-----------------------+---------------------------+
 
-**Table 3**
+: **Table 3**
 
 1.  io1 disks with 120 / 10 IOPS per GiB are used for control plane/etcd nodes as etcd is I/O intensive and latency sensitive.
 
@@ -132,7 +132,7 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 | Compute <sup>\[1,3\]</sup>            | 8                     | 32                       | ds8k      | 150 / LCU 2        | 4 nodes (scaled to 100/250/500 pods per node) |
 +---------------------------------------+-----------------------+--------------------------+-----------+--------------------+-----------------------------------------------+
 
-**Table 4**
+: **Table 4**
 
 1.  Nodes are distributed between two logical control units (LCUs) to optimize disk I/O load of the control plane/etcd nodes as etcd is I/O intensive and latency sensitive. Etcd I/O demand should not interfere with other workloads.
 
@@ -189,7 +189,7 @@ Consider an example application environment:
 | JBoss EAP   | 100          | 1 GB        | 1           | 1 GB               |
 +-------------+--------------+-------------+-------------+--------------------+
 
-**Table 5**
+: **Table 5**
 
 Extrapolated requirements: 550 CPU cores, 450GB RAM, and 1.4TB storage.
 
@@ -205,7 +205,7 @@ Instance size for nodes can be modulated up or down, depending on your preferenc
 | Nodes (option 3) | 25              | 16              | 64              |
 +------------------+-----------------+-----------------+-----------------+
 
-**Table 6**
+: **Table 6**
 
 Some applications lend themselves well to overcommitted environments, and some do not. Most Java applications and applications that use huge pages are examples of applications that would not allow for overcommitment. That memory can not be used for other applications. In the example above, the environment would be roughly 30 percent overcommitted, a common ratio.
 

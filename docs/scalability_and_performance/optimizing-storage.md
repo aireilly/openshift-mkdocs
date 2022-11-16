@@ -30,7 +30,7 @@ Understand your persistent storage options so that you can optimize your OpenShi
 |              | -   Applications must build their drivers into the application and/or container.                                                               |                                                                                                                          |
 +--------------+------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------+
 
-**Table 1: Available storage options**
+: **Table 1: Available storage options**
 
 1.  NetApp NFS supports dynamic PV provisioning when using the Trident plug-in.
 
@@ -51,7 +51,7 @@ The following table summarizes the recommended and configurable storage technolo
 | Object       | Yes             | Yes             | Recommended  | Recommended      | Not configurable         | Not configurable         | Not configurable<sup>7</sup> |
 +--------------+-----------------+-----------------+--------------+------------------+--------------------------+--------------------------+------------------------------+
 
-**Table 2: Recommended and configurable storage technology**
+: **Table 2: Recommended and configurable storage technology**
 
 !!! note
     A scaled registry is an OpenShift Container Platform registry where two or more pod replicas are running.
@@ -149,4 +149,4 @@ The following table summarizes the main directories that OpenShift Container Pla
 | ***/var/lib/kubelet***    | Ephemeral volume storage for pods. This includes anything external that is mounted into a container at runtime. Includes environment variables, kube secrets, and data volumes not backed by persistent volumes. | Varies                                                                                                                  | Minimal if pods requiring storage are using persistent volumes. If using ephemeral storage, this can grow quickly. |
 +---------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
-**Table 3: Main directories for storing OpenShift Container Platform data**
+: **Table 3: Main directories for storing OpenShift Container Platform data**

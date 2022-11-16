@@ -2,7 +2,7 @@
 
 Before you can deploy virtualized distributed unit (vDU) applications, you need to tune and configure the cluster host BIOS and various other cluster configuration settings. Use the following information to validate the cluster configuration to support vDU workloads.
 
--   For a complete reference to configuring single-node OpenShift clusters tuned for vDU application deployments, see [Deploying distributed units manually on single-node OpenShift](../scalability_and_performance/ztp-configuring-single-node-cluster-deployment-during-installation.xml#sno-du-deploying-distributed-units-manually-on-single-node-openshift).
+-   For a complete reference to configuring single-node OpenShift clusters tuned for vDU application deployments, see [Deploying distributed units manually on single-node OpenShift](../scalability_and_performance/ztp-configuring-single-node-cluster-deployment-during-installation/#sno-du-deploying-distributed-units-manually-on-single-node-openshift).
 
 ## Recommended BIOS configuration for vDU cluster hosts
 
@@ -47,7 +47,7 @@ Use the following table as the basis to configure the cluster host BIOS for vDU 
 | Sub-NUMA Clustering              | Disabled            | Sub-NUMA clustering divides the processor cores, cache, and memory into multiple NUMA domains. Disabling this option can increase performance for latency-sensitive workloads.                                               |
 +----------------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 1: Recommended cluster host BIOS settings**
+: **Table 1: Recommended cluster host BIOS settings**
 
 !!! note
     Enable global SR-IOV and VT-d settings in the BIOS for the host. These settings are relevant to bare-metal environments.
@@ -76,7 +76,7 @@ The following `MachineConfig` CRs configure the cluster host:
 | `06-kdump-master.yaml`, `06-kdump-worker.yaml` | Configures `kdump` for the cluster.                                                                                            |
 +------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 2: Recommended MachineConfig CRs**
+: **Table 2: Recommended MachineConfig CRs**
 
 ### Recommended cluster Operators
 
@@ -135,11 +135,15 @@ Always use the latest supported realtime kernel version in your cluster. You sho
 
 Always use the latest version of the realtime kernel in your OpenShift Container Platform clusters. If you are unsure about the kernel version that is in use in the cluster, you can compare the current realtime kernel version to the release version with the following procedure.
 
+**Prerequisites**
+
 -   You have installed the OpenShift CLI (`oc`).
 
 -   You are logged in as a user with `cluster-admin` privileges.
 
 -   You have installed `podman`.
+
+**Procedure**
 
 1.  Run the following command to get the cluster version:
 
@@ -196,11 +200,15 @@ Check that the kernel version listed for the cluster’s current release matches
 
 You can check that clusters are running the correct configuration. The following procedure describes how to check the various configurations that you require to deploy a DU application in OpenShift Container Platform 4.11 clusters.
 
+**Prerequisites**
+
 -   You have deployed a cluster and tuned it for vDU workloads.
 
 -   You have installed the OpenShift CLI (`oc`).
 
 -   You have logged in as a user with `cluster-admin` privileges.
+
+**Procedure**
 
 1.  Check that the default Operator Hub sources are disabled. Run the following command:
 

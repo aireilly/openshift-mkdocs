@@ -25,6 +25,8 @@ A key feature to enable as part of a single-node OpenShift installation is workl
 !!! note
     You can enable workload partitioning during the cluster installation process only. You cannot disable workload partitioning post-installation. However, you can reconfigure workload partitioning by updating the `cpu` value that you define in the `performanceprofile`, and in the MachineConfig CR in the following procedure.
 
+**Procedure**
+
 -   The base64-encoded content below contains the CPU set that the management workloads are constrained to. This content must be adjusted to match the set specified in the `performanceprofile` and must be accurate for the number of cores on the cluster.
 
     ``` yaml
