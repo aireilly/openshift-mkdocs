@@ -9,7 +9,7 @@ Learn about NUMA-aware scheduling and how you can use it to deploy high performa
 
 The NUMA Resources Operator allows you to schedule high-performance workloads in the same NUMA zone. It deploys a node resources exporting agent that reports on available cluster node NUMA resources, and a secondary scheduler that manages the workloads.
 
-## About NUMA-aware scheduling
+## About NUMA-aware scheduling {#cnf-about-numa-aware-scheduling_numa-aware}
 
 Non-Uniform Memory Access (NUMA) is a compute platform architecture that allows different CPUs to access different regions of memory at different speeds. NUMA resource topology refers to the locations of CPUs, memory, and PCI devices relative to each other in the compute node. Co-located resources are said to be in the same *NUMA zone*. For high-performance applications, the cluster needs to process pod workloads in a single NUMA zone.
 
@@ -39,11 +39,11 @@ PodResources API
 
 -   For more information about running secondary pod schedulers in your cluster and how to deploy pods with a secondary pod scheduler, see [Scheduling pods using a secondary scheduler](../nodes/scheduling/secondary_scheduler/nodes-secondary-scheduler-configuring/#secondary-scheduler-configuring).
 
-## Installing the NUMA Resources Operator
+## Installing the NUMA Resources Operator {#installing-the-numa-resources-operator_numa-aware}
 
 NUMA Resources Operator deploys resources that allow you to schedule NUMA-aware workloads and deployments. You can install the NUMA Resources Operator using the OpenShift Container Platform CLI or the web console.
 
-### Installing the NUMA Resources Operator using the CLI
+### Installing the NUMA Resources Operator using the CLI {#cnf-installing-numa-resources-operator-cli_numa-aware}
 
 As a cluster administrator, you can install the Operator using the CLI.
 
@@ -131,7 +131,7 @@ As a cluster administrator, you can install the Operator using the CLI.
     numaresources-operator.v4.11.2   numaresources-operator   4.11.2               Succeeded
     ```
 
-### Installing the NUMA Resources Operator using the web console
+### Installing the NUMA Resources Operator using the web console {#cnf-installing-numa-resources-operator-console_numa-aware}
 
 As a cluster administrator, you can install the NUMA Resources Operator using the web console.
 
@@ -158,7 +158,7 @@ As a cluster administrator, you can install the NUMA Resources Operator using th
 
         -   Go to the **Workloads** → **Pods** page and check the logs for pods in the `default` project.
 
-## Creating the NUMAResourcesOperator custom resource
+## Creating the NUMAResourcesOperator custom resource {#cnf-creating-nrop-cr_numa-aware}
 
 When you have installed the NUMA Resources Operator, then create the `NUMAResourcesOperator` custom resource (CR) that instructs the NUMA Resources Operator to install all the cluster infrastructure needed to support the NUMA-aware scheduler, including daemon sets and APIs.
 
@@ -239,7 +239,7 @@ NAME                    AGE
 numaresourcesoperator   10m
 ```
 
-## Deploying the NUMA-aware secondary pod scheduler
+## Deploying the NUMA-aware secondary pod scheduler {#cnf-deploying-the-numa-aware-scheduler_numa-aware}
 
 After you install the NUMA Resources Operator, do the following to deploy the NUMA-aware secondary pod scheduler:
 
@@ -346,7 +346,7 @@ replicaset.apps/numaresources-controller-manager-7575848485   1         1       
 replicaset.apps/secondary-scheduler-56994cf6cf                1         1         1       16m
 ```
 
-## Scheduling workloads with the NUMA-aware scheduler
+## Scheduling workloads with the NUMA-aware scheduler {#cnf-scheduling-numa-aware-workloads_numa-aware}
 
 You can schedule workloads with the NUMA-aware scheduler using `Deployment` CRs that specify the minimum required resources to process the workload.
 
@@ -519,7 +519,7 @@ The following example deployment uses NUMA-aware scheduling for a sample workloa
     Guaranteed
     ```
 
-## Troubleshooting NUMA-aware scheduling
+## Troubleshooting NUMA-aware scheduling {#cnf-troubleshooting-numa-aware-workloads_numa-aware}
 
 To troubleshoot common problems with NUMA-aware pod scheduling, perform the following steps.
 
@@ -718,7 +718,7 @@ To troubleshoot common problems with NUMA-aware pod scheduling, perform the foll
 
     -   `resources` describes the current state of the NUMA zone resources. Check that resources listed under `items.zones.resources.available` correspond to the exclusive NUMA zone resources allocated to each guaranteed pod.
 
-### Checking the NUMA-aware scheduler logs
+### Checking the NUMA-aware scheduler logs {#cnf-checking-numa-aware-scheduler-logs_numa-aware}
 
 Troubleshoot problems with the NUMA-aware scheduler by reviewing the logs. If required, you can increase the scheduler log level by modifying the `spec.logLevel` field of the `NUMAResourcesScheduler` resource. Acceptable values are `Normal`, `Debug`, and `Trace`, with `Trace` being the most verbose option.
 
@@ -850,7 +850,7 @@ Troubleshoot problems with the NUMA-aware scheduler by reviewing the logs. If re
         I0223 11:05:53.461016       1 eventhandlers.go:244] "Delete event for scheduled pod" pod="openshift-marketplace/certified-operators-thtvq"
         ```
 
-### Troubleshooting the resource topology exporter
+### Troubleshooting the resource topology exporter {#cnf-troubleshooting-resource-topo-exporter_numa-aware}
 
 Troubleshoot `noderesourcetopologies` objects where unexpected results are occurring by inspecting the corresponding `resource-topology-exporter` logs.
 
@@ -932,7 +932,7 @@ Troubleshoot `noderesourcetopologies` objects where unexpected results are occur
       numa cell 1 -> 48372Mi
     ```
 
-### Correcting a missing resource topology exporter config map
+### Correcting a missing resource topology exporter config map {#cnf-troubleshooting-missing-rte-config-maps_numa-aware}
 
 If you install the NUMA Resources Operator in a cluster with misconfigured cluster settings, in some circumstances, the Operator is shown as active but the logs of the resource topology exporter (RTE) daemon set pods show that the configuration for the RTE is missing, for example:
 

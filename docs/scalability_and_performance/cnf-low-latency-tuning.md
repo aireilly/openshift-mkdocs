@@ -1,6 +1,6 @@
 # Low latency tuning
 
-## Understanding low latency
+## Understanding low latency {#cnf-understanding-low-latency_cnf-master}
 
 The emergence of Edge computing in the area of Telco / 5G plays a key role in reducing latency and congestion problems and improving application performance.
 
@@ -32,7 +32,7 @@ The environment in which an application is operating influences its behavior. Fo
 
 In OpenShift Container Platform version 4.10 and previous versions, the Performance Addon Operator was used to implement automatic tuning to achieve low latency performance. Now this functionality is part of the Node Tuning Operator.
 
-### About hyperthreading for low latency and real-time applications
+### About hyperthreading for low latency and real-time applications {#about_hyperthreading_for_low_latency_and_real_time_applications_cnf-master}
 
 Hyperthreading is an Intel processor technology that allows a physical CPU processor core to function as two logical cores, executing two independent threads simultaneously. Hyperthreading allows for better system throughput for certain workload types where parallel processing is beneficial. The default OpenShift Container Platform configuration expects hyperthreading to be enabled by default.
 
@@ -41,9 +41,9 @@ For telecommunications applications, it is important to design your application 
 !!! note
     Hyperthreading implementation and configuration differs depending on the hardware you are running OpenShift Container Platform on. Consult the relevant host hardware tuning information for more details of the hyperthreading implementation specific to that hardware. Disabling hyperthreading can increase the cost per core of the cluster.
 
--   [Configuring hyperthreading for a cluster](../scalability_and_performance/cnf-low-latency-tuning/#configuring_hyperthreading_for_a_cluster_cnf-master)
+-   [Configuring hyperthreading for a cluster](../cnf-low-latency-tuning/#configuring_hyperthreading_for_a_cluster_cnf-master)
 
-## Provisioning real-time and low latency workloads
+## Provisioning real-time and low latency workloads {#cnf-provisioning-real-time-and-low-latency-workloads_cnf-master}
 
 Many industries and organizations need extremely high performance computing and might require low and predictable latency, especially in the financial and telecommunications industries. For these industries, with their unique requirements, OpenShift Container Platform provides the Node Tuning Operator to implement automatic tuning to achieve low latency performance and consistent response time for OpenShift Container Platform applications.
 
@@ -54,7 +54,7 @@ The cluster administrator can use this performance profile configuration to make
 !!! note
     In earlier versions of OpenShift Container Platform, the Performance Addon Operator was used to implement automatic tuning to achieve low latency performance for OpenShift applications. In OpenShift Container Platform 4.11 and later, these functions are part of the Node Tuning Operator.
 
-### Known limitations for real-time
+### Known limitations for real-time {#node-tuning-operator-known-limitations-for-real-time_cnf-master}
 
 !!! note
     In most deployments, kernel-rt is supported only on worker nodes when you use a standard cluster with three control plane nodes and three worker nodes. There are exceptions for compact and single nodes on OpenShift Container Platform deployments. For installations on a single node, kernel-rt is supported on the single control plane node.
@@ -68,7 +68,7 @@ OpenShift Container Platform restricts the allowed capabilities, so you might ne
 
 Establishing the right performance expectations refers to the fact that the real-time kernel is not a panacea. Its objective is consistent, low-latency determinism offering predictable response times. There is some additional kernel overhead associated with the real-time kernel. This is due primarily to handling hardware interruptions in separately scheduled threads. The increased overhead in some workloads results in some degradation in overall throughput. The exact amount of degradation is very workload dependent, ranging from 0% to 30%. However, it is the cost of determinism.
 
-### Provisioning a worker with real-time capabilities
+### Provisioning a worker with real-time capabilities {#node-tuning-operator-provisioning-worker-with-real-time-capabilities_cnf-master}
 
 1.  Optional: Add a node to the OpenShift Container Platform cluster. See [Setting BIOS parameters](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/8/html-single/tuning_guide/index#Setting_BIOS_parameters).
 
@@ -141,7 +141,7 @@ Establishing the right performance expectations refers to the fact that the real
 
 9.  Verify everything is working as expected.
 
-### Verifying the real-time kernel installation
+### Verifying the real-time kernel installation {#node-tuning-operator-verifying-real-time-kernel-installation_cnf-master}
 
 Use this command to verify that the real-time kernel is installed:
 
@@ -161,7 +161,7 @@ rt-worker-0.example.com           Ready  worker,worker-rt   5d17h   v1.25.0
 [...]
 ```
 
-### Creating a workload that works in real-time
+### Creating a workload that works in real-time {#node-tuning-operator-creating-workload-that-works-in-real-time_cnf-master}
 
 Use the following procedures for preparing a workload that will use real-time capabilities.
 
@@ -175,7 +175,7 @@ Use the following procedures for preparing a workload that will use real-time ca
 
 When writing your applications, follow the general recommendations described in [Application tuning and deployment](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/8/html-single/tuning_guide/index#chap-Application_Tuning_and_Deployment).
 
-### Creating a pod with a QoS class of `Guaranteed`
+### Creating a pod with a QoS class of `Guaranteed` {#node-tuning-operator-creating-pod-with-guaranteed-qos-class_cnf-master}
 
 Keep the following in mind when you create a pod that is given a QoS class of `Guaranteed`:
 
@@ -229,7 +229,7 @@ spec:
     !!! note
         If a container specifies its own memory limit, but does not specify a memory request, OpenShift Container Platform automatically assigns a memory request that matches the limit. Similarly, if a container specifies its own CPU limit, but does not specify a CPU request, OpenShift Container Platform automatically assigns a CPU request that matches the limit.
 
-### Optional: Disabling CPU load balancing for DPDK
+### Optional: Disabling CPU load balancing for DPDK {#node-tuning-operator-disabling-cpu-load-balancing-for-dpdk_cnf-master}
 
 Functionality to disable or enable CPU load balancing is implemented on the CRI-O level. The code under the CRI-O disables or enables CPU load balancing only when the following requirements are met.
 
@@ -267,7 +267,7 @@ spec:
 !!! note
     Only disable CPU load balancing when the CPU manager static policy is enabled and for pods with guaranteed QoS that use whole CPUs. Otherwise, disabling CPU load balancing can affect the performance of other containers in the cluster.
 
-### Assigning a proper node selector
+### Assigning a proper node selector {#node-tuning-operator-assigning-proper-node-selector_cnf-master}
 
 The preferred way to assign a pod to nodes is to use the same node selector the performance profile used, as shown here:
 
@@ -284,11 +284,11 @@ spec:
 
 For more information, see [Placing pods on specific nodes using node selectors](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.5/html-single/nodes/index#nodes-scheduler-node-selectors).
 
-### Scheduling a workload onto a worker with real-time capabilities
+### Scheduling a workload onto a worker with real-time capabilities {#node-tuning-operator-scheduling-workload-onto-worker-with-real-time-capabilities_cnf-master}
 
 Use label selectors that match the nodes attached to the machine config pool that was configured for low latency by the Node Tuning Operator. For more information, see [Assigning pods to nodes](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/).
 
-### Reducing power consumption by taking CPUs offline
+### Reducing power consumption by taking CPUs offline {#node-tuning-operator-disabling-CPUs-for-power-consumption_cnf-master}
 
 You can generally anticipate telecommunication workloads. When not all of the CPU resources are required, the Node Tuning Operator allows you take unused CPUs offline to reduce power consumption by manually updating the performance profile.
 
@@ -331,7 +331,7 @@ To take unused CPUs offline, you must perform the following tasks:
     $ oc apply -f my-performance-profile.yaml
     ```
 
-### Optional: Power saving configurations
+### Optional: Power saving configurations {#node-tuning-operator-pod-power-saving-config_cnf-master}
 
 You can enable power savings for a node that has low priority workloads that are colocated with high priority workloads without impacting the latency or throughput of the high priority workloads. Power saving is possible without modifications to the workloads themselves.
 
@@ -438,9 +438,9 @@ By disabling P-states and C-states at the pod level, you can configure high prio
 
 5.  Restart the pods.
 
--   For more information about recommended BIOS configuration, see [Recommended BIOS configuration for vDU cluster hosts](../scalability_and_performance/ztp-vdu-validating-cluster-tuning/#ztp-du-bios-config-reference_vdu-config-ref).
+-   For more information about recommended BIOS configuration, see [Recommended BIOS configuration for vDU cluster hosts](../ztp-vdu-validating-cluster-tuning/#ztp-du-bios-config-reference_vdu-config-ref).
 
-### Managing device interrupt processing for guaranteed pod isolated CPUs
+### Managing device interrupt processing for guaranteed pod isolated CPUs {#managing-device-interrupt-processing-for-guaranteed-pod-isolated-cpus_cnf-master}
 
 The Node Tuning Operator can manage host CPUs by dividing them into reserved CPUs for cluster and operating system housekeeping duties, including pod infra containers, and isolated CPUs for application containers to run the workloads. This allows you to set CPUs for low latency workloads as isolated.
 
@@ -450,7 +450,7 @@ In the performance profile, `globallyDisableIrqLoadBalancing` is used to manage 
 
 To achieve low latency for workloads, some (but not all) pods require the CPUs they are running on to not process device interrupts. A pod annotation, `irq-load-balancing.crio.io`, is used to define whether device interrupts are processed or not. When configured, CRI-O disables device interrupts only as long as the pod is running.
 
-#### Disabling CPU CFS quota
+#### Disabling CPU CFS quota {#disabling-cpu-cfs-quota_cnf-master}
 
 To reduce CPU throttling for individual guaranteed pods, create a pod specification with the annotation `cpu-quota.crio.io: "disable"`. This annotation disables the CPU completely fair scheduler (CFS) quota at the pod run time. The following pod specification contains this annotation:
 
@@ -468,7 +468,7 @@ spec:
 !!! note
     Only disable CPU CFS quota when the CPU manager static policy is enabled and for pods with guaranteed QoS that use whole CPUs. Otherwise, disabling CPU CFS quota can affect the performance of other containers in the cluster.
 
-#### Disabling global device interrupts handling in Node Tuning Operator
+#### Disabling global device interrupts handling in Node Tuning Operator {#configuring-global-device-interrupts-handling-for-isolated-cpus_cnf-master}
 
 To configure Node Tuning Operator to disable global device interrupts for the isolated CPU set, set the `globallyDisableIrqLoadBalancing` field in the performance profile to `true`. When `true`, conflicting pod annotations are ignored. When `false`, IRQ loads are balanced across all CPUs.
 
@@ -484,7 +484,7 @@ spec:
 ...
 ```
 
-#### Disabling interrupt processing for individual pods
+#### Disabling interrupt processing for individual pods {#disabling_interrupt_processing_for_individual_pods_cnf-master}
 
 To disable interrupt processing for individual pods, ensure that `globallyDisableIrqLoadBalancing` is set to `false` in the performance profile. Then, in the pod specification, set the `irq-load-balancing.crio.io` pod annotation to `disable`. The following pod specification contains this annotation:
 
@@ -499,26 +499,26 @@ spec:
 ...
 ```
 
-### Upgrading the performance profile to use device interrupt processing
+### Upgrading the performance profile to use device interrupt processing {#use-device-interrupt-processing-for-isolated-cpus_cnf-master}
 
 When you upgrade the Node Tuning Operator performance profile custom resource definition (CRD) from v1 or v1alpha1 to v2, `globallyDisableIrqLoadBalancing` is set to `true` on existing profiles.
 
 !!! note
     `globallyDisableIrqLoadBalancing` toggles whether IRQ load balancing will be disabled for the Isolated CPU set. When the option is set to `true` it disables IRQ load balancing for the Isolated CPU set. Setting the option to `false` allows the IRQs to be balanced across all CPUs.
 
-#### Supported API Versions
+#### Supported API Versions {#nto_supported_api_versions_cnf-master}
 
 The Node Tuning Operator supports `v2`, `v1`, and `v1alpha1` for the performance profile `apiVersion` field. The v1 and v1alpha1 APIs are identical. The v2 API includes an optional boolean field `globallyDisableIrqLoadBalancing` with a default value of `false`.
 
-##### Upgrading Node Tuning Operator API from v1alpha1 to v1
+##### Upgrading Node Tuning Operator API from v1alpha1 to v1 {#upgrading_nto_api_from_v1alpha1_to_v1_cnf-master}
 
 When upgrading Node Tuning Operator API version from v1alpha1 to v1, the v1alpha1 performance profiles are converted on-the-fly using a "None" Conversion strategy and served to the Node Tuning Operator with API version v1.
 
-##### Upgrading Node Tuning Operator API from v1alpha1 or v1 to v2
+##### Upgrading Node Tuning Operator API from v1alpha1 or v1 to v2 {#upgrading_nto_api_from_v1alpha1_to_v1_or_v2_cnf-master}
 
 When upgrading from an older Node Tuning Operator API version, the existing v1 and v1alpha1 performance profiles are converted using a conversion webhook that injects the `globallyDisableIrqLoadBalancing` field with a value of `true`.
 
-## Tuning nodes for low latency with the performance profile
+## Tuning nodes for low latency with the performance profile {#cnf-tuning-nodes-for-low-latency-via-performanceprofile_cnf-master}
 
 The performance profile lets you control latency tuning aspects of nodes that belong to a certain machine config pool. After you specify your settings, the `PerformanceProfile` object is compiled into multiple objects that perform the actual node level tuning:
 
@@ -570,9 +570,9 @@ spec:
 
 <!-- -->
 
--   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles/#cnf-create-performance-profiles).
+-   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../cnf-create-performance-profiles/#cnf-create-performance-profiles).
 
-### Configuring huge pages
+### Configuring huge pages {#cnf-configuring-huge-pages_cnf-master}
 
 Nodes must pre-allocate huge pages used in an OpenShift Container Platform cluster. Use the Node Tuning Operator to allocate huge pages on a specific node.
 
@@ -633,7 +633,7 @@ These are the only configuration steps you need to do to allocate huge pages.
      hugepages-###:  ###
     ```
 
-### Allocating multiple huge page sizes
+### Allocating multiple huge page sizes {#cnf-allocating-multiple-huge-page-sizes_cnf-master}
 
 You can request huge pages with different sizes under the same container. This allows you to define more complicated pods consisting of containers with different huge page size needs.
 
@@ -652,7 +652,7 @@ spec:
       size: 1G
 ```
 
-### Configuring a node for IRQ dynamic load balancing
+### Configuring a node for IRQ dynamic load balancing {#configuring_for_irq_dynamic_load_balancing_cnf-master}
 
 To configure a cluster node to handle IRQ dynamic load balancing, do the following:
 
@@ -818,7 +818,7 @@ Some IRQ controllers do not support IRQ re-balancing and will always expose all 
 $ cat /proc/irq/<irq-num>/effective_affinity
 ```
 
-### Configuring hyperthreading for a cluster
+### Configuring hyperthreading for a cluster {#configuring_hyperthreading_for_a_cluster_cnf-master}
 
 To configure hyperthreading for an OpenShift Container Platform cluster, set the CPU threads in the performance profile to the same cores that are configured for the reserved or isolated CPU pools.
 
@@ -887,7 +887,7 @@ To configure hyperthreading for an OpenShift Container Platform cluster, set the
 !!! important
     Hyperthreading is enabled by default on most Intel processors. If you enable hyperthreading, all threads processed by a particular core must be isolated or processed on the same core.
 
-#### Disabling hyperthreading for low latency applications
+#### Disabling hyperthreading for low latency applications {#disabling_hyperthreading_for_low_latency_applications_cnf-master}
 
 When configuring clusters for low latency processing, consider whether you want to disable hyperthreading before you deploy the cluster. To disable hyperthreading, do the following:
 
@@ -927,7 +927,7 @@ When configuring clusters for low latency processing, consider whether you want 
     !!! note
         When you configure reserved and isolated CPUs, the infra containers in pods use the reserved CPUs and the application containers use the isolated CPUs.
 
-### Understanding workload hints
+### Understanding workload hints {#cnf-understanding-workload-hints_cnf-master}
 
 The following table describes how combinations of power consumption and real-time settings impact on latency.
 
@@ -965,9 +965,9 @@ The following table describes how combinations of power consumption and real-tim
 
 : **Table 2**
 
--   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles/#cnf-create-performance-profiles).
+-   For information on using the Performance Profile Creator (PPC) to generate a performance profile, see [Creating a performance profile](../cnf-create-performance-profiles/#cnf-create-performance-profiles).
 
-### Configuring workload hints manually
+### Configuring workload hints manually {#configuring-workload-hints_cnf-master}
 
 **Procedure**
 
@@ -991,7 +991,7 @@ The following table describes how combinations of power consumption and real-tim
 
     -   Disables some debugging and monitoring features that can affect system latency.
 
-### Restricting CPUs for infra and application containers
+### Restricting CPUs for infra and application containers {#cnf-cpu-infra-container_cnf-master}
 
 Generic housekeeping and workload tasks use CPUs in a way that may impact latency-sensitive processes. By default, the container runtime uses all online CPUs to run all containers together, which can result in context switches and spikes in latency. Partitioning the CPUs prevents noisy processes from interfering with latency-sensitive processes by separating them from each other. The following table describes how processes run on a CPU after you have tuned the node using the Node Tuning Operator:
 
@@ -1065,11 +1065,11 @@ To ensure that housekeeping tasks and workloads do not interfere with each other
 
     -   Optional: Specify a node selector to apply the performance profile to specific nodes.
 
--   [Managing device interrupt processing for guaranteed pod isolated CPUs](../scalability_and_performance/cnf-low-latency-tuning/#managing-device-interrupt-processing-for-guaranteed-pod-isolated-cpus_cnf-master)
+-   [Managing device interrupt processing for guaranteed pod isolated CPUs](../cnf-low-latency-tuning/#managing-device-interrupt-processing-for-guaranteed-pod-isolated-cpus_cnf-master)
 
 -   [Create a pod that gets assigned a QoS class of Guaranteed](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/#create-a-pod-that-gets-assigned-a-qos-class-of-guaranteed)
 
-## Reducing NIC queues using the Node Tuning Operator
+## Reducing NIC queues using the Node Tuning Operator {#reducing-nic-queues-using-the-node-tuning-operator_cnf-master}
 
 The Node Tuning Operator allows you to adjust the network interface controller (NIC) queue count for each network device by configuring the performance profile. Device network queues allows the distribution of packets among different physical queues and each queue gets a separate thread for packet processing.
 
@@ -1082,7 +1082,7 @@ Too many queues are created by default for each CPU and these do not fit into th
 !!! note
     In earlier versions of OpenShift Container Platform, the Performance Addon Operator provided automatic, low latency performance tuning for applications. In OpenShift Container Platform 4.11, these functions are part of the Node Tuning Operator.
 
-### Adjusting the NIC queues with the performance profile
+### Adjusting the NIC queues with the performance profile {#adjusting-nic-queues-with-the-performance-profile_cnf-master}
 
 The performance profile lets you adjust the queue count for each network device.
 
@@ -1243,9 +1243,9 @@ Unsupported network devices:
     $ oc apply -f <your_profile_name>.yaml
     ```
 
--   [Creating a performance profile](../scalability_and_performance/cnf-create-performance-profiles/#cnf-create-performance-profiles).
+-   [Creating a performance profile](../cnf-create-performance-profiles/#cnf-create-performance-profiles).
 
-### Verifying the queue status
+### Verifying the queue status {#verifying-queue-status_cnf-master}
 
 In this section, a number of examples illustrate different performance profiles and how to verify the changes are applied.
 
@@ -1453,7 +1453,7 @@ E: INTERFACE=eth0
 
     -   The total count of reserved CPUs for all supported devices with `vendorID=0x1af4` is set to 2. For example, if there is another network device `ens2` with `vendorID=0x1af4`, it will also have the total net queues set to 2. Similarly, a device with `interfaceName` equal to `eth0` will have total net queues set to 2.
 
-### Logging associated with adjusting NIC queues
+### Logging associated with adjusting NIC queues {#logging-associated-with-adjusting-nic-queues_cnf-master}
 
 Log messages detailing the assigned devices are recorded in the respective Tuned daemon logs. The following messages might be recorded to the `/var/log/tuned/tuned.log` file:
 
@@ -1469,7 +1469,7 @@ Log messages detailing the assigned devices are recorded in the respective Tuned
     WARNING  tuned.plugins.base: instance net_test: no matching devices available
     ```
 
-## Debugging low latency CNF tuning status
+## Debugging low latency CNF tuning status {#cnf-debugging-low-latency-cnf-tuning-status_cnf-master}
 
 The `PerformanceProfile` custom resource (CR) contains status fields for reporting tuning status and debugging latency degradation issues. These fields report on conditions that describe the state of the operator’s reconciliation functionality.
 
@@ -1538,7 +1538,7 @@ Each of these types contain the following fields:
 
 :   The human readable reason describing the state and error details, if any.
 
-### Machine config pools
+### Machine config pools {#cnf-debugging-low-latency-cnf-tuning-status-machineconfigpools_cnf-master}
 
 A performance profile and its created products are applied to a node according to an associated machine config pool (MCP). The MCP holds valuable information about the progress of applying the machine configurations created by performance profiles that encompass kernel args, kube config, huge pages allocation, and deployment of rt-kernel. The Performance Profile controller monitors changes in the MCP and updates the performance profile status accordingly.
 
@@ -1595,7 +1595,7 @@ The following example is for a performance profile with an associated machine co
        Type:    Degraded
     ```
 
-## Collecting low latency tuning debugging data for Red Hat Support
+## Collecting low latency tuning debugging data for Red Hat Support {#cnf-collecting-low-latency-tuning-debugging-data-for-red-hat-support_cnf-master}
 
 When opening a support case, it is helpful to provide debugging information about your cluster to Red Hat Support.
 
@@ -1603,7 +1603,7 @@ The `must-gather` tool enables you to collect diagnostic information about your 
 
 For prompt support, supply diagnostic information for both OpenShift Container Platform and low latency tuning.
 
-### About the must-gather tool
+### About the must-gather tool {#cnf-about-must-gather_cnf-master}
 
 The `oc adm must-gather` CLI command collects the information from your cluster that is most likely needed for debugging issues, such as:
 
@@ -1615,7 +1615,7 @@ The `oc adm must-gather` CLI command collects the information from your cluster 
 
 You can specify one or more images when you run the command by including the `--image` argument. When you specify an image, the tool collects data related to that feature or product. When you run `oc adm must-gather`, a new pod is created on the cluster. The data is collected on that pod and saved in a new directory that starts with `must-gather.local`. This directory is created in your current working directory.
 
-### About collecting low latency tuning data
+### About collecting low latency tuning data {#cnf-about-collecting-low-latency-data_cnf-master}
 
 Use the `oc adm must-gather` CLI command to collect information about your cluster, including features and objects associated with low latency tuning, including:
 
@@ -1640,7 +1640,7 @@ To collect debugging information with `must-gather`, you must specify the Perfor
 !!! note
     In earlier versions of OpenShift Container Platform, the Performance Addon Operator provided automatic, low latency performance tuning for applications. In OpenShift Container Platform 4.11, these functions are part of the Node Tuning Operator. However, you must still use the `performance-addon-operator-must-gather` image when running the `must-gather` command.
 
-### Gathering data about specific features
+### Gathering data about specific features {#cnf-about-gathering-data_cnf-master}
 
 You can gather debugging information about specific features by using the `oc adm must-gather` CLI command with the `--image` or `--image-stream` argument. The `must-gather` tool supports multiple images, so you can gather data about more than one feature by running a single command.
 
@@ -1684,8 +1684,8 @@ You can gather debugging information about specific features by using the `oc ad
 
 -   For more information about MachineConfig and KubeletConfig, see [Managing nodes](../nodes/nodes/nodes-nodes-managing/#nodes-nodes-managing).
 
--   For more information about the Node Tuning Operator, see [Using the Node Tuning Operator](../scalability_and_performance/using-node-tuning-operator/#using-node-tuning-operator).
+-   For more information about the Node Tuning Operator, see [Using the Node Tuning Operator](../using-node-tuning-operator/#using-node-tuning-operator).
 
--   For more information about the PerformanceProfile, see [Configuring huge pages](../scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps/#configuring-huge-pages_huge-pages).
+-   For more information about the PerformanceProfile, see [Configuring huge pages](../what-huge-pages-do-and-how-they-are-consumed-by-apps/#configuring-huge-pages_huge-pages).
 
--   For more information about consuming huge pages from your containers, see [How huge pages are consumed by apps](../scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps/#how-huge-pages-are-consumed-by-apps_huge-pages).
+-   For more information about consuming huge pages from your containers, see [How huge pages are consumed by apps](../what-huge-pages-do-and-how-they-are-consumed-by-apps/#how-huge-pages-are-consumed-by-apps_huge-pages).

@@ -2,7 +2,7 @@
 
 Learn about the Performance Profile Creator (PPC) and how you can use it to create a performance profile.
 
-## About the Performance Profile Creator
+## About the Performance Profile Creator {#cnf-about-the-profile-creator-tool_cnf-create-performance-profiles}
 
 The Performance Profile Creator (PPC) is a command-line tool, delivered with the Node Tuning Operator, used to create the performance profile. The tool consumes `must-gather` data from the cluster and several user-supplied profile arguments. The PPC generates a performance profile that is appropriate for your hardware and topology.
 
@@ -12,7 +12,7 @@ The tool is run by one of the following methods:
 
 -   Calling a wrapper script
 
-### Gathering data about your cluster using `must-gather`
+### Gathering data about your cluster using `must-gather` {#gathering-data-about-your-cluster-using-must-gather_cnf-create-performance-profiles}
 
 The Performance Profile Creator (PPC) tool requires `must-gather` data. As a cluster administrator, run `must-gather` to capture information about your cluster.
 
@@ -52,7 +52,7 @@ The Performance Profile Creator (PPC) tool requires `must-gather` data. As a clu
     $ tar cvaf must-gather.tar.gz must-gather/
     ```
 
-### Running the Performance Profile Creator using podman
+### Running the Performance Profile Creator using podman {#running-the-performance-profile-profile-cluster-using-podman_cnf-create-performance-profiles}
 
 As a cluster administrator, you can run `podman` and the Performance Profile Creator to create a performance profile.
 
@@ -203,7 +203,7 @@ As a cluster administrator, you can run `podman` and the Performance Profile Cre
     $ oc apply -f my-performance-profile.yaml
     ```
 
-#### How to run `podman` to create a performance profile
+#### How to run `podman` to create a performance profile {#how-to-run-podman-to-create-a-profile_cnf-create-performance-profiles}
 
 The following example illustrates how to run `podman` to create a performance profile with 20 reserved CPUs that are to be split across the NUMA nodes.
 
@@ -245,7 +245,7 @@ The created profile is described in the following YAML:
 !!! note
     In this case, 10 CPUs are reserved on NUMA node 0 and 10 are reserved on NUMA node 1.
 
-### Running the Performance Profile Creator wrapper script
+### Running the Performance Profile Creator wrapper script {#running-the-performance-profile-creator-wrapper-script_cnf-create-performance-profiles}
 
 The performance profile wrapper script simplifies the running of the Performance Profile Creator (PPC) tool. It hides the complexities associated with running `podman` and specifying the mapping directories and it enables the creation of the performance profile.
 
@@ -486,7 +486,7 @@ The performance profile wrapper script simplifies the running of the Performance
     $ oc apply -f my-performance-profile.yaml
     ```
 
-### Performance Profile Creator arguments
+### Performance Profile Creator arguments {#performance-profile-creator-arguments_cnf-create-performance-profiles}
 
 +-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Argument                          | Description                                                                                                                                                                              |
@@ -582,9 +582,9 @@ The performance profile wrapper script simplifies the running of the Performance
 
 : **Table 1: Performance Profile Creator arguments**
 
-## Reference performance profiles
+## Reference performance profiles {#cnf-create-performance-profiles-reference}
 
-### A performance profile template for clusters that use OVS-DPDK on OpenStack
+### A performance profile template for clusters that use OVS-DPDK on OpenStack {#installation-openstack-ovs-dpdk-performance-profile_cnf-create-performance-profiles}
 
 To maximize machine performance in a cluster that uses Open vSwitch with the Data Plane Development Kit (OVS-DPDK) on Red Hat OpenStack Platform (RHOSP), you can use a performance profile.
 
@@ -628,6 +628,6 @@ Insert values that are appropriate for your configuration for the `CPU_ISOLATED`
 
 To learn how to create and use performance profiles, see the "Creating a performance profile" page in the "Scalability and performance" section of the OpenShift Container Platform documentation.
 
-## Additional resources
+## Additional resources {#cnf-create-performance-profiles-additional-resources}
 
 -   For more information about the `must-gather` tool, see [Gathering data about your cluster](../support/gathering-cluster-data/#nodes-nodes-managing).

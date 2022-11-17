@@ -9,7 +9,7 @@ These guidelines are based on the largest possible cluster. For smaller clusters
 
 In most cases, exceeding these numbers results in lower overall performance. It does not necessarily mean that the cluster will fail.
 
-## OpenShift Container Platform tested cluster maximums for major releases
+## OpenShift Container Platform tested cluster maximums for major releases {#cluster-maximums-major-releases_object-limits}
 
 Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack Platform (RHOSP), Amazon Web Services and Microsoft Azure. Tested Cloud Platforms for OpenShift Container Platform 4.x: Amazon Web Services, Microsoft Azure and Google Cloud Platform.
 
@@ -68,9 +68,9 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 !!! note
     Red Hat does not provide direct guidance on sizing your OpenShift Container Platform cluster. This is because determining whether your cluster is within the supported bounds of OpenShift Container Platform requires careful consideration of all the multidimensional factors that limit the cluster scale.
 
-## OpenShift Container Platform environment and configuration on which the cluster maximums are tested
+## OpenShift Container Platform environment and configuration on which the cluster maximums are tested {#cluster-maximums-environment_object-limits}
 
-### AWS cloud platform
+### AWS cloud platform {#_aws_cloud_platform}
 
 +-------------------------------------+-------------+--------+----------+-----------+----------------------+-------------------------------+-----------+
 | Node                                | Flavor      | vCPU   | RAM(GiB) | Disk type | Disk size(GiB)/IOS   | Count                         | Region    |
@@ -96,7 +96,7 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 
 5.  Cluster is scaled in iterations and performance and scalability tests are executed at the specified node counts.
 
-### IBM Power platform
+### IBM Power platform {#_ibm_power_platform}
 
 +-------------------------------------+----------+----------+-----------+-----------------------+---------------------------+
 | Node                                | vCPU     | RAM(GiB) | Disk type | Disk size(GiB)/IOS    | Count                     |
@@ -122,7 +122,7 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 
 5.  Cluster is scaled in iterations.
 
-### IBM Z platform
+### IBM Z platform {#_ibm_z_platform}
 
 +---------------------------------------+-----------------------+--------------------------+-----------+--------------------+-----------------------------------------------+
 | Node                                  | vCPU <sup>\[4\]</sup> | RAM(GiB)<sup>\[5\]</sup> | Disk type | Disk size(GiB)/IOS | Count                                         |
@@ -144,7 +144,7 @@ Tested Cloud Platforms for OpenShift Container Platform 3.x: Red Hat OpenStack P
 
 5.  Total physical memory used is 512 GiB.
 
-## How to plan your environment according to tested cluster maximums
+## How to plan your environment according to tested cluster maximums {#how-to-plan-according-to-cluster-maximums_object-limits}
 
 !!! important
     Oversubscribing the physical resources on a node affects resource guarantees the Kubernetes scheduler makes during pod placement. Learn what measures you can take to avoid memory swapping.
@@ -173,7 +173,7 @@ Where:
 
     required pods per cluster / total number of nodes = expected pods per node
 
-## How to plan your environment according to application requirements
+## How to plan your environment according to application requirements {#how-to-plan-according-to-application-requirements_object-limits}
 
 Consider an example application environment:
 
@@ -275,7 +275,7 @@ objects:
       protocol: TCP
       port: 80
       targetPort: 8080
-    portalIP: ''
+    clusterIP: ''
     type: ClusterIP
     sessionAffinity: None
   status:

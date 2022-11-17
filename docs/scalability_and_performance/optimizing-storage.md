@@ -2,7 +2,7 @@
 
 Optimizing storage helps to minimize storage use across all resources. By optimizing storage, administrators help ensure that existing storage resources are working in an efficient manner.
 
-## Available persistent storage options
+## Available persistent storage options {#available-persistent-storage-options_persistent-storage}
 
 Understand your persistent storage options so that you can optimize your OpenShift Container Platform environment.
 
@@ -37,7 +37,7 @@ Understand your persistent storage options so that you can optimize your OpenShi
 !!! important
     Currently, CNS is not supported in OpenShift Container Platform 4.11.
 
-## Recommended configurable storage technology
+## Recommended configurable storage technology {#recommended-configurable-storage-technology_persistent-storage}
 
 The following table summarizes the recommended and configurable storage technologies for the given OpenShift Container Platform cluster application.
 
@@ -56,14 +56,14 @@ The following table summarizes the recommended and configurable storage technolo
 !!! note
     A scaled registry is an OpenShift Container Platform registry where two or more pod replicas are running.
 
-### Specific application storage recommendations
+### Specific application storage recommendations {#_specific_application_storage_recommendations}
 
 !!! important
     Testing shows issues with using the NFS server on Red Hat Enterprise Linux (RHEL) as storage backend for core services. This includes the OpenShift Container Registry and Quay, Prometheus for monitoring storage, and Elasticsearch for logging storage. Therefore, using RHEL NFS to back PVs used by core services is not recommended.
     
     Other NFS implementations on the marketplace might not have these issues. Contact the individual NFS implementation vendor for more information on any testing that was possibly completed against these OpenShift Container Platform core components.
 
-#### Registry
+#### Registry {#_registry}
 
 In a non-scaled/high-availability (HA) OpenShift Container Platform registry cluster deployment:
 
@@ -75,7 +75,7 @@ In a non-scaled/high-availability (HA) OpenShift Container Platform registry clu
 
 -   File storage is not recommended for OpenShift Container Platform registry cluster deployment with production workloads.
 
-#### Scaled registry
+#### Scaled registry {#_scaled_registry}
 
 In a scaled/HA OpenShift Container Platform registry cluster deployment:
 
@@ -93,7 +93,7 @@ In a scaled/HA OpenShift Container Platform registry cluster deployment:
 
 -   Block storage is not configurable.
 
-#### Metrics
+#### Metrics {#_metrics}
 
 In an OpenShift Container Platform hosted metrics cluster deployment:
 
@@ -104,7 +104,7 @@ In an OpenShift Container Platform hosted metrics cluster deployment:
 !!! important
     It is not recommended to use file storage for a hosted metrics cluster deployment with production workloads.
 
-#### Logging
+#### Logging {#_logging}
 
 In an OpenShift Container Platform hosted logging cluster deployment:
 
@@ -112,7 +112,7 @@ In an OpenShift Container Platform hosted logging cluster deployment:
 
 -   Object storage is not configurable.
 
-#### Applications
+#### Applications {#_applications}
 
 Application use cases vary from application to application, as described in the following examples:
 
@@ -120,7 +120,7 @@ Application use cases vary from application to application, as described in the 
 
 -   Application developers are responsible for knowing and understanding the storage requirements for their application, and how it works with the provided storage to ensure that issues do not occur when an application scales or interacts with the storage layer.
 
-### Other specific application storage recommendations
+### Other specific application storage recommendations {#_other_specific_application_storage_recommendations}
 
 !!! important
     It is not recommended to use RAID configurations on `Write` intensive workloads, such as `etcd`. If you are running `etcd` with a RAID configuration, you might be at risk of encountering performance issues with your workloads.
@@ -131,7 +131,7 @@ Application use cases vary from application to application, as described in the 
 
 -   The etcd database must have enough storage and adequate performance capacity to enable a large cluster. Information about monitoring and benchmarking tools to establish ample storage and a high-performance environment is described in *Recommended etcd practices*.
 
-## Data storage management
+## Data storage management {#data-storage-management_persistent-storage}
 
 The following table summarizes the main directories that OpenShift Container Platform components write data to.
 

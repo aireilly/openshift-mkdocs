@@ -2,13 +2,13 @@
 
 When you install OpenShift Container Platform on a bare metal cluster, you can provision and manage bare metal nodes using `machine` and `machineset` custom resources (CRs) for bare metal hosts that exist in the cluster.
 
-## About bare metal hosts and nodes
+## About bare metal hosts and nodes {#about-bare-metal-hosts-and-nodes_managing-bare-metal-hosts}
 
 To provision a Red Hat Enterprise Linux CoreOS (RHCOS) bare metal host as a node in your cluster, first create a `MachineSet` custom resource (CR) object that corresponds to the bare metal host hardware. Bare metal host compute machine sets describe infrastructure components specific to your configuration. You apply specific Kubernetes labels to these compute machine sets and then update the infrastructure components to run on only those machines.
 
 `Machine` CR’s are created automatically when you scale up the relevant `MachineSet` containing a `metal3.io/autoscale-to-hosts` annotation. OpenShift Container Platform uses `Machine` CR’s to provision the bare metal node that corresponds to the host as specified in the `MachineSet` CR.
 
-## Maintaining bare metal hosts
+## Maintaining bare metal hosts {#maintaining-bare-metal-hosts_managing-bare-metal-hosts}
 
 You can maintain the details of the bare metal hosts in your cluster from the OpenShift Container Platform web console. Navigate to **Compute** → **Bare Metal Hosts**, and select a task from the **Actions** drop down menu. Here you can manage items such as BMC details, boot MAC address for the host, enable power management, and so on. You can also review the details of the network interfaces and drives for the host.
 
@@ -25,7 +25,7 @@ You can deprovision a bare metal host in the web console. Deprovisioning a host 
 
 -   [Adding compute machines to bare metal](../machine_management/user_infra/adding-bare-metal-compute-user-infra/#adding-bare-metal-compute-user-infra)
 
-### Adding a bare metal host to the cluster using the web console
+### Adding a bare metal host to the cluster using the web console {#adding-bare-metal-host-to-cluster-using-web-console_managing-bare-metal-hosts}
 
 You can add bare metal hosts to the cluster in the web console.
 
@@ -58,7 +58,7 @@ You can add bare metal hosts to the cluster in the web console.
 !!! note
     You can also manage the number of bare metal nodes using the `oc scale` command and the appropriate bare metal compute machine set.
 
-### Adding a bare metal host to the cluster using YAML in the web console
+### Adding a bare metal host to the cluster using YAML in the web console {#adding-bare-metal-host-to-cluster-using-yaml_managing-bare-metal-hosts}
 
 You can add bare metal hosts to the cluster in the web console using a YAML file that describes the bare metal host.
 
@@ -102,7 +102,7 @@ You can add bare metal hosts to the cluster in the web console using a YAML file
     !!! note
         You can also manage the number of bare metal nodes using the `oc scale` command and the appropriate bare metal compute machine set.
 
-### Automatically scaling machines to the number of available bare metal hosts
+### Automatically scaling machines to the number of available bare metal hosts {#automatically-scaling-machines-to-available-bare-metal-hosts_managing-bare-metal-hosts}
 
 To automatically create the number of `Machine` objects that matches the number of available `BareMetalHost` objects, add a `metal3.io/autoscale-to-hosts` annotation to the `MachineSet` object.
 

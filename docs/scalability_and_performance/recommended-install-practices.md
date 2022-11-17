@@ -2,7 +2,7 @@
 
 Apply the following practices when installing large clusters or scaling clusters to larger node counts.
 
-## Recommended practices for installing large scale clusters
+## Recommended practices for installing large scale clusters {#recommended-install-practices_cluster-install}
 
 When installing large clusters or scaling the cluster to larger node counts, set the cluster network `cidr` accordingly in your `install-config.yaml` file before you install the cluster:
 

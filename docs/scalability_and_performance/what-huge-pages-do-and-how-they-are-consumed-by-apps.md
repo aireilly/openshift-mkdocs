@@ -1,6 +1,6 @@
 # What huge pages do and how they are consumed by applications
 
-## What huge pages do
+## What huge pages do {#what-huge-pages-do_huge-pages}
 
 Memory is managed in blocks known as pages. On most systems, a page is 4Ki. 1Mi of memory is equal to 256 pages; 1Gi of memory is 256,000 pages, and so on. CPUs have a built-in memory management unit that manages a list of these pages in hardware. The Translation Lookaside Buffer (TLB) is a small hardware cache of virtual-to-physical page mappings. If the virtual address passed in a hardware instruction can be found in the TLB, the mapping can be determined quickly. If not, a TLB miss occurs, and the system falls back to slower, software-based address translation, resulting in performance issues. Since the size of the TLB is fixed, the only way to reduce the chance of a TLB miss is to increase the page size.
 
@@ -8,7 +8,7 @@ A huge page is a memory page that is larger than 4Ki. On x86\_64 architectures, 
 
 In OpenShift Container Platform, applications in a pod can allocate and consume pre-allocated huge pages.
 
-## How huge pages are consumed by apps
+## How huge pages are consumed by apps {#how-huge-pages-are-consumed-by-apps_huge-pages}
 
 Nodes must pre-allocate huge pages in order for the node to report its huge page capacity. A node can only pre-allocate huge pages for a single size.
 
@@ -58,7 +58,7 @@ Some platforms support multiple huge page sizes. To allocate huge pages of a spe
 
 -   Applications that consume huge pages via `shmget()` with `SHM_HUGETLB` must run with a supplemental group that matches ***proc/sys/vm/hugetlb\_shm\_group***.
 
-## Consuming huge pages resources using the Downward API
+## Consuming huge pages resources using the Downward API {#consuming-huge-pages-resource-using-the-downward-api_huge-pages}
 
 You can use the Downward API to inject information about the huge pages resources that are consumed by a container.
 
@@ -157,11 +157,11 @@ You can inject the resource allocation as environment variables, a volume plug-i
 
 -   [Allowing containers to consume Downward API objects](../nodes/containers/nodes-containers-downward-api/#nodes-containers-downward-api)
 
-## Configuring huge pages
+## Configuring huge pages {#configuring-huge-pages_huge-pages}
 
 Nodes must pre-allocate huge pages used in an OpenShift Container Platform cluster. There are two ways of reserving huge pages: at boot time and at run time. Reserving at boot time increases the possibility of success because the memory has not yet been significantly fragmented. The Node Tuning Operator currently supports boot time allocation of huge pages on specific nodes.
 
-### At boot time
+### At boot time {#_at_boot_time}
 
 **Procedure**
 
@@ -246,7 +246,7 @@ $ oc get node <node_using_hugepages> -o jsonpath="{.status.allocatable.hugepages
 !!! warning
     The TuneD bootloader plug-in is currently supported on Red Hat Enterprise Linux CoreOS (RHCOS) 8.x worker nodes. For Red Hat Enterprise Linux (RHEL) 7.x worker nodes, the TuneD bootloader plug-in is currently not supported.
 
-## Disabling Transparent Huge Pages
+## Disabling Transparent Huge Pages {#disable-thp_huge-pages}
 
 Transparent Huge Pages (THP) attempt to automate most aspects of creating, managing, and using huge pages. Since THP automatically manages the huge pages, this is not always handled optimally for all types of workloads. THP can lead to performance regressions, since many applications handle huge pages on their own. Therefore, consider disabling THP. The following steps describe how to disable THP using the Node Tuning Operator (NTO).
 

@@ -7,7 +7,7 @@
 
 Apply the following best practices to scale the number of worker machines in your OpenShift Container Platform cluster. You scale the worker machines by increasing or decreasing the number of replicas that are defined in the worker machine set.
 
-## Recommended practices for scaling the cluster
+## Recommended practices for scaling the cluster {#recommended-scale-practices_cluster-scaling}
 
 When scaling up the cluster to higher node counts:
 
@@ -27,7 +27,7 @@ Enable machine health checks when scaling to large node counts. In case of failu
 !!! note
     When scaling large and dense clusters to lower node counts, it might take large amounts of time as the process involves draining or evicting the objects running on the nodes being terminated in parallel. Also, the client might start to throttle the requests if there are too many objects to evict. The default client QPS and burst rates are currently set to `5` and `10` respectively and they cannot be modified in OpenShift Container Platform.
 
-## Modifying a compute machine set
+## Modifying a compute machine set {#machineset-modifying_cluster-scaling}
 
 To make changes to a compute machine set, edit the `MachineSet` YAML. Then, remove all machines associated with the compute machine set by deleting each machine or scaling down the compute machine set to `0` replicas. Then, scale the replicas back to the desired number. Changes you make to a compute machine set do not affect existing machines.
 
@@ -104,7 +104,7 @@ If you need to scale a compute machine set without making other changes, you do 
 
     Wait for the machines to start. The new machines contain changes you made to the compute machine set.
 
-## About machine health checks
+## About machine health checks {#machine-health-checks-about_cluster-scaling}
 
 Machine health checks automatically repair unhealthy machines in a particular machine pool.
 
@@ -126,7 +126,7 @@ To limit disruptive impact of the machine deletion, the controller drains and de
 
 To stop the check, remove the resource.
 
-### Limitations when deploying machine health checks
+### Limitations when deploying machine health checks {#machine-health-checks-limitations_cluster-scaling}
 
 There are limitations to consider before deploying a machine health check:
 
@@ -140,7 +140,7 @@ There are limitations to consider before deploying a machine health check:
 
 -   A machine is remediated immediately if the `Machine` resource phase is `Failed`.
 
-## Sample MachineHealthCheck resource
+## Sample MachineHealthCheck resource {#machine-health-checks-resource_cluster-scaling}
 
 The `MachineHealthCheck` resource for all cloud-based installation types, and other than bare metal, resembles the following YAML file:
 
@@ -182,7 +182,7 @@ spec:
 !!! note
     The `matchLabels` are examples only; you must map your machine groups based on your specific needs.
 
-### Short-circuiting machine health check remediation
+### Short-circuiting machine health check remediation {#machine-health-checks-short-circuiting_cluster-scaling}
 
 Short circuiting ensures that machine health checks remediate machines only when the cluster is healthy. Short-circuiting is configured through the `maxUnhealthy` field in the `MachineHealthCheck` resource.
 
@@ -195,7 +195,7 @@ The appropriate `maxUnhealthy` value depends on the scale of the cluster you dep
 
 The `maxUnhealthy` field can be set as either an integer or percentage. There are different remediation implementations depending on the `maxUnhealthy` value.
 
-#### Setting maxUnhealthy by using an absolute value
+#### Setting maxUnhealthy by using an absolute value {#_setting_maxunhealthy_by_using_an_absolute_value}
 
 If `maxUnhealthy` is set to `2`:
 
@@ -205,7 +205,7 @@ If `maxUnhealthy` is set to `2`:
 
 These values are independent of how many machines are being checked by the machine health check.
 
-#### Setting maxUnhealthy by using percentages
+#### Setting maxUnhealthy by using percentages {#_setting_maxunhealthy_by_using_percentages}
 
 If `maxUnhealthy` is set to `40%` and there are 25 machines being checked:
 
@@ -222,7 +222,7 @@ If `maxUnhealthy` is set to `40%` and there are 6 machines being checked:
 !!! note
     The allowed number of machines is rounded down when the percentage of `maxUnhealthy` machines that are checked is not a whole number.
 
-## Creating a MachineHealthCheck resource
+## Creating a MachineHealthCheck resource {#machine-health-checks-creating_cluster-scaling}
 
 You can create a `MachineHealthCheck` resource for all `MachineSets` in your cluster. You should not create a `MachineHealthCheck` resource that targets control plane machines.
 

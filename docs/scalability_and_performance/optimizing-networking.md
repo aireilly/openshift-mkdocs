@@ -18,7 +18,7 @@ If you are looking to push beyond one Gbps, you can:
 
 VXLAN-offload does not reduce latency. However, CPU utilization is reduced even in latency tests.
 
-## Optimizing the MTU for your network
+## Optimizing the MTU for your network {#optimizing-mtu_optimizing-networking}
 
 There are two important maximum transmission units (MTUs): the network interface controller (NIC) MTU and the cluster network MTU.
 
@@ -31,7 +31,7 @@ For OVN and Geneve, the MTU must be less than the NIC MTU by 100 bytes at a mini
 !!! note
     This 50 byte overlay header is relevant to the OpenShift SDN. Other SDN solutions might require the value to be more or less.
 
-## Recommended practices for installing large scale clusters
+## Recommended practices for installing large scale clusters {#recommended-install-practices_optimizing-networking}
 
 When installing large clusters or scaling the cluster to larger node counts, set the cluster network `cidr` accordingly in your `install-config.yaml` file before you install the cluster:
 
@@ -49,13 +49,13 @@ networking:
 
 The default cluster network `cidr` `10.128.0.0/14` cannot be used if the cluster size is more than 500 nodes. It must be set to `10.128.0.0/12` or `10.128.0.0/10` to get to larger node counts beyond 500 nodes.
 
-## Impact of IPsec
+## Impact of IPsec {#ipsec-impact_optimizing-networking}
 
 Because encrypting and decrypting node hosts uses CPU power, performance is affected both in throughput and CPU usage on the nodes when encryption is enabled, regardless of the IP security system being used.
 
 IPSec encrypts traffic at the IP payload level, before it hits the NIC, protecting fields that would otherwise be used for NIC offloading. This means that some NIC acceleration features might not be usable when IPSec is enabled and will lead to decreased throughput and increased CPU usage.
 
-## Additional resources
+## Additional resources {#optimizing-networking-additional-resources}
 
 -   [Modifying advanced network configuration parameters](../installing/installing_aws/installing-aws-network-customizations/#modifying-nwoperator-config-startup_installing-aws-network-customizations)
 
@@ -63,4 +63,4 @@ IPSec encrypts traffic at the IP payload level, before it hits the NIC, protecti
 
 -   [Configuration parameters for the OpenShift SDN default CNI network provider](../networking/cluster-network-operator/#nw-operator-configuration-parameters-for-openshift-sdn_cluster-network-operator)
 
--   [Improving cluster stability in high latency environments using worker latency profiles](../scalability_and_performance/scaling-worker-latency-profiles/#scaling-worker-latency-profiles)
+-   [Improving cluster stability in high latency environments using worker latency profiles](../scaling-worker-latency-profiles/#scaling-worker-latency-profiles)

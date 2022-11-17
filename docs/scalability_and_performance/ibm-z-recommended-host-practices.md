@@ -7,7 +7,7 @@ This topic provides recommended host practices for OpenShift Container Platform 
 !!! note
     Unless stated otherwise, these practices apply to both z/VM and Red Hat Enterprise Linux (RHEL) KVM installations on IBM Z and LinuxONE.
 
-## Managing CPU overcommitment
+## Managing CPU overcommitment {#ibm-z-managing-cpu-overcommitment_ibm-z-recommended-host-practices}
 
 In a highly virtualized IBM Z environment, you must carefully plan the infrastructure setup and sizing. One of the most important features of virtualization is the capability to do resource overcommitment, allocating more resources to the virtual machines than actually available at the hypervisor level. This is very workload dependent and there is no golden rule that can be applied to all setups.
 
@@ -33,15 +33,15 @@ Depending on your setup, consider these best practices regarding CPU overcommitm
 
 -   [LPAR CPU management](https://www.ibm.com/docs/en/zos/2.2.0?topic=director-lpar-cpu-management)
 
-## Disable Transparent Huge Pages
+## Disable Transparent Huge Pages {#ibm-z-disable-thp_ibm-z-recommended-host-practices}
 
 Transparent Huge Pages (THP) attempt to automate most aspects of creating, managing, and using huge pages. Since THP automatically manages the huge pages, this is not always handled optimally for all types of workloads. THP can lead to performance regressions, since many applications handle huge pages on their own. Therefore, consider disabling THP.
 
-## Boost networking performance with Receive Flow Steering
+## Boost networking performance with Receive Flow Steering {#ibm-z-boost-networking-performance-with-rfs_ibm-z-recommended-host-practices}
 
 Receive Flow Steering (RFS) extends Receive Packet Steering (RPS) by further reducing network latency. RFS is technically based on RPS, and improves the efficiency of packet processing by increasing the CPU cache hit rate. RFS achieves this, and in addition considers queue length, by determining the most convenient CPU for computation so that cache hits are more likely to occur within the CPU. Thus, the CPU cache is invalidated less and requires fewer cycles to rebuild the cache. This can help reduce packet processing run time.
 
-### Use the Machine Config Operator (MCO) to activate RFS
+### Use the Machine Config Operator (MCO) to activate RFS {#use-the-mco-to-activate-rfs_ibm-z-recommended-host-practices}
 
 **Procedure**
 
@@ -96,7 +96,7 @@ Receive Flow Steering (RFS) extends Receive Packet Steering (RPS) by further red
 
 -   [Scaling in the Linux Networking Stack](https://www.kernel.org/doc/Documentation/networking/scaling.txt)
 
-## Choose your networking setup
+## Choose your networking setup {#ibm-z-choose-networking-setup_ibm-z-recommended-host-practices}
 
 The networking stack is one of the most important components for a Kubernetes-based product like OpenShift Container Platform. For IBM Z setups, the networking setup depends on the hypervisor of your choice. Depending on the workload and the application, the best fit usually changes with the use case and the traffic pattern.
 
@@ -122,13 +122,13 @@ Depending on your setup, consider these best practices:
 
 -   [Controlling pod placement on nodes using node affinity rules](../nodes/scheduling/nodes-scheduler-node-affinity.xml)
 
-## Ensure high disk performance with HyperPAV on z/VM
+## Ensure high disk performance with HyperPAV on z/VM {#ibm-z-ensure-high-disk-performance-hyperpav_ibm-z-recommended-host-practices}
 
 DASD and ECKD devices are commonly used disk types in IBM Z environments. In a typical OpenShift Container Platform setup in z/VM environments, DASD disks are commonly used to support the local storage for the nodes. You can set up HyperPAV alias devices to provide more throughput and overall better I/O performance for the DASD disks that support the z/VM guests.
 
 Using HyperPAV for the local storage devices leads to a significant performance benefit. However, you must be aware that there is a trade-off between throughput and CPU costs.
 
-### Use the Machine Config Operator (MCO) to activate HyperPAV aliases in nodes using z/VM full-pack minidisks
+### Use the Machine Config Operator (MCO) to activate HyperPAV aliases in nodes using z/VM full-pack minidisks {#use-the-mco-to-activate-hyperpav-aliases-in-nodes-using-zvm-full-pack-minidisks_ibm-z-recommended-host-practices}
 
 For z/VM-based OpenShift Container Platform setups that use full-pack minidisks, you can leverage the advantage of MCO profiles by activating HyperPAV aliases in all of the nodes. You must add YAML configurations for both control plane and compute nodes.
 
@@ -197,13 +197,13 @@ For z/VM-based OpenShift Container Platform setups that use full-pack minidisks,
 
 -   [Scaling HyperPAV alias devices on Linux guests on z/VM](http://public.dhe.ibm.com/software/dw/linux390/perf/zvm_hpav00.pdf)
 
-## RHEL KVM on IBM Z host recommendations
+## RHEL KVM on IBM Z host recommendations {#ibm-z-rhel-kvm-host-recommendations_ibm-z-recommended-host-practices}
 
 Optimizing a KVM virtual server environment strongly depends on the workloads of the virtual servers and on the available resources. The same action that enhances performance in one environment can have adverse effects in another. Finding the best balance for a particular setting can be a challenge and often involves experimentation.
 
 The following section introduces some best practices when using OpenShift Container Platform with RHEL KVM on IBM Z and LinuxONE environments.
 
-### Use multiple queues for your VirtIO network interfaces
+### Use multiple queues for your VirtIO network interfaces {#use-multiple-queues-for-your-virtio-network-interfaces_ibm-z-recommended-host-practices}
 
 With multiple virtual CPUs, you can transfer packages in parallel if you provide multiple queues for incoming and outgoing packets. Use the `queues` attribute of the `driver` element to configure multiple queues. Specify an integer of at least 2 that does not exceed the number of virtual CPUs of the virtual server.
 
@@ -219,7 +219,7 @@ The following example specification configures two input and output queues for a
 
 Multiple queues are designed to provide enhanced performance for a network interface, but they also use memory and CPU resources. Start with defining two queues for busy interfaces. Next, try two queues for interfaces with less traffic or more than two queues for busy interfaces.
 
-### Use I/O threads for your virtual block devices
+### Use I/O threads for your virtual block devices {#use-io-threads-for-your-virtual-block-devices_ibm-z-recommended-host-practices}
 
 To make virtual block devices use I/O threads, you must configure one or more I/O threads for the virtual server and each virtual block device to use one of these I/O threads.
 
@@ -253,7 +253,7 @@ Start with a small number of I/O threads. Often, a single I/O thread for all dis
 
 You can use the `virsh iothreadadd` command to add I/O threads with specific thread IDs to a running virtual server.
 
-### Avoid virtual SCSI devices
+### Avoid virtual SCSI devices {#avoid-virtual-scsi-devices_ibm-z-recommended-host-practices}
 
 Configure virtual SCSI devices only if you need to address the device through SCSI-specific interfaces. Configure disk space as virtual block devices rather than virtual SCSI devices, regardless of the backing on the host.
 
@@ -263,7 +263,7 @@ However, you might need SCSI-specific interfaces for:
 
 -   A DVD ISO file on the host file system that is mounted on a virtual DVD drive.
 
-### Configure guest caching for disk
+### Configure guest caching for disk {#configure-guest-caching-for-disk_ibm-z-recommended-host-practices}
 
 Configure your disk devices to do caching by the guest and not by the host.
 
@@ -276,7 +276,7 @@ Ensure that the driver element of the disk device includes the `cache="none"` an
 </disk>
 ```
 
-### Exclude the memory balloon device
+### Exclude the memory balloon device {#exclude-the-memory-ballon-device_ibm-z-recommended-host-practices}
 
 Unless you need a dynamic memory size, do not define a memory balloon device and ensure that libvirt does not create one for you. Include the `memballoon` parameter as a child of the devices element in your domain configuration XML file.
 
@@ -286,7 +286,7 @@ Unless you need a dynamic memory size, do not define a memory balloon device and
     <memballoon model="none"/>
     ```
 
-### Tune the CPU migration algorithm of the host scheduler
+### Tune the CPU migration algorithm of the host scheduler {#tune-the-cpu-migration-algorithm-of-the-host-scheduler_ibm-z-recommended-host-practices}
 
 !!! important
     Do not change the scheduler settings unless you are an expert who understands the implications. Do not apply changes to production systems without testing them and confirming that they have the intended effect.
@@ -307,7 +307,7 @@ To persistently change the value to 60000 ns, add the following entry to `/etc/s
 kernel.sched_migration_cost_ns=60000
 ```
 
-### Disable the cpuset cgroup controller
+### Disable the cpuset cgroup controller {#disable-the-cpuset-cgroup-controller_ibm-z-recommended-host-practices}
 
 !!! note
     This setting applies only to KVM hosts with cgroups version 1. To enable CPU hotplug on the host, disable the cgroup controller.
@@ -340,7 +340,7 @@ kernel.sched_migration_cost_ns=60000
 
 This setting persists across host reboots.
 
-### Tune the polling period for idle virtual CPUs
+### Tune the polling period for idle virtual CPUs {#tune-the-polling-period-for-idle-virtual-cpus_ibm-z-recommended-host-practices}
 
 When a virtual CPU becomes idle, KVM polls for wakeup conditions for the virtual CPU before allocating the host resource. You can specify the time interval, during which polling takes place in sysfs at `/sys/module/kvm/parameters/halt_poll_ns`. During the specified time, polling reduces the wakeup latency for the virtual CPU at the expense of resource usage. Depending on the workload, a longer or shorter time for polling can be beneficial. The time interval is specified in nanoseconds. The default is 50000 ns.
 

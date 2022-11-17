@@ -18,7 +18,7 @@ When applying workload partitioning, use the Node Tuning Operator to implement t
 
 Workload partitioning introduces a new extended resource of `<workload-type>.workload.openshift.io/cores` for each defined CPU pool, or workload-type. Kubelet advertises these new resources and CPU requests by pods allocated to the pool are accounted for within the corresponding resource rather than the typical `cpu` resource. When workload partitioning is enabled, the `<workload-type>.workload.openshift.io/cores` resource allows access to the CPU capacity of the host, not just the default CPU pool.
 
-## Enabling workload partitioning
+## Enabling workload partitioning {#sno-du-enabling-workload-partitioning_sno-du-enabling-workload-partitioning-on-single-node-openshift}
 
 A key feature to enable as part of a single-node OpenShift installation is workload partitioning. This limits the cores allowed to run platform services, maximizing the CPU core for application payloads. You must configure workload partitioning at cluster installation time.
 

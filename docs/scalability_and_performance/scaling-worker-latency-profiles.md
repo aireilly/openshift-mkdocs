@@ -18,7 +18,7 @@ These worker latency profiles are three sets of parameters that are pre-defined 
 
 You can configure worker latency profiles when installing a cluster or at any time you notice increased latency in your cluster network.
 
-## Understanding worker latency profiles
+## Understanding worker latency profiles {#nodes-cluster-worker-latency-profiles-about_scaling-worker-latency-profiles}
 
 Worker latency profiles are multiple sets of carefully-tuned values for the `node-status-update-frequency`, `node-monitor-grace-period`, `default-not-ready-toleration-seconds` and `default-unreachable-toleration-seconds` parameters. These parameters let you control the reaction of the cluster to latency issues without needing to determine the best values manually.
 
@@ -101,7 +101,7 @@ Low worker latency profile
 
     : **Table 3**
 
-## Using worker latency profiles
+## Using worker latency profiles {#nodes-cluster-worker-latency-profiles-using_scaling-worker-latency-profiles}
 
 To implement a worker latency profile to deal with network latency, edit the `node.config` object to add the name of the profile. You can change the profile at any time as latency increases or decreases.
 

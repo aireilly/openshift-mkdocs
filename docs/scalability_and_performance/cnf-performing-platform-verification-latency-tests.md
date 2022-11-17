@@ -7,7 +7,7 @@ The `cnf-tests` container image is available at `registry.redhat.io/openshift4/c
 !!! important
     The `cnf-tests` image also includes several tests that are not supported by Red Hat at this time. Only the latency tests are supported by Red Hat.
 
-## Prerequisites for running latency tests
+## Prerequisites for running latency tests {#cnf-latency-tests-prerequisites_cnf-latency-tests}
 
 Your cluster must meet the following requirements before you can run the latency tests:
 
@@ -17,9 +17,9 @@ Your cluster must meet the following requirements before you can run the latency
 
 3.  You have a pre-existing `MachineConfigPool` CR applied in the cluster. The default worker pool is `worker-cnf`.
 
--   For more information about creating the cluster performance profile, see [Provisioning a worker with real-time capabilities](../scalability_and_performance/cnf-low-latency-tuning/#node-tuning-operator-provisioning-worker-with-real-time-capabilities_cnf-master).
+-   For more information about creating the cluster performance profile, see [Provisioning a worker with real-time capabilities](../cnf-low-latency-tuning/#node-tuning-operator-provisioning-worker-with-real-time-capabilities_cnf-master).
 
-## About discovery mode for latency tests
+## About discovery mode for latency tests {#discovery-mode_cnf-latency-tests}
 
 Use discovery mode to validate the functionality of a cluster without altering its configuration. Existing environment configurations are used for the tests. The tests can find the configuration items needed and use those items to execute the tests. If resources needed to run a specific test are not found, the test is skipped, providing an appropriate message to the user. After the tests are finished, no cleanup of the pre-configured configuration items is done, and the test environment can be immediately used for another test run.
 
@@ -33,7 +33,7 @@ The nodes on which the tests are executed can be limited by specifying a `NODES_
 !!! note
     If you want to override the default worker pool, pass the `-e ROLE_WORKER_CNF=<custom_worker_pool>` variable to the command specifying an appropriate label.
 
-## Measuring latency
+## Measuring latency {#cnf-measuring-latency_cnf-latency-tests}
 
 The `cnf-tests` image uses three tools to measure the latency of the system:
 
@@ -82,7 +82,7 @@ The tests introduce the following environment variables:
 !!! note
     Variables that are specific to a latency tool take precedence over unified variables. For example, if `OSLAT_MAXIMUM_LATENCY` is set to 30 microseconds and `MAXIMUM_LATENCY` is set to 10 microseconds, the `oslat` test will run with maximum acceptable latency of 30 microseconds.
 
-## Running the latency tests
+## Running the latency tests {#cnf-performing-end-to-end-tests-running-the-tests_cnf-latency-tests}
 
 Run the cluster latency tests to validate node tuning for your Cloud-native Network Functions (CNF) workload.
 
@@ -127,7 +127,7 @@ Run the cluster latency tests to validate node tuning for your Cloud-native Netw
     !!! important
         For valid latency tests results, run the tests for at least 12 hours.
 
-### Running hwlatdetect
+### Running hwlatdetect {#cnf-performing-end-to-end-tests-running-hwlatdetect_cnf-latency-tests}
 
 The `hwlatdetect` tool is available in the `rt-kernel` package with a regular subscription of Red Hat Enterprise Linux (RHEL) 8.x.
 
@@ -292,7 +292,7 @@ The output of `hwlatdetect` shows that multiple samples exceed the threshold. Ho
     
     Not all latency spikes are hardware related. Ensure that you tune the host firmware to meet your workload requirements. For more information, see [Setting firmware parameters for system tuning](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/9/html-single/optimizing_rhel_9_for_real_time_for_low_latency_operation/index#setting-bios-parameters-for-system-tuning_optimizing-RHEL9-for-real-time-for-low-latency-operation).
 
-### Running cyclictest
+### Running cyclictest {#cnf-performing-end-to-end-tests-running-cyclictest_cnf-latency-tests}
 
 The `cyclictest` tool measures the real-time kernel scheduler latency on the specified CPUs.
 
@@ -421,7 +421,7 @@ More histogram entries ...
 # Thread 15: 110059 155917
 ```
 
-### Running oslat
+### Running oslat {#cnf-performing-end-to-end-tests-running-oslat_cnf-latency-tests}
 
 The `oslat` test simulates a CPU-intensive DPDK application and measures all the interruptions and disruptions to test how the cluster handles CPU heavy data processing.
 
@@ -494,7 +494,7 @@ The `oslat` test simulates a CPU-intensive DPDK application and measures all the
 
     -   In this example, the measured latency is outside the maximum allowed value.
 
-## Generating a latency test failure report
+## Generating a latency test failure report {#cnf-performing-end-to-end-tests-test-failure-report_cnf-latency-tests}
 
 Use the following procedures to generate a JUnit latency test output and test failure report.
 
@@ -522,7 +522,7 @@ Use the following procedures to generate a JUnit latency test output and test fa
 
     :   Is the path to the folder where the report is generated.
 
-## Generating a JUnit latency test report
+## Generating a JUnit latency test report {#cnf-performing-end-to-end-tests-junit-test-output_cnf-latency-tests}
 
 Use the following procedures to generate a JUnit latency test output and test failure report.
 
@@ -550,7 +550,7 @@ Use the following procedures to generate a JUnit latency test output and test fa
 
     :   Is the path to the folder where the junit report is generated
 
-## Running latency tests on a single-node OpenShift cluster
+## Running latency tests on a single-node OpenShift cluster {#cnf-performing-end-to-end-tests-running-in-single-node-cluster_cnf-latency-tests}
 
 You can run latency tests on single-node OpenShift clusters.
 
@@ -581,7 +581,7 @@ You can run latency tests on single-node OpenShift clusters.
 
     After running the test suite, all the dangling resources are cleaned up.
 
-## Running latency tests in a disconnected cluster
+## Running latency tests in a disconnected cluster {#cnf-performing-end-to-end-tests-disconnected-mode_cnf-latency-tests}
 
 The CNF tests image can run tests in a disconnected cluster that is not able to reach external registries. This requires two steps:
 
@@ -732,7 +732,7 @@ You can optionally change the default upstream images that are mirrored for the 
     |  oc image mirror -f -
     ```
 
-## Troubleshooting errors with the cnf-tests container
+## Troubleshooting errors with the cnf-tests container {#cnf-performing-end-to-end-tests-troubleshooting_cnf-latency-tests}
 
 To run latency tests, the cluster must be accessible from within the `cnf-tests` container.
 

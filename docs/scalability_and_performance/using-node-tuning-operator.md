@@ -2,7 +2,7 @@
 
 Learn about the Node Tuning Operator and how you can use it to manage node-level tuning by orchestrating the tuned daemon.
 
-## About the Node Tuning Operator
+## About the Node Tuning Operator {#about-node-tuning-operator_node-tuning-operator}
 
 The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller. The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
 
@@ -23,7 +23,7 @@ The Node Tuning Operator is part of a standard OpenShift Container Platform inst
 !!! note
     In earlier versions of OpenShift Container Platform, the Performance Addon Operator was used to implement automatic tuning to achieve low latency performance for OpenShift applications. In OpenShift Container Platform 4.11, these functions are part of the Node Tuning Operator.
 
-## Accessing an example Node Tuning Operator specification
+## Accessing an example Node Tuning Operator specification {#accessing-an-example-node-tuning-operator-specification_node-tuning-operator}
 
 Use this process to access an example Node Tuning Operator specification.
 
@@ -40,7 +40,7 @@ The default CR is meant for delivering standard node-level tuning for the OpenSh
 !!! warning
     While in certain situations the support for pod labels can be a convenient way of automatically delivering required tuning, this practice is discouraged and strongly advised against, especially in large-scale clusters. The default Tuned CR ships without pod label matching. If a custom profile is created with pod label matching, then the functionality will be enabled at that time. The pod label functionality will be deprecated in future versions of the Node Tuning Operator.
 
-## Default profiles set on a cluster
+## Default profiles set on a cluster {#custom-tuning-default-profiles-set_node-tuning-operator}
 
 The following are the default profiles set on a cluster.
 
@@ -68,7 +68,7 @@ Starting with OpenShift Container Platform 4.9, all OpenShift TuneD profiles are
 $ oc exec $tuned_pod -n openshift-cluster-node-tuning-operator -- find /usr/lib/tuned/openshift{,-control-plane,-node} -name tuned.conf -exec grep -H ^ {} \;
 ```
 
-## Verifying that the TuneD profiles are applied
+## Verifying that the TuneD profiles are applied {#verifying-tuned-profiles-are-applied_node-tuning-operator}
 
 Verify the TuneD profiles that are applied to your cluster node.
 
@@ -97,7 +97,7 @@ worker-b         openshift-node            True      False      6h28m
 
 -   `AGE`: Time elapsed since the creation of Profile object.
 
-## Custom tuning specification
+## Custom tuning specification {#custom-tuning-specification_node-tuning-operator}
 
 The custom resource (CR) for the Operator has two major sections. The first section, `profile:`, is a list of TuneD profiles and their names. The second, `recommend:`, defines the profile selection logic.
 
@@ -293,7 +293,7 @@ spec:
 !!! note
     Due to profile inheritance, any setting specified in the `provider-<cloud-provider>` profile will be overwritten by the `openshift` profile and its child profiles.
 
-## Custom tuning examples
+## Custom tuning examples {#custom-tuning-example_node-tuning-operator}
 
 **Using TuneD profiles from the default CR**
 
@@ -362,7 +362,7 @@ spec:
 
 In addition to the built-in `hpc-compute` profile, the example above includes the `openshift-node` TuneD daemon profile shipped within the default Tuned CR to use OpenShift-specific tuning for compute nodes.
 
-## Supported TuneD daemon plug-ins
+## Supported TuneD daemon plug-ins {#supported-tuned-daemon-plug-ins_node-tuning-operator}
 
 Excluding the `[main]` section, the following TuneD plug-ins are supported when using custom profiles defined in the `profile:` section of the Tuned CR:
 
@@ -409,7 +409,7 @@ There is some dynamic tuning functionality provided by some of these plug-ins th
 
 See [Available TuneD Plug-ins](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/monitoring_and_managing_system_status_and_performance/customizing-tuned-profiles_monitoring-and-managing-system-status-and-performance#available-tuned-plug-ins_customizing-tuned-profiles) and [Getting Started with TuneD](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/monitoring_and_managing_system_status_and_performance/getting-started-with-tuned_monitoring-and-managing-system-status-and-performance) for more information.
 
-## Configuring node tuning in a hosted cluster
+## Configuring node tuning in a hosted cluster {#node-tuning-hosted-cluster_node-tuning-operator}
 
 !!! important
     Hosted control planes is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
@@ -527,7 +527,7 @@ Now that you have created the `ConfigMap` object that contains a `Tuned` manifes
     vm.dirty_ratio = 55
     ```
 
-## Advanced node tuning for hosted clusters by setting kernel boot parameters
+## Advanced node tuning for hosted clusters by setting kernel boot parameters {#advanced-node-tuning-hosted-cluster_node-tuning-operator}
 
 !!! important
     Hosted control planes is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.

@@ -10,7 +10,7 @@ The procedures do not describe how to install single-node OpenShift. This can be
 
 -   Additional items that help minimize the potential reboots post installation.
 
-## Configuring the distributed units (DUs)
+## Configuring the distributed units (DUs) {#sno-configuring-the-distributed-units_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 This section describes a set of configurations for an OpenShift Container Platform cluster so that it meets the feature and performance requirements necessary for running a distributed unit (DU) application. Some of this content must be applied during installation and other configurations can be applied post-install.
 
@@ -18,7 +18,7 @@ After you have installed the single-node OpenShift DU, further configuration is 
 
 The configurations in this section are applied to the cluster after installation in order to configure the cluster for DU workloads.
 
-### Enabling workload partitioning
+### Enabling workload partitioning {#sno-du-enabling-workload-partitioning_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 A key feature to enable as part of a single-node OpenShift installation is workload partitioning. This limits the cores allowed to run platform services, maximizing the CPU core for application payloads. You must configure workload partitioning at cluster installation time.
 
@@ -89,7 +89,7 @@ This content should be base64 encoded and provided in the `01-workload-partition
 
 This content should be base64 encoded and provided in the `openshift-workload-pinning-content` in the preceding manifest.
 
-### Configuring the container mount namespace
+### Configuring the container mount namespace {#sno-du-configuring-the-container-mountspace_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 To reduce the overall management footprint of the platform, a machine configuration is provided to contain the mount points. No configuration changes are needed. Use the provided settings:
 
@@ -167,7 +167,7 @@ spec:
         name: kubelet.service
 ```
 
-### Enabling Stream Control Transmission Protocol (SCTP)
+### Enabling Stream Control Transmission Protocol (SCTP) {#sno-du-enabling-sctp_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 SCTP is a key protocol used in RAN applications. This `MachineConfig` object adds the SCTP kernel module to the node to enable this protocol.
 
@@ -201,7 +201,7 @@ SCTP is a key protocol used in RAN applications. This `MachineConfig` object add
                 path: /etc/modules-load.d/sctp-load.conf
     ```
 
-### Creating OperatorGroups for Operators
+### Creating OperatorGroups for Operators {#sno-du-configuring-the-operators_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 This configuration is provided to enable addition of the Operators needed to configure the platform post-installation. It adds the `Namespace` and `OperatorGroup` objects for the Local Storage Operator, Logging Operator, PTP Operator, and SR-IOV Network Operator.
 
@@ -291,7 +291,7 @@ This configuration is provided to enable addition of the Operators needed to con
         - openshift-sriov-network-operator
     ```
 
-### Subscribing to the Operators
+### Subscribing to the Operators {#sno-du-subscribing-to-the-operators-needed-for-platform-configuration_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 The subscription provides the location to download the Operators needed for platform configuration.
 
@@ -360,7 +360,7 @@ The subscription provides the location to download the Operators needed for plat
 
     -   Specify the channel to get the `sriov-network-operator` Operator.
 
-### Configuring logging locally and forwarding
+### Configuring logging locally and forwarding {#sno-du-configuring-logging-locally-and-forwarding_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 To be able to debug a single node distributed unit (DU), logs need to be stored for further analysis.
 
@@ -416,7 +416,7 @@ To be able to debug a single node distributed unit (DU), logs need to be stored 
 
     -   Specifies the destination of the kafka server.
 
-### Configuring the Node Tuning Operator
+### Configuring the Node Tuning Operator {#sno-du-configuring-performance-addons_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 This is a key configuration for the single node distributed unit (DU). Many of the real-time capabilities and service assurance are configured here.
 
@@ -467,7 +467,7 @@ This is a key configuration for the single node distributed unit (DU). Many of t
 
 -   Set to `true` to install the real-time Linux kernel.
 
-### Configuring Precision Time Protocol (PTP)
+### Configuring Precision Time Protocol (PTP) {#sno-du-configuring-ptp_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 In the far edge, the RAN uses PTP to synchronize the systems.
 
@@ -599,7 +599,7 @@ In the far edge, the RAN uses PTP to synchronize the systems.
 
 -   Sets the interface used for PTP.
 
-### Disabling Network Time Protocol (NTP)
+### Disabling Network Time Protocol (NTP) {#sno-du-disabling-ntp_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 After the system is configured for Precision Time Protocol (PTP), you need to remove NTP to prevent it from impacting the system clock.
 
@@ -642,7 +642,7 @@ After the system is configured for Precision Time Protocol (PTP), you need to re
           version: 2.2.0
     ```
 
-### Configuring single root I/O virtualization (SR-IOV)
+### Configuring single root I/O virtualization (SR-IOV) {#sno-du-configuring-sriov_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 SR-IOV is commonly used to enable the fronthaul and the midhaul networks.
 
@@ -736,7 +736,7 @@ SR-IOV is commonly used to enable the fronthaul and the midhaul networks.
 
 -   Specifies the number of VFs for the fronthaul network.
 
-### Disabling the console Operator
+### Disabling the console Operator {#sno-du-removing-the-console-operator_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 The console-operator installs and maintains the web console on a cluster. When the node is centrally managed the Operator is not needed and makes space for application workloads.
 
@@ -760,7 +760,7 @@ The console-operator installs and maintains the web console on a cluster. When t
       operatorLogLevel: Normal
     ```
 
-## Applying the distributed unit (DU) configuration to a single-node OpenShift cluster
+## Applying the distributed unit (DU) configuration to a single-node OpenShift cluster {#sno-du-applying-the-distributed-unit-configuration-to-sno_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 Perform the following tasks to configure a single-node cluster for a DU:
 
@@ -768,7 +768,7 @@ Perform the following tasks to configure a single-node cluster for a DU:
 
 -   Apply the post-install configuration custom resources (CRs).
 
-### Applying the extra installation manifests
+### Applying the extra installation manifests {#sno-du-applying-the-extra-installation-manifests_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 To apply the distributed unit (DU) configuration to the single-node cluster, the following extra installation manifests need to be included during installation:
 
@@ -776,7 +776,7 @@ To apply the distributed unit (DU) configuration to the single-node cluster, the
 
 -   Other `MachineConfig` objects – There is a set of `MachineConfig` custom resources (CRs) included by default. You can choose to include these additional `MachineConfig` CRs that are unique to their environment. It is recommended, but not required, to apply these CRs during installation in order to minimize the number of reboots that can occur during post-install configuration.
 
-### Applying the post-install configuration custom resources (CRs)
+### Applying the post-install configuration custom resources (CRs) {#sno-du-applying-the-post-install-configuration-custom-resources_sno-du-deploying-distributed-units-manually-on-single-node-openshift}
 
 -   After OpenShift Container Platform is installed on the cluster, use the following command to apply the CRs you configured for the distributed units (DUs):
 

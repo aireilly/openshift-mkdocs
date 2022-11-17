@@ -2,7 +2,7 @@
 
 OpenShift Container Platform exposes metrics that the Cluster Monitoring Operator collects and stores in the Prometheus-based monitoring stack. As an administrator, you can view dashboards for system resources, containers, and components metrics in the OpenShift Container Platform web console by navigating to **Observe** → **Dashboards**.
 
-## Prometheus database storage requirements
+## Prometheus database storage requirements {#prometheus-database-storage-requirements_cluster-monitoring-operator}
 
 Red Hat performed various tests for different scale sizes.
 
@@ -36,7 +36,7 @@ The above calculation is for the default OpenShift Container Platform Cluster Mo
 
 -   Use at least three **openshift-container-storage** nodes with non-volatile memory express (NVMe) drives.
 
-## Configuring cluster monitoring
+## Configuring cluster monitoring {#configuring-cluster-monitoring_cluster-monitoring-operator}
 
 You can increase the storage capacity for the Prometheus component in the cluster monitoring stack.
 

@@ -7,7 +7,7 @@ You can use the Topology Aware Lifecycle Manager (TALM) to manage the software l
     
     For more information about the support scope of Red Hat Technology Preview features, see <https://access.redhat.com/support/offerings/techpreview/>.
 
-## About the Topology Aware Lifecycle Manager configuration
+## About the Topology Aware Lifecycle Manager configuration {#cnf-about-topology-aware-lifecycle-manager-config_cnf-topology-aware-lifecycle-manager}
 
 The Topology Aware Lifecycle Manager (TALM) manages the deployment of Red Hat Advanced Cluster Management (RHACM) policies for one or more OpenShift Container Platform clusters. Using TALM in a large network of clusters allows the phased rollout of policies to the clusters in limited batches. This helps to minimize possible service disruptions when updating. With TALM, you can control the following actions:
 
@@ -25,7 +25,7 @@ The Topology Aware Lifecycle Manager (TALM) manages the deployment of Red Hat Ad
 
 TALM supports the orchestration of the OpenShift Container Platform y-stream and z-stream updates, and day-two operations on y-streams and z-streams.
 
-## About managed policies used with Topology Aware Lifecycle Manager
+## About managed policies used with Topology Aware Lifecycle Manager {#cnf-about-topology-aware-lifecycle-manager-about-policies_cnf-topology-aware-lifecycle-manager}
 
 The Topology Aware Lifecycle Manager (TALM) uses RHACM policies for cluster updates.
 
@@ -41,7 +41,7 @@ For more information about managed policies, see [Policy Overview](https://acces
 
 For more information about the `PolicyGenTemplate` CRD, see the "About the PolicyGenTemplate" section in "Deploying distributed units at scale in a disconnected environment".
 
-## Installing the Topology Aware Lifecycle Manager by using the web console
+## Installing the Topology Aware Lifecycle Manager by using the web console {#installing-topology-aware-lifecycle-manager-using-web-console_cnf-topology-aware-lifecycle-manager}
 
 You can use the OpenShift Container Platform web console to install the Topology Aware Lifecycle Manager.
 
@@ -77,7 +77,7 @@ If the Operator is not installed successfully:
 
 2.  Navigate to the **Workloads** → **Pods** page and check the logs in any containers in the `cluster-group-upgrades-controller-manager` pod that are reporting issues.
 
-## Installing the Topology Aware Lifecycle Manager by using the CLI
+## Installing the Topology Aware Lifecycle Manager by using the CLI {#installing-topology-aware-lifecycle-manager-using-cli_cnf-topology-aware-lifecycle-manager}
 
 You can use the OpenShift CLI (`oc`) to install the Topology Aware Lifecycle Manager (TALM).
 
@@ -144,7 +144,7 @@ You can use the OpenShift CLI (`oc`) to install the Topology Aware Lifecycle Man
     openshift-operators                                cluster-group-upgrades-controller-manager        1/1     1            1           14s
     ```
 
-## About the ClusterGroupUpgrade CR
+## About the ClusterGroupUpgrade CR {#talo-about-cgu-crs_cnf-topology-aware-lifecycle-manager}
 
 The Topology Aware Lifecycle Manager (TALM) builds the remediation plan from the `ClusterGroupUpgrade` CR for a group of clusters. You can define the following specifications in a `ClusterGroupUpgrade` CR:
 
@@ -183,7 +183,7 @@ As TALM works through remediation of the policies to the specified clusters, the
     
     -   When the cluster changes to non-compliant with the `inform` policy after being updated
 
-### The UpgradeNotStarted state
+### The UpgradeNotStarted state {#upgrade_not_started}
 
 The initial state of the `ClusterGroupUpgrade` CR is `UpgradeNotStarted`.
 
@@ -265,7 +265,7 @@ status:
 
 -   Displays information about the status of the updates.
 
-### The UpgradeCannotStart state
+### The UpgradeCannotStart state {#upgrade_cannot_start}
 
 In the `UpgradeCannotStart` state, the update cannot start because of the following reasons:
 
@@ -273,7 +273,7 @@ In the `UpgradeCannotStart` state, the update cannot start because of the follow
 
 -   Blocking CRs have not yet finished
 
-### The UpgradeNotCompleted state
+### The UpgradeNotCompleted state {#upgrade_not_completed}
 
 In the `UpgradeNotCompleted` state, TALM enforces the policies following the remediation plan defined in the `UpgradeNotStarted` state.
 
@@ -334,7 +334,7 @@ status:
 
 -   Lists the clusters in the batch and the index of the policy that is being currently applied to each cluster. The index of the policies starts with `0` and the index follows the order of the `status.managedPoliciesForUpgrade` list.
 
-### The UpgradeTimedOut state
+### The UpgradeTimedOut state {#upgrade_timed_out}
 
 In the `UpgradeTimedOut` state, TALM checks every hour if all the policies for the `ClusterGroupUpgrade` CR are compliant. The checks continue until the `ClusterGroupUpgrade` CR is deleted or the updates are completed. The periodic checks allow the updates to complete if they get prolonged due to network, CPU, or other issues.
 
@@ -346,7 +346,7 @@ TALM transitions to the `UpgradeTimedOut` state in two cases:
 
 If the policies are compliant, TALM transitions to the `UpgradeCompleted` state.
 
-### The UpgradeCompleted state
+### The UpgradeCompleted state {#upgrade_completed}
 
 In the `UpgradeCompleted` state, the cluster updates are complete.
 
@@ -397,7 +397,7 @@ status:
 
 In the `PrecachingRequired` state, the clusters need to have images pre-cached before the update can start. For more information about pre-caching, see the "Using the container image pre-cache feature" section.
 
-### Blocking ClusterGroupUpgrade CRs
+### Blocking ClusterGroupUpgrade CRs {#cnf-about-topology-aware-lifecycle-manager-blocking-crs_cnf-topology-aware-lifecycle-manager}
 
 You can create multiple `ClusterGroupUpgrade` CRs and control their order of application.
 
@@ -774,7 +774,7 @@ One `ClusterGroupUpgrade` CR can have multiple blocking CRs. In this case, all t
 
     -   The `cgu-c` update does not have any blocking CRs.
 
-## Update policies on managed clusters
+## Update policies on managed clusters {#talo-policies-concept_cnf-topology-aware-lifecycle-manager}
 
 The Topology Aware Lifecycle Manager (TALM) remediates a set of `inform` policies for the clusters specified in the `ClusterGroupUpgrade` CR. TALM remediates `inform` policies by making `enforce` copies of the managed RHACM policies. Each copied policy has its own corresponding RHACM placement rule and RHACM placement binding.
 
@@ -792,9 +792,9 @@ For more information about RHACM policies, see [Policy overview](https://access.
 
 **Additional resources**
 
-For more information about `PolicyGenTemplate` CRD, see [About the PolicyGenTemplate](../scalability_and_performance/ztp-deploying-disconnected/#ztp-the-policygentemplate_ztp-deploying-disconnected).
+For more information about `PolicyGenTemplate` CRD, see [About the PolicyGenTemplate](../ztp-deploying-disconnected/#ztp-the-policygentemplate_ztp-deploying-disconnected).
 
-### Applying update policies to managed clusters
+### Applying update policies to managed clusters {#talo-apply-policies_cnf-topology-aware-lifecycle-manager}
 
 You can update your managed clusters by applying your policies.
 
@@ -1143,7 +1143,7 @@ You can update your managed clusters by applying your policies.
     cluster-logging.5.4.2   Red Hat OpenShift Logging   5.4.2                Succeeded
     ```
 
-## Creating a backup of cluster resources before upgrade
+## Creating a backup of cluster resources before upgrade {#talo-backup-feature-concept_cnf-topology-aware-lifecycle-manager}
 
 For single-node OpenShift, the Topology Aware Lifecycle Manager (TALM) can create a backup of a deployment before an upgrade. If the upgrade fails, you can recover the previous version and restore a cluster to a working state without requiring a reprovision of applications.
 
@@ -1178,7 +1178,7 @@ The backup process can be in the following statuses:
 !!! note
     If the backup fails and enters the `BackupStateTimeout` or `BackupStateError` state, the cluster upgrade does not proceed.
 
-### Creating a ClusterGroupUpgrade CR with backup
+### Creating a ClusterGroupUpgrade CR with backup {#talo-backup-start_and_update_cnf-topology-aware-lifecycle-manager}
 
 For single-node OpenShift, you can create a backup of a deployment before an upgrade. If the upgrade fails you can use the `upgrade-recovery.sh` script generated by Topology Aware Lifecycle Manager (TALM) to return the system to its preupgrade state. The backup consists of the following items:
 
@@ -1299,7 +1299,7 @@ Images (Optional)
     "status": {}
     ```
 
-### Recovering a cluster after a failed upgrade
+### Recovering a cluster after a failed upgrade {#talo-backup-recovery_cnf-topology-aware-lifecycle-manager}
 
 If an upgrade of a cluster fails, you can manually log in to the cluster and use the backup to return the cluster to its preupgrade state. There are two stages:
 
@@ -1427,7 +1427,7 @@ Recovery
 
     -   The `ClusterOperator` object’s availability is `True`.
 
-## Using the container image pre-cache feature
+## Using the container image pre-cache feature {#talo-precache-feature-concept_cnf-topology-aware-lifecycle-manager}
 
 Clusters might have limited bandwidth to access the container image registry, which can cause a timeout before the updates are completed.
 
@@ -1468,7 +1468,7 @@ The pre-caching process can be in the following statuses:
 
 :   The job ends with a non-zero exit code.
 
-### Creating a ClusterGroupUpgrade CR with pre-caching
+### Creating a ClusterGroupUpgrade CR with pre-caching {#talo-precache-start_and_update_cnf-topology-aware-lifecycle-manager}
 
 The pre-cache feature allows the required container images to be present on the spoke cluster before the update starts.
 
@@ -1621,7 +1621,7 @@ The pre-cache feature allows the required container images to be present on the 
 
     -   The pre-cache tasks are done.
 
-## Troubleshooting the Topology Aware Lifecycle Manager
+## Troubleshooting the Topology Aware Lifecycle Manager {#talo-troubleshooting_cnf-topology-aware-lifecycle-manager}
 
 The Topology Aware Lifecycle Manager (TALM) is an OpenShift Container Platform Operator that remediates RHACM policies. When issues occur, use the `oc adm must-gather` command to gather details and logs and to take steps in debugging the issues.
 
@@ -1633,7 +1633,7 @@ For more information about related topics, see the following documentation:
 
 -   The "Troubleshooting Operator issues" section
 
-### General troubleshooting
+### General troubleshooting {#talo-general-troubleshooting_cnf-topology-aware-lifecycle-manager}
 
 You can determine the cause of the problem by reviewing the following questions:
 
@@ -1664,7 +1664,7 @@ To ensure that the `ClusterGroupUpgrade` configuration is functional, you can do
 !!! warning
     After you set the `spec.enable` field to `true` in the `ClusterUpgradeGroup` CR, the update procedure starts and you cannot edit the CR's `spec` fields anymore.
 
-### Cannot modify the ClusterUpgradeGroup CR
+### Cannot modify the ClusterUpgradeGroup CR {#talo-troubleshooting-modify-cgu_cnf-topology-aware-lifecycle-manager}
 
 Issue
 
@@ -1692,7 +1692,7 @@ Resolution
         $ oc apply -f <ClusterGroupUpgradeCR_YAML>
         ```
 
-### Managed policies
+### Managed policies {#talo-troubleshooting-managed-policies_cnf-topology-aware-lifecycle-manager}
 
 **Checking managed policies on the system**
 
@@ -1762,7 +1762,7 @@ Resolution
     default     policy4-common-sriov-sub-policy                      inform               NonCompliant       5d21h
     ```
 
-### Clusters
+### Clusters {#talo-troubleshooting-clusters_cnf-topology-aware-lifecycle-manager}
 
 **Checking if managed clusters are present**
 
@@ -1928,7 +1928,7 @@ Resolution
     $ oc get jobs,pods -n openshift-talo-pre-cache
     ```
 
-### Remediation Strategy
+### Remediation Strategy {#talo-troubleshooting-remediation-strategy_cnf-topology-aware-lifecycle-manager}
 
 **Checking if remediationStrategy is present in the ClusterGroupUpgrade CR**
 
@@ -1970,7 +1970,7 @@ Resolution
     2
     ```
 
-### Topology Aware Lifecycle Manager
+### Topology Aware Lifecycle Manager {#talo-troubleshooting-remediation-talo_cnf-topology-aware-lifecycle-manager}
 
 **Checking condition message and status in the ClusterGroupUpgrade CR**
 
@@ -2064,4 +2064,4 @@ Resolution
 
 -   For information about troubleshooting, see [OpenShift Container Platform Troubleshooting Operator Issues](../support/troubleshooting/troubleshooting-operator-issues.xml).
 
--   For more information about using Topology Aware Lifecycle Manager in the ZTP workflow, see [Updating managed policies with Topology Aware Lifecycle Manager](../scalability_and_performance/ztp-deploying-disconnected/#cnf-topology-aware-lifecycle-manager).
+-   For more information about using Topology Aware Lifecycle Manager in the ZTP workflow, see [Updating managed policies with Topology Aware Lifecycle Manager](../ztp-deploying-disconnected/#cnf-topology-aware-lifecycle-manager).

@@ -12,7 +12,7 @@ CPU Manager is useful for workloads that have some of these attributes:
 
 -   Coordinate with other processes and benefit from sharing a single processor cache.
 
-## Setting up CPU Manager
+## Setting up CPU Manager {#seting_up_cpu_manager_using-cpu-manager}
 
 **Procedure**
 

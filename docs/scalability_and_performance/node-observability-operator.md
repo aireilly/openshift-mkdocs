@@ -7,7 +7,7 @@ The Node Observability Operator collects and stores the CRI-O and Kubelet profil
     
     For more information about the support scope of Red Hat Technology Preview features, see <https://access.redhat.com/support/offerings/techpreview/>.
 
-## Workflow of the Node Observability Operator
+## Workflow of the Node Observability Operator {#workflow-node-observability-operator_node-observability-operator}
 
 The following workflow outlines on how to query the profiling data using the Node Observability Operator:
 
@@ -17,11 +17,11 @@ The following workflow outlines on how to query the profiling data using the Nod
 
 3.  Run the profiling query to generate the profiling data.
 
-## Installing the Node Observability Operator
+## Installing the Node Observability Operator {#install-node-observability-operator_node-observability-operator}
 
 The Node Observability Operator is not installed in OpenShift Container Platform by default. You can install the Node Observability Operator by using the OpenShift Container Platform CLI or the web console.
 
-### Installing the Node Observability Operator using the CLI
+### Installing the Node Observability Operator using the CLI {#install-node-observability-using-cli_node-observability-operator}
 
 You can install the Node Observability Operator by using the OpenShift CLI (oc).
 
@@ -125,7 +125,7 @@ You can install the Node Observability Operator by using the OpenShift CLI (oc).
     node-observability-operator-controller-manager  1/1     1           1           40h
     ```
 
-### Installing the Node Observability Operator using the web console
+### Installing the Node Observability Operator using the web console {#install-node-observability-using-web-console_node-observability-operator}
 
 You can install the Node Observability Operator from the OpenShift Container Platform web console.
 
@@ -163,7 +163,7 @@ You can install the Node Observability Operator from the OpenShift Container Pla
 
 2.  Verify that the Node Observability Operator is listed in the Operators list.
 
-## Creating the Node Observability custom resource
+## Creating the Node Observability custom resource {#creating-node-observability-custom-resource_node-observability-operator}
 
 You must create and run the `NodeObservability` custom resource (CR) before you run the profiling query. When you run the `NodeObservability` CR, it creates the necessary machine config and machine config pool CRs to enable the CRI-O profiling on the worker nodes matching the `nodeSelector`.
 
@@ -240,7 +240,7 @@ The CRI-O unix socket of the node is mounted on the agent pod, which allows the 
 
     `NodeObservability` CR run is completed when the reason is `Ready` and the status is `True`.
 
-## Running the profiling query
+## Running the profiling query {#running-profiling-query_node-observability-operator}
 
 To run the profiling query, you must create a `NodeObservabilityRun` resource. The profiling query is a blocking operation that fetches CRI-O and Kubelet profiling data for a duration of 30 seconds. After the profiling query is complete, you must retrieve the profiling data inside the container file system `/run/node-observability` directory. The lifetime of data is bound to the agent pod through the `emptyDir` volume, so you can access the profiling data while the agent pod is in the `running` status.
 

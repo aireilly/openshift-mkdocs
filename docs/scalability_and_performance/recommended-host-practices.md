@@ -5,7 +5,7 @@ This topic provides recommended host practices for OpenShift Container Platform.
 !!! important
     These guidelines apply to OpenShift Container Platform with software-defined networking (SDN), not Open Virtual Network (OVN).
 
-## Recommended node host practices
+## Recommended node host practices {#recommended-node-host-practices_recommended-host-practices}
 
 The OpenShift Container Platform node configuration file contains important options. For example, two parameters control the maximum number of pods that can be scheduled to a node: `podsPerCore` and `maxPods`.
 
@@ -42,7 +42,7 @@ Setting `podsPerCore` to `0` disables this limit. The default is `0`. `podsPerCo
     maxPods: 250
 ```
 
-## Creating a KubeletConfig CRD to edit kubelet parameters
+## Creating a KubeletConfig CRD to edit kubelet parameters {#create-a-kubeletconfig-crd-to-edit-kubelet-parameters_recommended-host-practices}
 
 The kubelet configuration is currently serialized as an Ignition configuration, so it can be directly edited. However, there is also a new `kubelet-config-controller` added to the Machine Config Controller (MCC). This lets you use a `KubeletConfig` custom resource (CR) to edit the kubelet parameters.
 
@@ -271,7 +271,7 @@ The following procedure is an example to show how to configure the maximum numbe
         type: Success
     ```
 
-## Modifying the number of unavailable worker nodes
+## Modifying the number of unavailable worker nodes {#modify-unavailable-workers_recommended-host-practices}
 
 By default, only one machine is allowed to be unavailable when applying the kubelet-related configuration to the available worker nodes. For a large cluster, it can take a long time for the configuration change to be reflected. At any time, you can adjust the number of machines that are updating to speed up the process.
 
@@ -293,7 +293,7 @@ By default, only one machine is allowed to be unavailable when applying the kube
     !!! important
         When setting the value, consider the number of worker nodes that can be unavailable without affecting the applications running on the cluster.
 
-## Control plane node sizing
+## Control plane node sizing {#master-node-sizing_recommended-host-practices}
 
 The control plane node resource requirements depend on the number and type of nodes and objects in the cluster. The following control plane node size recommendations are based on the results of a control plane density focused testing, or *Cluster-density*. This test creates the following objects across a given number of namespaces:
 
@@ -369,7 +369,7 @@ Operator Lifecycle Manager (OLM ) runs on the control plane nodes and it’s mem
 !!! note
     In OpenShift Container Platform 4.11, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. The sizes are determined taking that into consideration.
 
-### Increasing the flavor size of the Amazon Web Services (AWS) master instances
+### Increasing the flavor size of the Amazon Web Services (AWS) master instances {#increasing-aws-flavor-size_recommended-host-practices}
 
 When you have overloaded AWS master nodes in a cluster and the master nodes require more resources, you can increase the flavor size of the master instances.
 
@@ -394,7 +394,7 @@ When you have overloaded AWS master nodes in a cluster and the master nodes requ
 
 -   [Backing up etcd](../backup_and_restore/control_plane_backup_and_restore/backing-up-etcd/#backing-up-etcd)
 
-## Recommended etcd practices
+## Recommended etcd practices {#recommended-etcd-practices_recommended-host-practices}
 
 Because etcd writes data to disk and persists proposals on disk, its performance depends on disk performance. Although etcd is not particularly I/O intensive, it requires a low latency block device for optimal performance and stability. Because etcd’s consensus protocol depends on persistently storing metadata to a log (WAL), etcd is sensitive to disk-write latency. Slow disks and disk activity from other processes can cause long fsync latencies.
 
@@ -468,7 +468,7 @@ The `histogram_quantile(0.99, rate(etcd_network_peer_round_trip_time_seconds_buc
 
 -   [How to use `fio` to check etcd disk performance in OpenShift Container Platform](https://access.redhat.com/solutions/4885641)
 
-## Defragmenting etcd data
+## Defragmenting etcd data {#etcd-defrag_recommended-host-practices}
 
 For large and dense clusters, etcd can suffer from poor performance if the keyspace grows too large and exceeds the space quota. Periodically maintain and defragment etcd to free up space in the data store. Monitor Prometheus for etcd metrics and defragment it when required; otherwise, etcd can raise a cluster-wide alarm that puts the cluster into a maintenance mode that accepts only key reads and deletes.
 
@@ -489,7 +489,7 @@ Defragmentation occurs automatically, but you can also trigger it manually.
 !!! note
     Automatic defragmentation is good for most cases, because the etcd operator uses cluster information to determine the most efficient operation for the user.
 
-### Automatic defragmentation
+### Automatic defragmentation {#automatic-defrag-etcd-data_recommended-host-practices}
 
 The etcd Operator automatically defragments disks. No manual intervention is needed.
 
@@ -516,7 +516,7 @@ etcd member has been defragmented: <member_name>, memberID: <member_id>
 failed defrag on member: <member_name>, memberID: <member_id>: <error_message>
 ```
 
-### Manual defragmentation
+### Manual defragmentation {#manual-defrag-etcd-data_recommended-host-practices}
 
 A Prometheus alert indicates when you need to use manual defragmentation. The alert is displayed in two cases:
 
@@ -651,7 +651,7 @@ Follow this procedure to defragment etcd data on each etcd member.
 
 After defragmentation, if etcd still uses more than 50% of its available space, consider increasing the disk quota for etcd.
 
-## OpenShift Container Platform infrastructure components
+## OpenShift Container Platform infrastructure components {#infrastructure-components_recommended-host-practices}
 
 The following infrastructure workloads do not incur OpenShift Container Platform worker subscriptions:
 
@@ -685,7 +685,7 @@ Any node that runs any other container, pod, or component is a worker node that 
 
 For information on infrastructure nodes and which components can run on infrastructure nodes, see the "Red Hat OpenShift control plane and infrastructure nodes" section in the [OpenShift sizing and subscription guide for enterprise Kubernetes](https://www.redhat.com/en/resources/openshift-subscription-sizing-guide) document.
 
-## Moving the monitoring solution
+## Moving the monitoring solution {#infrastructure-moving-monitoring_recommended-host-practices}
 
 The monitoring stack includes multiple components, including Prometheus, Thanos Querier, and Alertmanager. The Cluster Monitoring Operator manages this stack. To redeploy the monitoring stack to infrastructure nodes, you can create and apply a custom config map.
 
@@ -803,7 +803,7 @@ The monitoring stack includes multiple components, including Prometheus, Thanos 
 
     The component from the deleted pod is re-created on the `infra` node.
 
-## Moving the default registry
+## Moving the default registry {#infrastructure-moving-registry_recommended-host-practices}
 
 You configure the registry Operator to deploy its pods to different nodes.
 
@@ -897,7 +897,7 @@ You configure the registry Operator to deploy its pods to different nodes.
 
         Review the command output and confirm that `node-role.kubernetes.io/infra` is in the `LABELS` list.
 
-## Moving the router
+## Moving the router {#infrastructure-moving-router_recommended-host-practices}
 
 You can deploy the router pod to a different compute machine set. By default, the pod is deployed to a worker node.
 
@@ -999,7 +999,7 @@ You can deploy the router pod to a different compute machine set. By default, th
 
         Because the role list includes `infra`, the pod is running on the correct node.
 
-## Infrastructure node sizing
+## Infrastructure node sizing {#infrastructure-node-sizing_recommended-host-practices}
 
 *Infrastructure nodes* are nodes that are labeled to run pieces of the OpenShift Container Platform environment. The infrastructure node resource requirements depend on the cluster age, nodes, and objects in the cluster, as these factors can lead to an increase in the number of metrics or time series in Prometheus. The following infrastructure node size recommendations are based on the results of cluster maximums and control plane density focused testing.
 
@@ -1026,8 +1026,8 @@ In general, three infrastructure nodes are recommended per cluster.
 !!! note
     In OpenShift Container Platform 4.11, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. This influences the stated sizing recommendations.
 
-## Additional resources
+## Additional resources {#_additional_resources}
 
--   [OpenShift Container Platform cluster maximums](../scalability_and_performance/planning-your-environment-according-to-object-maximums/#planning-your-environment-according-to-object-maximums)
+-   [OpenShift Container Platform cluster maximums](../planning-your-environment-according-to-object-maximums/#planning-your-environment-according-to-object-maximums)
 
 -   [Creating infrastructure machine sets](../machine_management/creating-infrastructure-machinesets/#creating-infrastructure-machinesets)

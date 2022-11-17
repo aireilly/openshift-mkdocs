@@ -2,9 +2,9 @@
 
 Before you can deploy virtualized distributed unit (vDU) applications, you need to tune and configure the cluster host BIOS and various other cluster configuration settings. Use the following information to validate the cluster configuration to support vDU workloads.
 
--   For a complete reference to configuring single-node OpenShift clusters tuned for vDU application deployments, see [Deploying distributed units manually on single-node OpenShift](../scalability_and_performance/ztp-configuring-single-node-cluster-deployment-during-installation/#sno-du-deploying-distributed-units-manually-on-single-node-openshift).
+-   For a complete reference to configuring single-node OpenShift clusters tuned for vDU application deployments, see [Deploying distributed units manually on single-node OpenShift](../ztp-configuring-single-node-cluster-deployment-during-installation/#sno-du-deploying-distributed-units-manually-on-single-node-openshift).
 
-## Recommended BIOS configuration for vDU cluster hosts
+## Recommended BIOS configuration for vDU cluster hosts {#ztp-du-bios-config-reference_vdu-config-ref}
 
 Use the following table as the basis to configure the cluster host BIOS for vDU applications running on OpenShift Container Platform 4.11.
 
@@ -54,11 +54,11 @@ Use the following table as the basis to configure the cluster host BIOS for vDU 
 !!! note
     Enable both `C-states` and OS-controlled `P-States` to allow per pod power management.
 
-## Recommended cluster configurations to run vDU applications
+## Recommended cluster configurations to run vDU applications {#ztp-du-cluster-config-reference_vdu-config-ref}
 
 Clusters running virtualized distributed unit (vDU) applications require a highly tuned and optimized configuration. The following information describes the various elements that you require to support vDU workloads in OpenShift Container Platform 4.11 clusters.
 
-### Recommended cluster MachineConfig CRs
+### Recommended cluster MachineConfig CRs {#_recommended_cluster_machineconfig_crs}
 
 The following `MachineConfig` CRs configure the cluster host:
 
@@ -78,7 +78,7 @@ The following `MachineConfig` CRs configure the cluster host:
 
 : **Table 2: Recommended MachineConfig CRs**
 
-### Recommended cluster Operators
+### Recommended cluster Operators {#_recommended_cluster_operators}
 
 The following Operators are required for clusters running vDU applications and are a part of the baseline reference configuration:
 
@@ -92,7 +92,7 @@ The following Operators are required for clusters running vDU applications and a
 
 -   Local Storage Operator
 
-### Recommended cluster kernel configuration
+### Recommended cluster kernel configuration {#_recommended_cluster_kernel_configuration}
 
 Always use the latest supported realtime kernel version in your cluster. You should also ensure that the following configurations are applied in the cluster:
 
@@ -131,7 +131,7 @@ Always use the latest supported realtime kernel version in your cluster. You sho
 
     -   Listed CPUs depend on the host hardware configuration, specifically the number of available CPUs in the system and the CPU topology.
 
-### Checking the realtime kernel version
+### Checking the realtime kernel version {#ztp-checking-kernel-rt-in-cluster_vdu-config-ref}
 
 Always use the latest version of the realtime kernel in your OpenShift Container Platform clusters. If you are unsure about the kernel version that is in use in the cluster, you can compare the current realtime kernel version to the release version with the following procedure.
 
@@ -196,7 +196,7 @@ Check that the kernel version listed for the cluster’s current release matches
     4.18.0-305.49.1.rt7.121.el8_4.x86_64
     ```
 
-## Checking that the recommended cluster configurations are applied
+## Checking that the recommended cluster configurations are applied {#ztp-checking-du-cluster-config_vdu-config-ref}
 
 You can check that clusters are running the correct configuration. The following procedure describes how to check the various configurations that you require to deploy a DU application in OpenShift Container Platform 4.11 clusters.
 

@@ -3,7 +3,7 @@
 !!! note
     The features described in this document are for Developer Preview purposes and are not supported by Red Hat at this time.
 
-## Partitioning management workloads
+## Partitioning management workloads {#cnf-du-partitioning-management-workloads_installing-du}
 
 You can isolate the OpenShift Container Platform services, cluster management workloads, and infrastructure pods to run on a reserved set of CPUs. This is useful for resource-constrained environments, such as such as a single-node cluster, where you want to reserve most of the CPU resources for user workloads and configure OpenShift Container Platform to run on a fixed number of CPUs within the host.
 
@@ -36,7 +36,7 @@ The concept of cluster management workloads is flexible and can encompass:
 
 Workload partitioning introduces a new extended resource of `<workload-type>.workload.openshift.io/cores` for each CPU pool, workload-type, defined in the configuration file. Kubelet advertises these new resources. When workload partitioning is enabled, it represents all of the CPU capacity of the host, not just the CPU pool.
 
-### Configuring workload partitioning
+### Configuring workload partitioning {#cnf-du-configuring-workload-partitioning_installing-du}
 
 The following procedure outlines a high level, end to end workflow that installs a cluster with workload partitioning enabled and pods that are correctly scheduled to run on the management CPU partition.
 
@@ -50,7 +50,7 @@ The following procedure outlines a high level, end to end workflow that installs
 
 5.  The single-node cluster starts with management components constrained to a subset of available CPUs.
 
-#### Creating a machine config manifest for workload partitioning
+#### Creating a machine config manifest for workload partitioning {#cnf-du-creating-a-machine-config-manifest-for-workload-partitioning_installing-du}
 
 Part of configuring workload partitioning requires you to provide a `MachineConfig` manifest during installation to configure CRI-O and kubelet for the workload types.
 
@@ -119,7 +119,7 @@ This content should be base64 encoded and provided in the `openshift-workload-pi
 !!! note
     In this release, configuring machines for workload partitioning must be enabled during installation to work correctly. Once enabled, changes to the machine configs that enable the feature are not supported.
 
-### Required annotations for workload partitioning
+### Required annotations for workload partitioning {#cnf-du-required-annotations-for-workload-partitioning_installing-du}
 
 Two annotations must be specified to isolate partitioned workloads from each other. Annotate the containing namespace with `workload.openshift.io/allowed` and the pod with `target.workload.openshift.io`.
 
@@ -141,7 +141,7 @@ metadata:
 !!! note
     For this implementation, pods with multiple annotations are rejected. Future versions might allow multiple workload types with different priorities to support clusters with different types of configurations.
 
-### Workload partitioning and pod mutation
+### Workload partitioning and pod mutation {#cnf-du-workload-partitioning-pod-mutation_installing-du}
 
 The workload partitioning feature modifies pods that are annotated with `target.workload.openshift.io/<workload-type>` that are in a namespace that contains the `workload.openshift.io/allowed: <workload-type>` annotation.
 
@@ -184,7 +184,7 @@ Pods with QoS of `Guaranteed` are not mutated.
 !!! note
     Only pods with correct annotations on both the pod and namespace when the pod is created will take advantage of this feature. Workload partitioning annotations added after the pod is created will not have any impact. This has particular impact on post-installation Operators where the administrator must annotate the namespace prior to Operator installation.
 
-### CRI-O configuration for workload partitioning
+### CRI-O configuration for workload partitioning {#cnf-du-crio-configuration-for-workload-partitioning_installing-du}
 
 In support of workload partitioning, CRI-O supports new configuration settings. The configuration file is delivered to a host as part of a machine config.
 
@@ -212,15 +212,15 @@ In the management workload case, it is configured as follows:
 
 Pods that have the `target.workload.openshift.io/management` annotation will have their `cpuset` configured to the value from the appropriate workload configuration. The CPU shares for each container in the pod are configured according to the `management.workload.openshift.io/cores` resource limit, which ensures the pod’s CPU shares are enforced.
 
-### Configuring a performance profile to support workload partitioning
+### Configuring a performance profile to support workload partitioning {#cnf-du-configuring-a-performance-profile-to-support-workload-partitioning.adoc_installing-du}
 
 After you have configured workload partitioning, you need to ensure that the Performance Addon Operator has been installed and that you configured a performance profile.
 
 The reserved CPU IDs in the performance profile must match the workload partitioning CPU IDs.
 
--   [Low latency tuning](../scalability_and_performance/cnf-low-latency-tuning.xml)
+-   [Low latency tuning](../cnf-low-latency-tuning.xml)
 
-### Cluster Management pods
+### Cluster Management pods {#cnf-du-management-pods.adoc_installing-du}
 
 For the purposes of achieving 2-core (4 HT CPU) installation of single-node clusters, the set of pods that are considered *management* are limited to:
 
@@ -232,7 +232,7 @@ For the purposes of achieving 2-core (4 HT CPU) installation of single-node clus
 
 The following tables identify the namespaces and pods that can be restricted to a subset of the CPUs on a node by configuring workload partitioning.
 
-#### Core Operators
+#### Core Operators {#_core_operators}
 
 +--------------------------------------------------+----------------------------------------+
 | Namespace                                        | Pod                                    |
@@ -404,7 +404,7 @@ The following tables identify the namespaces and pods that can be restricted to 
 
 : **Table 1**
 
-#### Day 2 Operators
+#### Day 2 Operators {#_day_2_operators}
 
 +--------------------------------------+-----------------------------------+
 | Namespace                            | Pod                               |
@@ -440,7 +440,7 @@ The following tables identify the namespaces and pods that can be restricted to 
 
 : **Table 2**
 
-#### ACM pods
+#### ACM pods {#_acm_pods}
 
 +-------------------------------------+-------------------------------------------+
 | Namespace                           | Pod                                       |
@@ -470,7 +470,7 @@ The following tables identify the namespaces and pods that can be restricted to 
 
 : **Table 3**
 
-## Provisioning and deploying a distributed unit (DU) manually
+## Provisioning and deploying a distributed unit (DU) manually {#cnf-provisioning-deploying-a-distributed-unit-manually_installing-du}
 
 Radio access network (RAN) is composed of central units (CU), distributed units (DU), and radio units (RU). RAN from the telecommunications standard perspective is shown below:
 
@@ -502,7 +502,7 @@ Accessing hardware acceleration devices and high throughput network interface co
 
 In addition to the compute and acceleration requirements, DUs operate on multiple internal and external networks.
 
-### The manifest structure
+### The manifest structure {#cnf-manifest-structure_installing-du}
 
 The profile is built from one cluster specific folder and one or more site-specific folders. This is done to address a deployment that includes remote worker nodes, with several sites belonging to the same cluster.
 
@@ -510,7 +510,7 @@ The \[`cluster-config`\](ran-profile/cluster-config) directory contains performa
 
 The \[`site.1.fqdn`\](site.1.fqdn) folder contains site-specific network customizations.
 
-### Prerequisites
+### Prerequisites {#cnf-du-prerequisites_installing-du}
 
 Before installing the Operators and deploying the DU, perform the following steps.
 
@@ -552,7 +552,7 @@ Before installing the Operators and deploying the DU, perform the following step
     $ oc label --overwrite node/<your node name> ptp/slave=""
     ```
 
-### SR-IOV configuration notes
+### SR-IOV configuration notes {#cnf-du-configuration-notes_installing-du}
 
 The `SriovNetworkNodePolicy` object must be configured differently for different NIC models and placements.
 
@@ -570,9 +570,9 @@ In addition, when configuring the `nicSelector`, the `pfNames` value must match 
 
 If there is a mixed cluster where some of the nodes are deployed with Intel NICs and some with Mellanox, several SR-IOV configurations can be created with the same `resourceName`. The device plug-in will discover only the available ones and will put the capacity on the node accordingly.
 
-## Installing the Operators
+## Installing the Operators {#cnf-installing-the-operators_installing-du}
 
-### Installing the Performance Addon Operator
+### Installing the Performance Addon Operator {#cnf-installing-the-performnce-addon-operator_installing-du}
 
 Install the Performance Addon Operator using the OpenShift Container Platform CLI.
 
@@ -641,7 +641,7 @@ Install the Performance Addon Operator using the OpenShift Container Platform CL
 
     -   You must specify the `redhat-operators` value.
 
-### Installing the Precision Time Protocol (PTP) Operator
+### Installing the Precision Time Protocol (PTP) Operator {#cnf-installing-the-precision-time-protocol-operator_installing-du}
 
 Install the PTP Operator using the OpenShift Container Platform CLI or the web console.
 
@@ -695,7 +695,7 @@ Install the PTP Operator using the OpenShift Container Platform CLI or the web c
     EOF
     ```
 
-### Applying the Stream Control Transmission Protocol (SCTP) patch
+### Applying the Stream Control Transmission Protocol (SCTP) patch {#cnf-applying-the-stream-control-transmission-protocol-patch_installing-du}
 
 Load and enable the SCTP kernel module on worker nodes in your cluster.
 
@@ -730,7 +730,7 @@ Load and enable the SCTP kernel module on worker nodes in your cluster.
     EOF
     ```
 
-### Installing the SR-IOV Network Operator
+### Installing the SR-IOV Network Operator {#cnf-installing-the-sriov-network-operator_installing-du}
 
 Install the SR-IOV Network Operator by using the OpenShift Container Platform CLI or the web console.
 
@@ -779,7 +779,7 @@ Install the SR-IOV Network Operator by using the OpenShift Container Platform CL
     EOF
     ```
 
-### Verifying your changes
+### Verifying your changes {#cnf-installing-the-operators-verifying-your-changes_installing-du}
 
 Use the following command to verify the changes have been applied to the cluster:
 
@@ -787,9 +787,9 @@ Use the following command to verify the changes have been applied to the cluster
 $ oc wait mcp/worker-cnf --for condition="updated"
 ```
 
-## Deploying the DU infrastructure profile
+## Deploying the DU infrastructure profile {#cnf-deploying-the-du-infrastructure-profile_installing-du}
 
-### Creating the Performance Addon Operator and DU performance profile
+### Creating the Performance Addon Operator and DU performance profile {#cnf-creating-the-performance-addon-operator-and-du-performance-profile_installing-du}
 
 1.  Create and apply the performance profile, for example:
 
@@ -838,7 +838,7 @@ $ oc wait mcp/worker-cnf --for condition="updated"
     $ oc wait mcp/worker-cnf --for condition="updated"
     ```
 
-### Creating the PTP Operator and slave profile
+### Creating the PTP Operator and slave profile {#cnf-creating-the-ptp-operator-and-slave-profile_installing-du}
 
 1.  Apply the PTP configuration, for example:
 
@@ -976,7 +976,7 @@ $ oc wait mcp/worker-cnf --for condition="updated"
 
     -   These variables are set to enable the G.8275.1 profile for PTP.
 
-### Creating the SR-IOV Operator and associated profiles
+### Creating the SR-IOV Operator and associated profiles {#cnf-creating-the-sriov-operator-and-associated-profiles_installing-du}
 
 1.  Apply the SR-IOV network node policy, for example:
 
@@ -1038,7 +1038,7 @@ $ oc wait mcp/worker-cnf --for condition="updated"
 
     -   Modify this line to match the DU’s networking.
 
-## Modifying and applying the default profile
+## Modifying and applying the default profile {#cnf-modifying-and-applying-the-default-profile_installing-du}
 
 You can apply the profile manually or with the toolset of your choice, such as ArgoCD.
 
